@@ -1,0 +1,471 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "offer_core_service/v1/api.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "OfferCoreService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/offer_core_service.v1.OfferCoreService/CreateOffer": {
+      "post": {
+        "operationId": "OfferCoreService_CreateOffer",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateOfferResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateOfferRequest"
+            }
+          }
+        ],
+        "tags": [
+          "OfferCoreService"
+        ]
+      }
+    },
+    "/offer_core_service.v1.OfferCoreService/CreateOfferImage": {
+      "post": {
+        "operationId": "OfferCoreService_CreateOfferImage",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateOfferImageResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateOfferImageRequest"
+            }
+          }
+        ],
+        "tags": [
+          "OfferCoreService"
+        ]
+      }
+    },
+    "/offer_core_service.v1.OfferCoreService/GetOffer": {
+      "post": {
+        "operationId": "OfferCoreService_GetOffer",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetOfferResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GetOfferRequest"
+            }
+          }
+        ],
+        "tags": [
+          "OfferCoreService"
+        ]
+      }
+    },
+    "/offer_core_service.v1.OfferCoreService/GetOfferList": {
+      "post": {
+        "operationId": "OfferCoreService_GetOfferList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetOfferListResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GetOfferListRequest"
+            }
+          }
+        ],
+        "tags": [
+          "OfferCoreService"
+        ]
+      }
+    },
+    "/offer_core_service.v1.OfferCoreService/UpdateOffer": {
+      "post": {
+        "operationId": "OfferCoreService_UpdateOffer",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateOfferResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1UpdateOfferRequest"
+            }
+          }
+        ],
+        "tags": [
+          "OfferCoreService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "OfferStatusValue": {
+      "type": "string",
+      "enum": [
+        "VALUE_UNSPECIFIED",
+        "VALUE_UPLOADED",
+        "VALUE_APPROVED",
+        "VALUE_DISAPPROVED"
+      ],
+      "default": "VALUE_UNSPECIFIED"
+    },
+    "offer_core_servicev1Location": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "country": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "v1Company": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "profileImageUrl": {
+          "type": "string"
+        }
+      }
+    },
+    "v1CreateOfferImageRequest": {
+      "type": "object"
+    },
+    "v1CreateOfferImageResponse": {
+      "type": "object",
+      "properties": {
+        "image": {
+          "$ref": "#/definitions/v1OfferImage"
+        }
+      }
+    },
+    "v1CreateOfferRequest": {
+      "type": "object",
+      "properties": {
+        "companyId": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "location": {
+          "$ref": "#/definitions/offer_core_servicev1Location"
+        },
+        "position": {
+          "$ref": "#/definitions/v1Position"
+        },
+        "totalPackage": {
+          "$ref": "#/definitions/v1MonetaryValue"
+        },
+        "imageId": {
+          "type": "string",
+          "format": "uint64"
+        }
+      }
+    },
+    "v1CreateOfferResponse": {
+      "type": "object",
+      "properties": {
+        "offer": {
+          "$ref": "#/definitions/v1Offer"
+        }
+      }
+    },
+    "v1GetOfferListRequest": {
+      "type": "object",
+      "properties": {
+        "filterOptions": {
+          "$ref": "#/definitions/v1OfferListFilterOptions"
+        },
+        "offset": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "limit": {
+          "type": "string",
+          "format": "uint64"
+        }
+      }
+    },
+    "v1GetOfferListResponse": {
+      "type": "object",
+      "properties": {
+        "offerList": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Offer"
+          }
+        },
+        "totalOfferCount": {
+          "type": "string",
+          "format": "uint64"
+        }
+      }
+    },
+    "v1GetOfferRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        }
+      }
+    },
+    "v1GetOfferResponse": {
+      "type": "object",
+      "properties": {
+        "offer": {
+          "$ref": "#/definitions/v1Offer"
+        }
+      }
+    },
+    "v1MonetaryValue": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "currency": {
+          "type": "string"
+        }
+      }
+    },
+    "v1Offer": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "company": {
+          "$ref": "#/definitions/v1Company"
+        },
+        "location": {
+          "$ref": "#/definitions/offer_core_servicev1Location"
+        },
+        "position": {
+          "$ref": "#/definitions/v1Position"
+        },
+        "totalPackage": {
+          "$ref": "#/definitions/v1MonetaryValue"
+        },
+        "image": {
+          "$ref": "#/definitions/v1OfferImage"
+        },
+        "status": {
+          "$ref": "#/definitions/OfferStatusValue"
+        }
+      }
+    },
+    "v1OfferImage": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "url": {
+          "type": "string"
+        }
+      }
+    },
+    "v1OfferListFilterOptions": {
+      "type": "object",
+      "properties": {
+        "companyIdList": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uint64"
+          }
+        },
+        "countryList": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "stateList": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "cityList": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "levelTitleList": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "levelCodeList": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "v1Position": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "title": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        }
+      }
+    },
+    "v1UpdateOfferRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "status": {
+          "$ref": "#/definitions/OfferStatusValue"
+        }
+      }
+    },
+    "v1UpdateOfferResponse": {
+      "type": "object",
+      "properties": {
+        "offer": {
+          "$ref": "#/definitions/v1Offer"
+        }
+      }
+    }
+  }
+}

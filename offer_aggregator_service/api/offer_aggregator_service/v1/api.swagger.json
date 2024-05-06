@@ -1,0 +1,358 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "offer_aggregator_service/v1/api.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "OfferAggregatorService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/offer_aggregator_service.v1.OfferAggregatorService/GetAggregatedCompanyStatsList": {
+      "post": {
+        "operationId": "OfferAggregatorService_GetAggregatedCompanyStatsList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetAggregatedCompanyStatsListResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GetAggregatedCompanyStatsListRequest"
+            }
+          }
+        ],
+        "tags": [
+          "OfferAggregatorService"
+        ]
+      }
+    },
+    "/offer_aggregator_service.v1.OfferAggregatorService/GetCompanyAggregatedOfferStatsLists": {
+      "post": {
+        "operationId": "OfferAggregatorService_GetCompanyAggregatedOfferStatsLists",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetCompanyAggregatedOfferStatsListsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GetCompanyAggregatedOfferStatsListsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "OfferAggregatorService"
+        ]
+      }
+    },
+    "/offer_aggregator_service.v1.OfferAggregatorService/SearchAggregatedCompanyStatsList": {
+      "post": {
+        "operationId": "OfferAggregatorService_SearchAggregatedCompanyStatsList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1SearchAggregatedCompanyStatsListResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1SearchAggregatedCompanyStatsListRequest"
+            }
+          }
+        ],
+        "tags": [
+          "OfferAggregatorService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "v1AggregatedCompanyStats": {
+      "type": "object",
+      "properties": {
+        "company": {
+          "$ref": "#/definitions/v1Company"
+        },
+        "totalSubmissionCount": {
+          "type": "string",
+          "format": "uint64"
+        }
+      }
+    },
+    "v1AggregatedCompanyStatsFilterOptions": {
+      "type": "object",
+      "properties": {
+        "companyNameQuery": {
+          "type": "string"
+        },
+        "countryList": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "stateList": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "cityList": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "levelTitleList": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "levelCodeList": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "v1AggregatedCompanyStatsSortOrderValues": {
+      "type": "string",
+      "enum": [
+        "VALUES_UNSPECIFIED",
+        "VALUES_ID_ASCENDING",
+        "VALUES_ID_DESCENDING",
+        "VALUES_NAME_ASCENDING",
+        "VALUES_NAME_DESCENDING"
+      ],
+      "default": "VALUES_UNSPECIFIED"
+    },
+    "v1Company": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "profileImageUrl": {
+          "type": "string"
+        }
+      }
+    },
+    "v1CompanyAggregatedOfferStatsSortOrderValues": {
+      "type": "string",
+      "enum": [
+        "VALUES_UNSPECIFIED",
+        "VALUES_LOCATION_ASCENDING",
+        "VALUES_LOCATION_DESCENDING",
+        "VALUES_POSITION_ASCENDING",
+        "VALUES_POSITION_DESCENDING"
+      ],
+      "default": "VALUES_UNSPECIFIED"
+    },
+    "v1GetAggregatedCompanyStatsListRequest": {
+      "type": "object",
+      "properties": {
+        "companyId": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "companyName": {
+          "type": "string"
+        },
+        "sortOrder": {
+          "$ref": "#/definitions/v1AggregatedCompanyStatsSortOrderValues"
+        },
+        "limit": {
+          "type": "string",
+          "format": "uint64"
+        }
+      }
+    },
+    "v1GetAggregatedCompanyStatsListResponse": {
+      "type": "object",
+      "properties": {
+        "companyStatList": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1AggregatedCompanyStats"
+          }
+        },
+        "previousCompanyId": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "previousCompanyName": {
+          "type": "string"
+        },
+        "nextCompanyId": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "nextCompanyName": {
+          "type": "string"
+        }
+      }
+    },
+    "v1GetCompanyAggregatedOfferStatsListsRequest": {
+      "type": "object",
+      "properties": {
+        "locationId": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "positionName": {
+          "type": "string"
+        },
+        "sortOrder": {
+          "$ref": "#/definitions/v1CompanyAggregatedOfferStatsSortOrderValues"
+        },
+        "limit": {
+          "type": "string",
+          "format": "uint64"
+        }
+      }
+    },
+    "v1GetCompanyAggregatedOfferStatsListsResponse": {
+      "type": "object",
+      "properties": {
+        "offerStatList": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1AggregatedCompanyStats"
+          }
+        },
+        "previousLocationId": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "previousPositionId": {
+          "type": "string"
+        },
+        "nextLocationId": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "nextPositionId": {
+          "type": "string"
+        }
+      }
+    },
+    "v1SearchAggregatedCompanyStatsListRequest": {
+      "type": "object",
+      "properties": {
+        "filterOptions": {
+          "$ref": "#/definitions/v1AggregatedCompanyStatsFilterOptions"
+        },
+        "sortOrder": {
+          "$ref": "#/definitions/v1AggregatedCompanyStatsSortOrderValues"
+        },
+        "offset": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "limit": {
+          "type": "string",
+          "format": "uint64"
+        }
+      }
+    },
+    "v1SearchAggregatedCompanyStatsListResponse": {
+      "type": "object",
+      "properties": {
+        "companyStatList": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1AggregatedCompanyStats"
+          }
+        },
+        "totalCompanyStatCount": {
+          "type": "string",
+          "format": "uint64"
+        }
+      }
+    }
+  }
+}

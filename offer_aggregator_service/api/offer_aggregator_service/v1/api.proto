@@ -1,0 +1,182 @@
+syntax = "proto3";
+
+package offer_aggregator_service.v1;
+
+import "validate/validate.proto";
+
+service OfferAggregatorService {
+    rpc GetAggregatedCompanyStatsList(GetAggregatedCompanyStatsListRequest) returns (GetAggregatedCompanyStatsListResponse) {}
+    rpc SearchAggregatedCompanyStatsList(SearchAggregatedCompanyStatsListRequest) returns (SearchAggregatedCompanyStatsListResponse) {}
+    rpc GetCompanyAggregatedOfferStatsLists(GetCompanyAggregatedOfferStatsListsRequest) returns (GetCompanyAggregatedOfferStatsListsResponse) {}
+}
+
+message Company {
+    uint64 id = 1;
+    string name = 2;
+    string profile_image_url = 3;
+}
+
+message Location {
+    uint64 id = 1;
+    string country = 2 [(validate.rules).string = {
+        pattern: "^[\\p{L}\\p{M}\\p{N}\\p{P}\\p{S}\\p{Z}]{1,64}$",
+    }];
+    string state = 3 [(validate.rules).string = {
+        pattern: "^[\\p{L}\\p{M}\\p{N}\\p{P}\\p{S}\\p{Z}]{0,64}$",
+    }];
+    string city = 4 [(validate.rules).string = {
+        pattern: "^[\\p{L}\\p{M}\\p{N}\\p{P}\\p{S}\\p{Z}]{1,64}$",
+    }];
+}
+
+message Position {
+    uint64 id = 1;
+    string title = 2 [(validate.rules).string = {
+        pattern: "^[\\p{L}\\p{M}\\p{N}\\p{P}\\p{S}\\p{Z}]{1,256}$",
+    }];
+    string level = 3 [(validate.rules).string = {
+        pattern: "^[\\p{L}\\p{M}\\p{N}\\p{P}\\p{S}\\p{Z}]{0,64}$",
+    }];
+}
+
+message MonetaryValue {
+    uint64 amount = 1;
+    string currency = 2;
+}
+
+message AggregatedOfferStats {
+    Company company = 1;
+    Location location = 2;
+    Position position = 3;
+    MonetaryValue minimum_total_package = 4;
+    MonetaryValue maximum_total_package = 5;
+}
+
+message CompanyAggregatedOfferStatsSortOrder {
+    enum Values {
+        VALUES_UNSPECIFIED = 0;
+        VALUES_LOCATION_ASCENDING = 1;
+        VALUES_LOCATION_DESCENDING = 2;
+        VALUES_POSITION_ASCENDING = 3;
+        VALUES_POSITION_DESCENDING = 4;
+    }
+}
+
+message AggregatedCompanyStats {
+    Company company = 1;
+    uint64 total_submission_count = 2;
+}
+
+message AggregatedCompanyStatsSortOrder {
+    enum Values {
+        VALUES_UNSPECIFIED = 0;
+        VALUES_ID_ASCENDING = 1;
+        VALUES_ID_DESCENDING = 2;
+        VALUES_NAME_ASCENDING = 3;
+        VALUES_NAME_DESCENDING = 4;
+    }
+}
+
+message AggregatedCompanyStatsFilterOptions {
+    string company_name_query = 1;
+    repeated string country_list = 2 [(validate.rules).repeated = {
+        max_items: 10,
+        items: {
+            string: {
+                pattern: "^[\\p{L}\\p{M}\\p{N}\\p{P}\\p{S}\\p{Z}]{1,64}$",
+            },
+        },
+    }];
+    repeated string state_list = 3 [(validate.rules).repeated = {
+        max_items: 10,
+        items: {
+            string: {
+                pattern: "^[\\p{L}\\p{M}\\p{N}\\p{P}\\p{S}\\p{Z}]{1,64}$",
+            },
+        },
+    }];
+    repeated string city_list = 4 [(validate.rules).repeated = {
+        max_items: 10,
+        items: {
+            string: {
+                pattern: "^[\\p{L}\\p{M}\\p{N}\\p{P}\\p{S}\\p{Z}]{1,64}$",
+            },
+        },
+    }];
+    repeated string level_title_list = 5 [(validate.rules).repeated = {
+        max_items: 10,
+        items: {
+            string: {
+                pattern: "^[\\p{L}\\p{M}\\p{N}\\p{P}\\p{S}\\p{Z}]{1,256}",
+            },
+        },
+    }];
+    repeated string level_code_list = 6 [(validate.rules).repeated = {
+        max_items: 10,
+        items: {
+            string: {
+                pattern: "^[\\p{L}\\p{M}\\p{N}\\p{P}\\p{S}\\p{Z}]{1,64}$",
+            },
+        },
+    }];
+}
+
+message GetAggregatedCompanyStatsListRequest {
+    oneof cursor {
+        uint64 company_id = 1;
+        string company_name = 2;
+    }
+    AggregatedCompanyStatsSortOrder.Values sort_order = 3;
+    uint64 limit = 4 [(validate.rules).uint64 = {
+        lte: 100,
+    }];
+}
+
+message GetAggregatedCompanyStatsListResponse {
+    repeated AggregatedCompanyStats company_stat_list = 1;
+    oneof previous_cursor {
+        uint64 previous_company_id = 2;
+        string previous_company_name = 3;
+    }
+    oneof next_cursor {
+        uint64 next_company_id = 4;
+        string next_company_name = 5;
+    }
+}
+
+message SearchAggregatedCompanyStatsListRequest {
+    AggregatedCompanyStatsFilterOptions filter_options = 1;
+    AggregatedCompanyStatsSortOrder.Values sort_order = 2;
+    uint64 offset = 3;
+    uint64 limit = 4 [(validate.rules).uint64 = {
+        lte: 100,
+    }];
+}
+
+message SearchAggregatedCompanyStatsListResponse {
+    repeated AggregatedCompanyStats company_stat_list = 1;
+    uint64 total_company_stat_count = 2;
+}
+
+message GetCompanyAggregatedOfferStatsListsRequest {
+    oneof cursor {
+        uint64 location_id = 1;
+        string position_name = 2;
+    }
+    CompanyAggregatedOfferStatsSortOrder.Values sort_order = 3;
+    uint64 limit = 4 [(validate.rules).uint64 = {
+        lte: 100,
+    }];
+}
+
+message GetCompanyAggregatedOfferStatsListsResponse {
+    repeated AggregatedCompanyStats offer_stat_list = 1;
+    oneof previous_cursor {
+        uint64 previous_location_id = 2;
+        string previous_position_id = 3;
+    }
+    oneof next_cursor {
+        uint64 next_location_id = 4;
+        string next_position_id = 5;
+    }
+}
