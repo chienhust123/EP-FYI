@@ -108,12 +108,12 @@ message OfferListFilterOptions {
     repeated uint64 company_id_list = 1 [(validate.rules).repeated = {
         max_items: 10,
     }];
-    // The list of country names where the offers were extended from. Offers must belong to one of the provided countries.
+    // The list of country ISO codes where the offers were extended from. Offers must belong to one of the provided countries.
     repeated string country_list = 2 [(validate.rules).repeated = {
         max_items: 10,
         items: {
             string: {
-                pattern: "^[\\p{L}\\p{M}\\p{N}\\p{P}\\p{S}\\p{Z}]{1,64}$",
+                pattern: "^[A-Z]{2}$",
             },
         },
     }];

@@ -28,8 +28,17 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type OfferAggregatorServiceClient interface {
+	// Get the list of aggregated company statisics.
+	//
+	// This API endpoint is meant to be used for simple, fast listing. For more in-depth searching and filtering
+	// of aggregated company statistics, use the API endpoint GetAggregatedCompanyStatsList.
 	GetAggregatedCompanyStatsList(ctx context.Context, in *GetAggregatedCompanyStatsListRequest, opts ...grpc.CallOption) (*GetAggregatedCompanyStatsListResponse, error)
+	// Search the list of aggregated company statisics.
+	//
+	// This API endpoint is meant to be used for more in-depth search and filtering of aggregated company statistic.
+	// For simpler, faster listing without any filtering logic, use the API endpoint GetAggregatedCompanyStatsList.
 	SearchAggregatedCompanyStatsList(ctx context.Context, in *SearchAggregatedCompanyStatsListRequest, opts ...grpc.CallOption) (*SearchAggregatedCompanyStatsListResponse, error)
+	// Get the list of aggregated offer statistic of a company.
 	GetCompanyAggregatedOfferStatsLists(ctx context.Context, in *GetCompanyAggregatedOfferStatsListsRequest, opts ...grpc.CallOption) (*GetCompanyAggregatedOfferStatsListsResponse, error)
 }
 
@@ -72,8 +81,17 @@ func (c *offerAggregatorServiceClient) GetCompanyAggregatedOfferStatsLists(ctx c
 // All implementations must embed UnimplementedOfferAggregatorServiceServer
 // for forward compatibility
 type OfferAggregatorServiceServer interface {
+	// Get the list of aggregated company statisics.
+	//
+	// This API endpoint is meant to be used for simple, fast listing. For more in-depth searching and filtering
+	// of aggregated company statistics, use the API endpoint GetAggregatedCompanyStatsList.
 	GetAggregatedCompanyStatsList(context.Context, *GetAggregatedCompanyStatsListRequest) (*GetAggregatedCompanyStatsListResponse, error)
+	// Search the list of aggregated company statisics.
+	//
+	// This API endpoint is meant to be used for more in-depth search and filtering of aggregated company statistic.
+	// For simpler, faster listing without any filtering logic, use the API endpoint GetAggregatedCompanyStatsList.
 	SearchAggregatedCompanyStatsList(context.Context, *SearchAggregatedCompanyStatsListRequest) (*SearchAggregatedCompanyStatsListResponse, error)
+	// Get the list of aggregated offer statistic of a company.
 	GetCompanyAggregatedOfferStatsLists(context.Context, *GetCompanyAggregatedOfferStatsListsRequest) (*GetCompanyAggregatedOfferStatsListsResponse, error)
 	mustEmbedUnimplementedOfferAggregatorServiceServer()
 }

@@ -1052,7 +1052,7 @@ func (m *OfferListFilterOptions) validate(all bool) error {
 		if !_OfferListFilterOptions_CountryList_Pattern.MatchString(item) {
 			err := OfferListFilterOptionsValidationError{
 				field:  fmt.Sprintf("CountryList[%v]", idx),
-				reason: "value does not match regex pattern \"^[\\\\p{L}\\\\p{M}\\\\p{N}\\\\p{P}\\\\p{S}\\\\p{Z}]{1,64}$\"",
+				reason: "value does not match regex pattern \"^[A-Z]{2}$\"",
 			}
 			if !all {
 				return err
@@ -1261,7 +1261,7 @@ var _ interface {
 	ErrorName() string
 } = OfferListFilterOptionsValidationError{}
 
-var _OfferListFilterOptions_CountryList_Pattern = regexp.MustCompile("^[\\p{L}\\p{M}\\p{N}\\p{P}\\p{S}\\p{Z}]{1,64}$")
+var _OfferListFilterOptions_CountryList_Pattern = regexp.MustCompile("^[A-Z]{2}$")
 
 var _OfferListFilterOptions_StateList_Pattern = regexp.MustCompile("^[\\p{L}\\p{M}\\p{N}\\p{P}\\p{S}\\p{Z}]{1,64}$")
 

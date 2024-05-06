@@ -532,6 +532,8 @@ func (m *AggregatedOfferStats) validate(all bool) error {
 
 	var errors []error
 
+	// no validation rules for Id
+
 	if all {
 		switch v := interface{}(m.GetCompany()).(type) {
 		case interface{ ValidateAll() error }:
@@ -1140,7 +1142,7 @@ func (m *AggregatedCompanyStatsFilterOptions) validate(all bool) error {
 		if !_AggregatedCompanyStatsFilterOptions_CountryList_Pattern.MatchString(item) {
 			err := AggregatedCompanyStatsFilterOptionsValidationError{
 				field:  fmt.Sprintf("CountryList[%v]", idx),
-				reason: "value does not match regex pattern \"^[\\\\p{L}\\\\p{M}\\\\p{N}\\\\p{P}\\\\p{S}\\\\p{Z}]{1,64}$\"",
+				reason: "value does not match regex pattern \"^[A-Z]{2}$\"",
 			}
 			if !all {
 				return err
@@ -1204,9 +1206,9 @@ func (m *AggregatedCompanyStatsFilterOptions) validate(all bool) error {
 
 	}
 
-	if len(m.GetLevelTitleList()) > 10 {
+	if len(m.GetPositionTitleList()) > 10 {
 		err := AggregatedCompanyStatsFilterOptionsValidationError{
-			field:  "LevelTitleList",
+			field:  "PositionTitleList",
 			reason: "value must contain no more than 10 item(s)",
 		}
 		if !all {
@@ -1215,12 +1217,12 @@ func (m *AggregatedCompanyStatsFilterOptions) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	for idx, item := range m.GetLevelTitleList() {
+	for idx, item := range m.GetPositionTitleList() {
 		_, _ = idx, item
 
-		if !_AggregatedCompanyStatsFilterOptions_LevelTitleList_Pattern.MatchString(item) {
+		if !_AggregatedCompanyStatsFilterOptions_PositionTitleList_Pattern.MatchString(item) {
 			err := AggregatedCompanyStatsFilterOptionsValidationError{
-				field:  fmt.Sprintf("LevelTitleList[%v]", idx),
+				field:  fmt.Sprintf("PositionTitleList[%v]", idx),
 				reason: "value does not match regex pattern \"^[\\\\p{L}\\\\p{M}\\\\p{N}\\\\p{P}\\\\p{S}\\\\p{Z}]{1,256}\"",
 			}
 			if !all {
@@ -1231,9 +1233,9 @@ func (m *AggregatedCompanyStatsFilterOptions) validate(all bool) error {
 
 	}
 
-	if len(m.GetLevelCodeList()) > 10 {
+	if len(m.GetPositionLevelList()) > 10 {
 		err := AggregatedCompanyStatsFilterOptionsValidationError{
-			field:  "LevelCodeList",
+			field:  "PositionLevelList",
 			reason: "value must contain no more than 10 item(s)",
 		}
 		if !all {
@@ -1242,12 +1244,12 @@ func (m *AggregatedCompanyStatsFilterOptions) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	for idx, item := range m.GetLevelCodeList() {
+	for idx, item := range m.GetPositionLevelList() {
 		_, _ = idx, item
 
-		if !_AggregatedCompanyStatsFilterOptions_LevelCodeList_Pattern.MatchString(item) {
+		if !_AggregatedCompanyStatsFilterOptions_PositionLevelList_Pattern.MatchString(item) {
 			err := AggregatedCompanyStatsFilterOptionsValidationError{
-				field:  fmt.Sprintf("LevelCodeList[%v]", idx),
+				field:  fmt.Sprintf("PositionLevelList[%v]", idx),
 				reason: "value does not match regex pattern \"^[\\\\p{L}\\\\p{M}\\\\p{N}\\\\p{P}\\\\p{S}\\\\p{Z}]{1,64}$\"",
 			}
 			if !all {
@@ -1340,15 +1342,15 @@ var _ interface {
 	ErrorName() string
 } = AggregatedCompanyStatsFilterOptionsValidationError{}
 
-var _AggregatedCompanyStatsFilterOptions_CountryList_Pattern = regexp.MustCompile("^[\\p{L}\\p{M}\\p{N}\\p{P}\\p{S}\\p{Z}]{1,64}$")
+var _AggregatedCompanyStatsFilterOptions_CountryList_Pattern = regexp.MustCompile("^[A-Z]{2}$")
 
 var _AggregatedCompanyStatsFilterOptions_StateList_Pattern = regexp.MustCompile("^[\\p{L}\\p{M}\\p{N}\\p{P}\\p{S}\\p{Z}]{1,64}$")
 
 var _AggregatedCompanyStatsFilterOptions_CityList_Pattern = regexp.MustCompile("^[\\p{L}\\p{M}\\p{N}\\p{P}\\p{S}\\p{Z}]{1,64}$")
 
-var _AggregatedCompanyStatsFilterOptions_LevelTitleList_Pattern = regexp.MustCompile("^[\\p{L}\\p{M}\\p{N}\\p{P}\\p{S}\\p{Z}]{1,256}")
+var _AggregatedCompanyStatsFilterOptions_PositionTitleList_Pattern = regexp.MustCompile("^[\\p{L}\\p{M}\\p{N}\\p{P}\\p{S}\\p{Z}]{1,256}")
 
-var _AggregatedCompanyStatsFilterOptions_LevelCodeList_Pattern = regexp.MustCompile("^[\\p{L}\\p{M}\\p{N}\\p{P}\\p{S}\\p{Z}]{1,64}$")
+var _AggregatedCompanyStatsFilterOptions_PositionLevelList_Pattern = regexp.MustCompile("^[\\p{L}\\p{M}\\p{N}\\p{P}\\p{S}\\p{Z}]{1,64}$")
 
 // Validate checks the field values on GetAggregatedCompanyStatsListRequest
 // with the rules defined in the proto definition for this message. If any

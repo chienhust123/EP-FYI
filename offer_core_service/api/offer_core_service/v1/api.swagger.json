@@ -419,7 +419,7 @@
           "items": {
             "type": "string"
           },
-          "description": "The list of country names where the offers were extended from. Offers must belong to one of the provided countries."
+          "description": "The list of country ISO codes where the offers were extended from. Offers must belong to one of the provided countries."
         },
         "stateList": {
           "type": "array",
