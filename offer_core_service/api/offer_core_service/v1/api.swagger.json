@@ -18,6 +18,7 @@
   "paths": {
     "/offer_core_service.v1.OfferCoreService/CreateOffer": {
       "post": {
+        "summary": "Create a new offer entry in the database.",
         "operationId": "OfferCoreService_CreateOffer",
         "responses": {
           "200": {
@@ -50,6 +51,7 @@
     },
     "/offer_core_service.v1.OfferCoreService/CreateOfferImage": {
       "post": {
+        "summary": "Create a new offer image entry in the database, and returns a S3 presigned URL that can be used by the client to\nupload an image, which can be associated with an offer in the future.",
         "operationId": "OfferCoreService_CreateOfferImage",
         "responses": {
           "200": {
@@ -82,6 +84,8 @@
     },
     "/offer_core_service.v1.OfferCoreService/GetOffer": {
       "post": {
+        "summary": "Get an offer entry from the database.",
+        "description": "If the requested offer's status is not `APPROVED`, the requesting client's email address must be in the whitelisted\nlist in the config for the request to be authorized.",
         "operationId": "OfferCoreService_GetOffer",
         "responses": {
           "200": {
@@ -114,6 +118,8 @@
     },
     "/offer_core_service.v1.OfferCoreService/GetOfferList": {
       "post": {
+        "summary": "Get the list of offer entrys from the database that match the provided filter options.",
+        "description": "If the request try to filter for orders with non-`APPROVED` statuses, the requesting client's email address must be\nin the whitelisted list in the config for the request to be authorized.",
         "operationId": "OfferCoreService_GetOfferList",
         "responses": {
           "200": {
@@ -144,14 +150,16 @@
         ]
       }
     },
-    "/offer_core_service.v1.OfferCoreService/UpdateOffer": {
+    "/offer_core_service.v1.OfferCoreService/UpdateOfferStatus": {
       "post": {
-        "operationId": "OfferCoreService_UpdateOffer",
+        "summary": "Update the status of an offer entry in the database.",
+        "description": "The requesting client's email address must be in the whitelisted list in the config for the request to be authorized.",
+        "operationId": "OfferCoreService_UpdateOfferStatus",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1UpdateOfferResponse"
+              "$ref": "#/definitions/v1UpdateOfferStatusResponse"
             }
           },
           "default": {
@@ -167,7 +175,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1UpdateOfferRequest"
+              "$ref": "#/definitions/v1UpdateOfferStatusRequest"
             }
           }
         ],
@@ -178,16 +186,6 @@
     }
   },
   "definitions": {
-    "OfferStatusValue": {
-      "type": "string",
-      "enum": [
-        "VALUE_UNSPECIFIED",
-        "VALUE_UPLOADED",
-        "VALUE_APPROVED",
-        "VALUE_DISAPPROVED"
-      ],
-      "default": "VALUE_UNSPECIFIED"
-    },
     "offer_core_servicev1Location": {
       "type": "object",
       "properties": {
@@ -196,13 +194,16 @@
           "format": "uint64"
         },
         "country": {
-          "type": "string"
+          "type": "string",
+          "description": "The 2-letter ISO country code of the country of the location."
         },
         "state": {
-          "type": "string"
+          "type": "string",
+          "description": "Optional, the name of the state of the location."
         },
         "city": {
-          "type": "string"
+          "type": "string",
+          "description": "The name of the city of the location."
         }
       }
     },
@@ -263,22 +264,25 @@
     "v1CreateOfferRequest": {
       "type": "object",
       "properties": {
-        "companyId": {
-          "type": "string",
-          "format": "uint64"
+        "company": {
+          "$ref": "#/definitions/v1Company",
+          "description": "If the company ID is provided and exists inside the database, the newly created offer will be associated to that company.\nOtherwise, if the company name is provided, Offer Core Service will try to match it with an existing company inside the database.\nIf none is found, then a new company record is created inside the database."
         },
         "location": {
-          "$ref": "#/definitions/offer_core_servicev1Location"
+          "$ref": "#/definitions/offer_core_servicev1Location",
+          "description": "If the location ID is provided and exists inside the database, the newly created offer will be associated to that location.\nOtherwise, Offer Core Service will try to match the location's country, state and city with an existing location inside the database.\nIf none is found, then a new location record is created inside the database."
         },
         "position": {
-          "$ref": "#/definitions/v1Position"
+          "$ref": "#/definitions/v1Position",
+          "description": "If the position ID is provided and exists inside the database, the newly created offer will be associated to that position.\nOtherwise, Offer Core Service will try to match the position's title and level with an existing position inside the database.\nIf none is found, then a new position record is created inside the database."
         },
         "totalPackage": {
           "$ref": "#/definitions/v1MonetaryValue"
         },
         "imageId": {
           "type": "string",
-          "format": "uint64"
+          "format": "uint64",
+          "description": "Must be an image ID returned by the CreateOfferImage API, and the presigned URL associated with that image inside our database must\nhave an image uploaded to it."
         }
       }
     },
@@ -295,6 +299,9 @@
       "properties": {
         "filterOptions": {
           "$ref": "#/definitions/v1OfferListFilterOptions"
+        },
+        "sortOrder": {
+          "$ref": "#/definitions/v1OfferListSortOrderValue"
         },
         "offset": {
           "type": "string",
@@ -344,10 +351,12 @@
       "properties": {
         "amount": {
           "type": "string",
-          "format": "uint64"
+          "format": "uint64",
+          "description": "The amount of the monetary value, represented in the Inflated Integer format with multiplier of 10^5."
         },
         "currency": {
-          "type": "string"
+          "type": "string",
+          "description": "The 3-letter ISO currency code of the currency denoting the monetary value."
         }
       }
     },
@@ -374,7 +383,11 @@
           "$ref": "#/definitions/v1OfferImage"
         },
         "status": {
-          "$ref": "#/definitions/OfferStatusValue"
+          "$ref": "#/definitions/v1OfferStatusValue"
+        },
+        "createdTime": {
+          "type": "string",
+          "format": "uint64"
         }
       }
     },
@@ -398,39 +411,82 @@
           "items": {
             "type": "string",
             "format": "uint64"
-          }
+          },
+          "description": "The list of company IDs where the offers were extended from. Offer must belong to one of the provided company IDs."
         },
         "countryList": {
           "type": "array",
           "items": {
             "type": "string"
-          }
+          },
+          "description": "The list of country names where the offers were extended from. Offer must belong to one of the provided countries."
         },
         "stateList": {
           "type": "array",
           "items": {
             "type": "string"
-          }
+          },
+          "description": "The list of state names where the offers were extended from. Offer must belong to one of the provided states."
         },
         "cityList": {
           "type": "array",
           "items": {
             "type": "string"
-          }
+          },
+          "description": "The list of city names where the offers were extended from. Offer must belong to one of the provided cities."
         },
-        "levelTitleList": {
+        "positionTitleList": {
           "type": "array",
           "items": {
             "type": "string"
-          }
+          },
+          "description": "The list of position titles of the requested offers. Offer must match one of the provided title using full-text index search."
         },
-        "levelCodeList": {
+        "positionLevelList": {
           "type": "array",
           "items": {
             "type": "string"
-          }
+          },
+          "description": "The list of position level codes of the requested offers. Offer must match one of the provided level codes."
+        },
+        "statusList": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1OfferStatusValue"
+          },
+          "description": "The list of statuses the offer must be in. Any users can filter for offers with APPROVED status, but only whitelisted users can filter for offer of other statuses."
         }
-      }
+      },
+      "description": "Filter options when listing offers."
+    },
+    "v1OfferListSortOrderValue": {
+      "type": "string",
+      "enum": [
+        "VALUE_UNSPECIFIED",
+        "VALUE_CREATED_TIME_ASCENDING",
+        "VALUE_CREATED_TIME_DESCENDING",
+        "VALUE_COMPANY_ASCENDING",
+        "VALUE_COMPANY_DESCENDING",
+        "VALUE_LOCATION_ASCENDING",
+        "VALUE_LOCATION_DESCENDING",
+        "VALUE_POSITION_ASCENDING",
+        "VALUE_POSITION_DESCENDING",
+        "VALUE_TOTAL_PACKAGE_ASCENDING",
+        "VALUE_TOTAL_PACKAGE_DESCENDING"
+      ],
+      "default": "VALUE_UNSPECIFIED",
+      "description": " - VALUE_CREATED_TIME_ASCENDING: Sort offer by ascending created time first, ascending ID second.\n - VALUE_CREATED_TIME_DESCENDING: Sort offer by descending created time first, descending ID second.\n - VALUE_COMPANY_ASCENDING: Sort offer by ascending company name first, ascending ID second.\n - VALUE_COMPANY_DESCENDING: Sort offer by descending company name first, descending ID second.\n - VALUE_LOCATION_ASCENDING: Sort offer by ascending country first, then ascending state, ascending city and ascending ID.\n - VALUE_LOCATION_DESCENDING: Sort offer by descending country first, then descending state, descending city and descending ID.\n - VALUE_POSITION_ASCENDING: Sort offer by ascending position name first, ascending ID second.\n - VALUE_POSITION_DESCENDING: Sort offer by descending position name first, descending ID second.\n - VALUE_TOTAL_PACKAGE_ASCENDING: Sort offer by ascending currency name first, ascending amount second and aseconding ID last.\n - VALUE_TOTAL_PACKAGE_DESCENDING: Sort offer by descending currency name first, descending amount second and descending ID last."
+    },
+    "v1OfferStatusValue": {
+      "type": "string",
+      "enum": [
+        "VALUE_UNSPECIFIED",
+        "VALUE_UPLOADED",
+        "VALUE_APPROVED",
+        "VALUE_DISAPPROVED"
+      ],
+      "default": "VALUE_UNSPECIFIED",
+      "description": " - VALUE_UNSPECIFIED: Default status value.\n - VALUE_UPLOADED: Status representing a newly created offer.\n - VALUE_APPROVED: Status representing an approved offer, ready to be displayed on the public API and included in the aggregated result.\n - VALUE_DISAPPROVED: Status representing a disapporved offer, not to be displayed on the public API and included in the aggregated result."
     },
     "v1Position": {
       "type": "object",
@@ -440,14 +496,16 @@
           "format": "uint64"
         },
         "title": {
-          "type": "string"
+          "type": "string",
+          "description": "The title of the position - for example, Software Engineer, Senior Software Engineer, etc..."
         },
         "code": {
-          "type": "string"
+          "type": "string",
+          "description": "Optional, the level code of the position - for example, L3, L4, etc..."
         }
       }
     },
-    "v1UpdateOfferRequest": {
+    "v1UpdateOfferStatusRequest": {
       "type": "object",
       "properties": {
         "id": {
@@ -455,17 +513,12 @@
           "format": "uint64"
         },
         "status": {
-          "$ref": "#/definitions/OfferStatusValue"
+          "$ref": "#/definitions/v1OfferStatusValue"
         }
       }
     },
-    "v1UpdateOfferResponse": {
-      "type": "object",
-      "properties": {
-        "offer": {
-          "$ref": "#/definitions/v1Offer"
-        }
-      }
+    "v1UpdateOfferStatusResponse": {
+      "type": "object"
     }
   }
 }

@@ -295,7 +295,7 @@ func (m *Location) validate(all bool) error {
 	if !_Location_Country_Pattern.MatchString(m.GetCountry()) {
 		err := LocationValidationError{
 			field:  "Country",
-			reason: "value does not match regex pattern \"^[\\\\p{L}\\\\p{M}\\\\p{N}\\\\p{P}\\\\p{S}\\\\p{Z}]{1,64}$\"",
+			reason: "value does not match regex pattern \"^[A-Z]{2}$\"",
 		}
 		if !all {
 			return err
@@ -402,7 +402,7 @@ var _ interface {
 	ErrorName() string
 } = LocationValidationError{}
 
-var _Location_Country_Pattern = regexp.MustCompile("^[\\p{L}\\p{M}\\p{N}\\p{P}\\p{S}\\p{Z}]{1,64}$")
+var _Location_Country_Pattern = regexp.MustCompile("^[A-Z]{2}$")
 
 var _Location_State_Pattern = regexp.MustCompile("^[\\p{L}\\p{M}\\p{N}\\p{P}\\p{S}\\p{Z}]{0,64}$")
 
@@ -562,7 +562,7 @@ func (m *MonetaryValue) validate(all bool) error {
 	if !_MonetaryValue_Currency_Pattern.MatchString(m.GetCurrency()) {
 		err := MonetaryValueValidationError{
 			field:  "Currency",
-			reason: "value does not match regex pattern \"^[A-Z]{1,3}$\"",
+			reason: "value does not match regex pattern \"^[A-Z]{3}$\"",
 		}
 		if !all {
 			return err
@@ -648,7 +648,7 @@ var _ interface {
 	ErrorName() string
 } = MonetaryValueValidationError{}
 
-var _MonetaryValue_Currency_Pattern = regexp.MustCompile("^[A-Z]{1,3}$")
+var _MonetaryValue_Currency_Pattern = regexp.MustCompile("^[A-Z]{3}$")
 
 // Validate checks the field values on OfferImage with the rules defined in the
 // proto definition for this message. If any rules are violated, the first
@@ -923,6 +923,8 @@ func (m *Offer) validate(all bool) error {
 
 	// no validation rules for Status
 
+	// no validation rules for CreatedTime
+
 	if len(errors) > 0 {
 		return OfferMultiError(errors)
 	}
@@ -1114,9 +1116,9 @@ func (m *OfferListFilterOptions) validate(all bool) error {
 
 	}
 
-	if len(m.GetLevelTitleList()) > 10 {
+	if len(m.GetPositionTitleList()) > 10 {
 		err := OfferListFilterOptionsValidationError{
-			field:  "LevelTitleList",
+			field:  "PositionTitleList",
 			reason: "value must contain no more than 10 item(s)",
 		}
 		if !all {
@@ -1125,12 +1127,12 @@ func (m *OfferListFilterOptions) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	for idx, item := range m.GetLevelTitleList() {
+	for idx, item := range m.GetPositionTitleList() {
 		_, _ = idx, item
 
-		if !_OfferListFilterOptions_LevelTitleList_Pattern.MatchString(item) {
+		if !_OfferListFilterOptions_PositionTitleList_Pattern.MatchString(item) {
 			err := OfferListFilterOptionsValidationError{
-				field:  fmt.Sprintf("LevelTitleList[%v]", idx),
+				field:  fmt.Sprintf("PositionTitleList[%v]", idx),
 				reason: "value does not match regex pattern \"^[\\\\p{L}\\\\p{M}\\\\p{N}\\\\p{P}\\\\p{S}\\\\p{Z}]{1,256}\"",
 			}
 			if !all {
@@ -1141,9 +1143,9 @@ func (m *OfferListFilterOptions) validate(all bool) error {
 
 	}
 
-	if len(m.GetLevelCodeList()) > 10 {
+	if len(m.GetPositionLevelList()) > 10 {
 		err := OfferListFilterOptionsValidationError{
-			field:  "LevelCodeList",
+			field:  "PositionLevelList",
 			reason: "value must contain no more than 10 item(s)",
 		}
 		if !all {
@@ -1152,12 +1154,12 @@ func (m *OfferListFilterOptions) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	for idx, item := range m.GetLevelCodeList() {
+	for idx, item := range m.GetPositionLevelList() {
 		_, _ = idx, item
 
-		if !_OfferListFilterOptions_LevelCodeList_Pattern.MatchString(item) {
+		if !_OfferListFilterOptions_PositionLevelList_Pattern.MatchString(item) {
 			err := OfferListFilterOptionsValidationError{
-				field:  fmt.Sprintf("LevelCodeList[%v]", idx),
+				field:  fmt.Sprintf("PositionLevelList[%v]", idx),
 				reason: "value does not match regex pattern \"^[\\\\p{L}\\\\p{M}\\\\p{N}\\\\p{P}\\\\p{S}\\\\p{Z}]{1,64}$\"",
 			}
 			if !all {
@@ -1166,6 +1168,17 @@ func (m *OfferListFilterOptions) validate(all bool) error {
 			errors = append(errors, err)
 		}
 
+	}
+
+	if len(m.GetStatusList()) > 10 {
+		err := OfferListFilterOptionsValidationError{
+			field:  "StatusList",
+			reason: "value must contain no more than 10 item(s)",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(errors) > 0 {
@@ -1254,9 +1267,111 @@ var _OfferListFilterOptions_StateList_Pattern = regexp.MustCompile("^[\\p{L}\\p{
 
 var _OfferListFilterOptions_CityList_Pattern = regexp.MustCompile("^[\\p{L}\\p{M}\\p{N}\\p{P}\\p{S}\\p{Z}]{1,64}$")
 
-var _OfferListFilterOptions_LevelTitleList_Pattern = regexp.MustCompile("^[\\p{L}\\p{M}\\p{N}\\p{P}\\p{S}\\p{Z}]{1,256}")
+var _OfferListFilterOptions_PositionTitleList_Pattern = regexp.MustCompile("^[\\p{L}\\p{M}\\p{N}\\p{P}\\p{S}\\p{Z}]{1,256}")
 
-var _OfferListFilterOptions_LevelCodeList_Pattern = regexp.MustCompile("^[\\p{L}\\p{M}\\p{N}\\p{P}\\p{S}\\p{Z}]{1,64}$")
+var _OfferListFilterOptions_PositionLevelList_Pattern = regexp.MustCompile("^[\\p{L}\\p{M}\\p{N}\\p{P}\\p{S}\\p{Z}]{1,64}$")
+
+// Validate checks the field values on OfferListSortOrder with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *OfferListSortOrder) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on OfferListSortOrder with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// OfferListSortOrderMultiError, or nil if none found.
+func (m *OfferListSortOrder) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *OfferListSortOrder) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if len(errors) > 0 {
+		return OfferListSortOrderMultiError(errors)
+	}
+
+	return nil
+}
+
+// OfferListSortOrderMultiError is an error wrapping multiple validation errors
+// returned by OfferListSortOrder.ValidateAll() if the designated constraints
+// aren't met.
+type OfferListSortOrderMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m OfferListSortOrderMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m OfferListSortOrderMultiError) AllErrors() []error { return m }
+
+// OfferListSortOrderValidationError is the validation error returned by
+// OfferListSortOrder.Validate if the designated constraints aren't met.
+type OfferListSortOrderValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e OfferListSortOrderValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e OfferListSortOrderValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e OfferListSortOrderValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e OfferListSortOrderValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e OfferListSortOrderValidationError) ErrorName() string {
+	return "OfferListSortOrderValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e OfferListSortOrderValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sOfferListSortOrder.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = OfferListSortOrderValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = OfferListSortOrderValidationError{}
 
 // Validate checks the field values on CreateOfferImageRequest with the rules
 // defined in the proto definition for this message. If any rules are
@@ -1513,7 +1628,34 @@ func (m *CreateOfferRequest) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for CompanyId
+	if all {
+		switch v := interface{}(m.GetCompany()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CreateOfferRequestValidationError{
+					field:  "Company",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CreateOfferRequestValidationError{
+					field:  "Company",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetCompany()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CreateOfferRequestValidationError{
+				field:  "Company",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	if all {
 		switch v := interface{}(m.GetLocation()).(type) {
@@ -1815,22 +1957,22 @@ var _ interface {
 	ErrorName() string
 } = CreateOfferResponseValidationError{}
 
-// Validate checks the field values on UpdateOfferRequest with the rules
+// Validate checks the field values on UpdateOfferStatusRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
-func (m *UpdateOfferRequest) Validate() error {
+func (m *UpdateOfferStatusRequest) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on UpdateOfferRequest with the rules
-// defined in the proto definition for this message. If any rules are
+// ValidateAll checks the field values on UpdateOfferStatusRequest with the
+// rules defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// UpdateOfferRequestMultiError, or nil if none found.
-func (m *UpdateOfferRequest) ValidateAll() error {
+// UpdateOfferStatusRequestMultiError, or nil if none found.
+func (m *UpdateOfferStatusRequest) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *UpdateOfferRequest) validate(all bool) error {
+func (m *UpdateOfferStatusRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -1842,19 +1984,19 @@ func (m *UpdateOfferRequest) validate(all bool) error {
 	// no validation rules for Status
 
 	if len(errors) > 0 {
-		return UpdateOfferRequestMultiError(errors)
+		return UpdateOfferStatusRequestMultiError(errors)
 	}
 
 	return nil
 }
 
-// UpdateOfferRequestMultiError is an error wrapping multiple validation errors
-// returned by UpdateOfferRequest.ValidateAll() if the designated constraints
-// aren't met.
-type UpdateOfferRequestMultiError []error
+// UpdateOfferStatusRequestMultiError is an error wrapping multiple validation
+// errors returned by UpdateOfferStatusRequest.ValidateAll() if the designated
+// constraints aren't met.
+type UpdateOfferStatusRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m UpdateOfferRequestMultiError) Error() string {
+func (m UpdateOfferStatusRequestMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -1863,11 +2005,11 @@ func (m UpdateOfferRequestMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m UpdateOfferRequestMultiError) AllErrors() []error { return m }
+func (m UpdateOfferStatusRequestMultiError) AllErrors() []error { return m }
 
-// UpdateOfferRequestValidationError is the validation error returned by
-// UpdateOfferRequest.Validate if the designated constraints aren't met.
-type UpdateOfferRequestValidationError struct {
+// UpdateOfferStatusRequestValidationError is the validation error returned by
+// UpdateOfferStatusRequest.Validate if the designated constraints aren't met.
+type UpdateOfferStatusRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -1875,24 +2017,24 @@ type UpdateOfferRequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e UpdateOfferRequestValidationError) Field() string { return e.field }
+func (e UpdateOfferStatusRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e UpdateOfferRequestValidationError) Reason() string { return e.reason }
+func (e UpdateOfferStatusRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e UpdateOfferRequestValidationError) Cause() error { return e.cause }
+func (e UpdateOfferStatusRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e UpdateOfferRequestValidationError) Key() bool { return e.key }
+func (e UpdateOfferStatusRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e UpdateOfferRequestValidationError) ErrorName() string {
-	return "UpdateOfferRequestValidationError"
+func (e UpdateOfferStatusRequestValidationError) ErrorName() string {
+	return "UpdateOfferStatusRequestValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e UpdateOfferRequestValidationError) Error() string {
+func (e UpdateOfferStatusRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -1904,14 +2046,14 @@ func (e UpdateOfferRequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sUpdateOfferRequest.%s: %s%s",
+		"invalid %sUpdateOfferStatusRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = UpdateOfferRequestValidationError{}
+var _ error = UpdateOfferStatusRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -1919,73 +2061,44 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = UpdateOfferRequestValidationError{}
+} = UpdateOfferStatusRequestValidationError{}
 
-// Validate checks the field values on UpdateOfferResponse with the rules
+// Validate checks the field values on UpdateOfferStatusResponse with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
-func (m *UpdateOfferResponse) Validate() error {
+func (m *UpdateOfferStatusResponse) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on UpdateOfferResponse with the rules
-// defined in the proto definition for this message. If any rules are
+// ValidateAll checks the field values on UpdateOfferStatusResponse with the
+// rules defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// UpdateOfferResponseMultiError, or nil if none found.
-func (m *UpdateOfferResponse) ValidateAll() error {
+// UpdateOfferStatusResponseMultiError, or nil if none found.
+func (m *UpdateOfferStatusResponse) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *UpdateOfferResponse) validate(all bool) error {
+func (m *UpdateOfferStatusResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
 	var errors []error
 
-	if all {
-		switch v := interface{}(m.GetOffer()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, UpdateOfferResponseValidationError{
-					field:  "Offer",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, UpdateOfferResponseValidationError{
-					field:  "Offer",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetOffer()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return UpdateOfferResponseValidationError{
-				field:  "Offer",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
 	if len(errors) > 0 {
-		return UpdateOfferResponseMultiError(errors)
+		return UpdateOfferStatusResponseMultiError(errors)
 	}
 
 	return nil
 }
 
-// UpdateOfferResponseMultiError is an error wrapping multiple validation
-// errors returned by UpdateOfferResponse.ValidateAll() if the designated
-// constraints aren't met.
-type UpdateOfferResponseMultiError []error
+// UpdateOfferStatusResponseMultiError is an error wrapping multiple validation
+// errors returned by UpdateOfferStatusResponse.ValidateAll() if the
+// designated constraints aren't met.
+type UpdateOfferStatusResponseMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m UpdateOfferResponseMultiError) Error() string {
+func (m UpdateOfferStatusResponseMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -1994,11 +2107,11 @@ func (m UpdateOfferResponseMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m UpdateOfferResponseMultiError) AllErrors() []error { return m }
+func (m UpdateOfferStatusResponseMultiError) AllErrors() []error { return m }
 
-// UpdateOfferResponseValidationError is the validation error returned by
-// UpdateOfferResponse.Validate if the designated constraints aren't met.
-type UpdateOfferResponseValidationError struct {
+// UpdateOfferStatusResponseValidationError is the validation error returned by
+// UpdateOfferStatusResponse.Validate if the designated constraints aren't met.
+type UpdateOfferStatusResponseValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -2006,24 +2119,24 @@ type UpdateOfferResponseValidationError struct {
 }
 
 // Field function returns field value.
-func (e UpdateOfferResponseValidationError) Field() string { return e.field }
+func (e UpdateOfferStatusResponseValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e UpdateOfferResponseValidationError) Reason() string { return e.reason }
+func (e UpdateOfferStatusResponseValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e UpdateOfferResponseValidationError) Cause() error { return e.cause }
+func (e UpdateOfferStatusResponseValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e UpdateOfferResponseValidationError) Key() bool { return e.key }
+func (e UpdateOfferStatusResponseValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e UpdateOfferResponseValidationError) ErrorName() string {
-	return "UpdateOfferResponseValidationError"
+func (e UpdateOfferStatusResponseValidationError) ErrorName() string {
+	return "UpdateOfferStatusResponseValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e UpdateOfferResponseValidationError) Error() string {
+func (e UpdateOfferStatusResponseValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -2035,14 +2148,14 @@ func (e UpdateOfferResponseValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sUpdateOfferResponse.%s: %s%s",
+		"invalid %sUpdateOfferStatusResponse.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = UpdateOfferResponseValidationError{}
+var _ error = UpdateOfferStatusResponseValidationError{}
 
 var _ interface {
 	Field() string
@@ -2050,7 +2163,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = UpdateOfferResponseValidationError{}
+} = UpdateOfferStatusResponseValidationError{}
 
 // Validate checks the field values on GetOfferRequest with the rules defined
 // in the proto definition for this message. If any rules are violated, the
@@ -2333,6 +2446,8 @@ func (m *GetOfferListRequest) validate(all bool) error {
 			}
 		}
 	}
+
+	// no validation rules for SortOrder
 
 	// no validation rules for Offset
 

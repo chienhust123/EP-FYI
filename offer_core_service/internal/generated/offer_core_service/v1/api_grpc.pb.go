@@ -19,21 +19,35 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	OfferCoreService_CreateOfferImage_FullMethodName = "/offer_core_service.v1.OfferCoreService/CreateOfferImage"
-	OfferCoreService_CreateOffer_FullMethodName      = "/offer_core_service.v1.OfferCoreService/CreateOffer"
-	OfferCoreService_UpdateOffer_FullMethodName      = "/offer_core_service.v1.OfferCoreService/UpdateOffer"
-	OfferCoreService_GetOffer_FullMethodName         = "/offer_core_service.v1.OfferCoreService/GetOffer"
-	OfferCoreService_GetOfferList_FullMethodName     = "/offer_core_service.v1.OfferCoreService/GetOfferList"
+	OfferCoreService_CreateOfferImage_FullMethodName  = "/offer_core_service.v1.OfferCoreService/CreateOfferImage"
+	OfferCoreService_CreateOffer_FullMethodName       = "/offer_core_service.v1.OfferCoreService/CreateOffer"
+	OfferCoreService_UpdateOfferStatus_FullMethodName = "/offer_core_service.v1.OfferCoreService/UpdateOfferStatus"
+	OfferCoreService_GetOffer_FullMethodName          = "/offer_core_service.v1.OfferCoreService/GetOffer"
+	OfferCoreService_GetOfferList_FullMethodName      = "/offer_core_service.v1.OfferCoreService/GetOfferList"
 )
 
 // OfferCoreServiceClient is the client API for OfferCoreService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type OfferCoreServiceClient interface {
+	// Create a new offer image entry in the database, and returns a S3 presigned URL that can be used by the client to
+	// upload an image, which can be associated with an offer in the future.
 	CreateOfferImage(ctx context.Context, in *CreateOfferImageRequest, opts ...grpc.CallOption) (*CreateOfferImageResponse, error)
+	// Create a new offer entry in the database.
 	CreateOffer(ctx context.Context, in *CreateOfferRequest, opts ...grpc.CallOption) (*CreateOfferResponse, error)
-	UpdateOffer(ctx context.Context, in *UpdateOfferRequest, opts ...grpc.CallOption) (*UpdateOfferResponse, error)
+	// Update the status of an offer entry in the database.
+	//
+	// The requesting client's email address must be in the whitelisted list in the config for the request to be authorized.
+	UpdateOfferStatus(ctx context.Context, in *UpdateOfferStatusRequest, opts ...grpc.CallOption) (*UpdateOfferStatusResponse, error)
+	// Get an offer entry from the database.
+	//
+	// If the requested offer's status is not `APPROVED`, the requesting client's email address must be in the whitelisted
+	// list in the config for the request to be authorized.
 	GetOffer(ctx context.Context, in *GetOfferRequest, opts ...grpc.CallOption) (*GetOfferResponse, error)
+	// Get the list of offer entrys from the database that match the provided filter options.
+	//
+	// If the request try to filter for orders with non-`APPROVED` statuses, the requesting client's email address must be
+	// in the whitelisted list in the config for the request to be authorized.
 	GetOfferList(ctx context.Context, in *GetOfferListRequest, opts ...grpc.CallOption) (*GetOfferListResponse, error)
 }
 
@@ -63,9 +77,9 @@ func (c *offerCoreServiceClient) CreateOffer(ctx context.Context, in *CreateOffe
 	return out, nil
 }
 
-func (c *offerCoreServiceClient) UpdateOffer(ctx context.Context, in *UpdateOfferRequest, opts ...grpc.CallOption) (*UpdateOfferResponse, error) {
-	out := new(UpdateOfferResponse)
-	err := c.cc.Invoke(ctx, OfferCoreService_UpdateOffer_FullMethodName, in, out, opts...)
+func (c *offerCoreServiceClient) UpdateOfferStatus(ctx context.Context, in *UpdateOfferStatusRequest, opts ...grpc.CallOption) (*UpdateOfferStatusResponse, error) {
+	out := new(UpdateOfferStatusResponse)
+	err := c.cc.Invoke(ctx, OfferCoreService_UpdateOfferStatus_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -94,10 +108,24 @@ func (c *offerCoreServiceClient) GetOfferList(ctx context.Context, in *GetOfferL
 // All implementations must embed UnimplementedOfferCoreServiceServer
 // for forward compatibility
 type OfferCoreServiceServer interface {
+	// Create a new offer image entry in the database, and returns a S3 presigned URL that can be used by the client to
+	// upload an image, which can be associated with an offer in the future.
 	CreateOfferImage(context.Context, *CreateOfferImageRequest) (*CreateOfferImageResponse, error)
+	// Create a new offer entry in the database.
 	CreateOffer(context.Context, *CreateOfferRequest) (*CreateOfferResponse, error)
-	UpdateOffer(context.Context, *UpdateOfferRequest) (*UpdateOfferResponse, error)
+	// Update the status of an offer entry in the database.
+	//
+	// The requesting client's email address must be in the whitelisted list in the config for the request to be authorized.
+	UpdateOfferStatus(context.Context, *UpdateOfferStatusRequest) (*UpdateOfferStatusResponse, error)
+	// Get an offer entry from the database.
+	//
+	// If the requested offer's status is not `APPROVED`, the requesting client's email address must be in the whitelisted
+	// list in the config for the request to be authorized.
 	GetOffer(context.Context, *GetOfferRequest) (*GetOfferResponse, error)
+	// Get the list of offer entrys from the database that match the provided filter options.
+	//
+	// If the request try to filter for orders with non-`APPROVED` statuses, the requesting client's email address must be
+	// in the whitelisted list in the config for the request to be authorized.
 	GetOfferList(context.Context, *GetOfferListRequest) (*GetOfferListResponse, error)
 	mustEmbedUnimplementedOfferCoreServiceServer()
 }
@@ -112,8 +140,8 @@ func (UnimplementedOfferCoreServiceServer) CreateOfferImage(context.Context, *Cr
 func (UnimplementedOfferCoreServiceServer) CreateOffer(context.Context, *CreateOfferRequest) (*CreateOfferResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateOffer not implemented")
 }
-func (UnimplementedOfferCoreServiceServer) UpdateOffer(context.Context, *UpdateOfferRequest) (*UpdateOfferResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateOffer not implemented")
+func (UnimplementedOfferCoreServiceServer) UpdateOfferStatus(context.Context, *UpdateOfferStatusRequest) (*UpdateOfferStatusResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateOfferStatus not implemented")
 }
 func (UnimplementedOfferCoreServiceServer) GetOffer(context.Context, *GetOfferRequest) (*GetOfferResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetOffer not implemented")
@@ -170,20 +198,20 @@ func _OfferCoreService_CreateOffer_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
-func _OfferCoreService_UpdateOffer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateOfferRequest)
+func _OfferCoreService_UpdateOfferStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateOfferStatusRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(OfferCoreServiceServer).UpdateOffer(ctx, in)
+		return srv.(OfferCoreServiceServer).UpdateOfferStatus(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: OfferCoreService_UpdateOffer_FullMethodName,
+		FullMethod: OfferCoreService_UpdateOfferStatus_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(OfferCoreServiceServer).UpdateOffer(ctx, req.(*UpdateOfferRequest))
+		return srv.(OfferCoreServiceServer).UpdateOfferStatus(ctx, req.(*UpdateOfferStatusRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -240,8 +268,8 @@ var OfferCoreService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _OfferCoreService_CreateOffer_Handler,
 		},
 		{
-			MethodName: "UpdateOffer",
-			Handler:    _OfferCoreService_UpdateOffer_Handler,
+			MethodName: "UpdateOfferStatus",
+			Handler:    _OfferCoreService_UpdateOfferStatus_Handler,
 		},
 		{
 			MethodName: "GetOffer",
