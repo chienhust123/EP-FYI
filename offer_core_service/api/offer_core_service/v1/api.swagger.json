@@ -412,42 +412,42 @@
             "type": "string",
             "format": "uint64"
           },
-          "description": "The list of company IDs where the offers were extended from. Offer must belong to one of the provided company IDs."
+          "description": "The list of company IDs where the offers were extended from. Offers must belong to one of the provided company IDs."
         },
         "countryList": {
           "type": "array",
           "items": {
             "type": "string"
           },
-          "description": "The list of country names where the offers were extended from. Offer must belong to one of the provided countries."
+          "description": "The list of country names where the offers were extended from. Offers must belong to one of the provided countries."
         },
         "stateList": {
           "type": "array",
           "items": {
             "type": "string"
           },
-          "description": "The list of state names where the offers were extended from. Offer must belong to one of the provided states."
+          "description": "The list of state names where the offers were extended from. Offers must belong to one of the provided states."
         },
         "cityList": {
           "type": "array",
           "items": {
             "type": "string"
           },
-          "description": "The list of city names where the offers were extended from. Offer must belong to one of the provided cities."
+          "description": "The list of city names where the offers were extended from. Offers must belong to one of the provided cities."
         },
         "positionTitleList": {
           "type": "array",
           "items": {
             "type": "string"
           },
-          "description": "The list of position titles of the requested offers. Offer must match one of the provided title using full-text index search."
+          "description": "The list of position titles of the requested offers. Offers must match one of the provided title using full-text index search."
         },
         "positionLevelList": {
           "type": "array",
           "items": {
             "type": "string"
           },
-          "description": "The list of position level codes of the requested offers. Offer must match one of the provided level codes."
+          "description": "The list of position level codes of the requested offers. Offers must match one of the provided level codes."
         },
         "statusList": {
           "type": "array",
@@ -457,7 +457,7 @@
           "description": "The list of statuses the offer must be in. Any users can filter for offers with APPROVED status, but only whitelisted users can filter for offer of other statuses."
         }
       },
-      "description": "Filter options when listing offers."
+      "description": "Filter options when listing offers. Offers must match all of the provided conditions to be returned in the final result."
     },
     "v1OfferListSortOrderValue": {
       "type": "string",

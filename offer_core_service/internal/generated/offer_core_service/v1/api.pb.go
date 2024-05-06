@@ -615,23 +615,23 @@ func (x *Offer) GetCreatedTime() uint64 {
 	return 0
 }
 
-// Filter options when listing offers.
+// Filter options when listing offers. Offers must match all of the provided conditions to be returned in the final result.
 type OfferListFilterOptions struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// The list of company IDs where the offers were extended from. Offer must belong to one of the provided company IDs.
+	// The list of company IDs where the offers were extended from. Offers must belong to one of the provided company IDs.
 	CompanyIdList []uint64 `protobuf:"varint,1,rep,packed,name=company_id_list,json=companyIdList,proto3" json:"company_id_list,omitempty"`
-	// The list of country names where the offers were extended from. Offer must belong to one of the provided countries.
+	// The list of country names where the offers were extended from. Offers must belong to one of the provided countries.
 	CountryList []string `protobuf:"bytes,2,rep,name=country_list,json=countryList,proto3" json:"country_list,omitempty"`
-	// The list of state names where the offers were extended from. Offer must belong to one of the provided states.
+	// The list of state names where the offers were extended from. Offers must belong to one of the provided states.
 	StateList []string `protobuf:"bytes,3,rep,name=state_list,json=stateList,proto3" json:"state_list,omitempty"`
-	// The list of city names where the offers were extended from. Offer must belong to one of the provided cities.
+	// The list of city names where the offers were extended from. Offers must belong to one of the provided cities.
 	CityList []string `protobuf:"bytes,4,rep,name=city_list,json=cityList,proto3" json:"city_list,omitempty"`
-	// The list of position titles of the requested offers. Offer must match one of the provided title using full-text index search.
+	// The list of position titles of the requested offers. Offers must match one of the provided title using full-text index search.
 	PositionTitleList []string `protobuf:"bytes,5,rep,name=position_title_list,json=positionTitleList,proto3" json:"position_title_list,omitempty"`
-	// The list of position level codes of the requested offers. Offer must match one of the provided level codes.
+	// The list of position level codes of the requested offers. Offers must match one of the provided level codes.
 	PositionLevelList []string `protobuf:"bytes,6,rep,name=position_level_list,json=positionLevelList,proto3" json:"position_level_list,omitempty"`
 	// The list of statuses the offer must be in. Any users can filter for offers with APPROVED status, but only whitelisted users can filter for offer of other statuses.
 	StatusList []OfferStatus_Value `protobuf:"varint,7,rep,packed,name=status_list,json=statusList,proto3,enum=offer_core_service.v1.OfferStatus_Value" json:"status_list,omitempty"`

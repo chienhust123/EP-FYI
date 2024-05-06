@@ -102,13 +102,13 @@ message Offer {
     uint64 created_time = 8;
 }
 
-// Filter options when listing offers.
+// Filter options when listing offers. Offers must match all of the provided conditions to be returned in the final result.
 message OfferListFilterOptions {
-    // The list of company IDs where the offers were extended from. Offer must belong to one of the provided company IDs.
+    // The list of company IDs where the offers were extended from. Offers must belong to one of the provided company IDs.
     repeated uint64 company_id_list = 1 [(validate.rules).repeated = {
         max_items: 10,
     }];
-    // The list of country names where the offers were extended from. Offer must belong to one of the provided countries.
+    // The list of country names where the offers were extended from. Offers must belong to one of the provided countries.
     repeated string country_list = 2 [(validate.rules).repeated = {
         max_items: 10,
         items: {
@@ -117,7 +117,7 @@ message OfferListFilterOptions {
             },
         },
     }];
-    // The list of state names where the offers were extended from. Offer must belong to one of the provided states.
+    // The list of state names where the offers were extended from. Offers must belong to one of the provided states.
     repeated string state_list = 3 [(validate.rules).repeated = {
         max_items: 10,
         items: {
@@ -126,7 +126,7 @@ message OfferListFilterOptions {
             },
         },
     }];
-    // The list of city names where the offers were extended from. Offer must belong to one of the provided cities.
+    // The list of city names where the offers were extended from. Offers must belong to one of the provided cities.
     repeated string city_list = 4 [(validate.rules).repeated = {
         max_items: 10,
         items: {
@@ -135,7 +135,7 @@ message OfferListFilterOptions {
             },
         },
     }];
-    // The list of position titles of the requested offers. Offer must match one of the provided title using full-text index search.
+    // The list of position titles of the requested offers. Offers must match one of the provided title using full-text index search.
     repeated string position_title_list = 5 [(validate.rules).repeated = {
         max_items: 10,
         items: {
@@ -144,7 +144,7 @@ message OfferListFilterOptions {
             },
         },
     }];
-    // The list of position level codes of the requested offers. Offer must match one of the provided level codes.
+    // The list of position level codes of the requested offers. Offers must match one of the provided level codes.
     repeated string position_level_list = 6 [(validate.rules).repeated = {
         max_items: 10,
         items: {
