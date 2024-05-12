@@ -1,0 +1,475 @@
+syntax = "proto3";
+
+package offer_service.v1;
+
+import "validate/validate.proto";
+
+service OfferCoreService {
+    // Create a new company image entry in the database, and returns a S3 presigned URL that can be used by the client to
+    // upload an image, which can be associated with a company in the future. This API endpoint is provided to allow admin
+    // users a mean to quickly create/update popular company entries for auto suggestion on the front end.
+    //
+    // The requesting client's email address must be in the whitelisted list in the config for the request to be authorized.
+    rpc CreateCompanyProfileImage(CreateCompanyProfileImageRequest) returns (CreateCompanyProfileImageResponse) {}
+    // Create a new company entry in the database. This API endpoint is provided to allow admin users a mean to quickly add
+    // popular company entries for auto suggestion on the front end - regular users can create new company entries for newly
+    // created offer if the associating company does not exist.
+    //
+    // The requesting client's email address must be in the whitelisted list in the config for the request to be authorized.
+    rpc CreateCompany(CreateCompanyRequest) returns (CreateCompanyResponse) {}
+    // Update a new company entry in the database. This API endpoint is provided to allow admin users a mean to quickly edit
+    // popular company entries for auto suggestion on the front end.
+    //
+    // The requesting client's email address must be in the whitelisted list in the config for the request to be authorized.
+    rpc UpdateCompany(UpdateCompanyRequest) returns (UpdateCompanyResponse) {}
+    // Create a new offer image entry in the database, and returns a S3 presigned URL that can be used by the client to
+    // upload an image, which can be associated with an offer in the future.
+    rpc CreateOfferImage(CreateOfferImageRequest) returns (CreateOfferImageResponse) {}
+    // Create a new offer entry in the database.
+    rpc CreateOffer(CreateOfferRequest) returns (CreateOfferResponse) {}
+    // Update the status of an offer entry in the database.
+    //
+    // The requesting client's email address must be in the whitelisted list in the config for the request to be authorized.
+    rpc UpdateOffer(UpdateOfferRequest) returns (UpdateOfferResponse) {}
+    // Get an offer entry from the database.
+    //
+    // If the requested offer's status is not `APPROVED`, the requesting client's email address must be in the whitelisted
+    // list in the config for the request to be authorized.
+    rpc GetOffer(GetOfferRequest) returns (GetOfferResponse) {}
+    // Get the list of offer entrys from the database that match the provided filter options.
+    //
+    // If the request tries to filter for orders with non-`APPROVED` statuses, the requesting client's email address must be
+    // in the whitelisted list in the config for the request to be authorized.
+    rpc GetOfferList(GetOfferListRequest) returns (GetOfferListResponse) {}
+    // Get the list of aggregated company statisics.
+    //
+    // This API endpoint is meant to be used for simple, fast listing. For more in-depth searching and filtering
+    // of aggregated company statistics, use the API endpoint GetAggregatedCompanyStatsList.
+    rpc GetAggregatedCompanyStatsList(GetAggregatedCompanyStatsListRequest) returns (GetAggregatedCompanyStatsListResponse) {}
+    // Search the list of aggregated company statisics.
+    //
+    // This API endpoint is meant to be used for more in-depth search and filtering of aggregated company statistic.
+    // For simpler, faster listing without any filtering logic, use the API endpoint GetAggregatedCompanyStatsList.
+    rpc SearchAggregatedCompanyStatsList(SearchAggregatedCompanyStatsListRequest) returns (SearchAggregatedCompanyStatsListResponse) {}
+    // Get the list of aggregated offer statistic of a company.
+    rpc GetCompanyAggregatedOfferStatsLists(GetCompanyAggregatedOfferStatsListsRequest) returns (GetCompanyAggregatedOfferStatsListsResponse) {}
+}
+
+// Data models
+message OfferStatus {
+    enum Value {
+        // Default status value.
+        VALUE_UNSPECIFIED = 0;
+        // Status representing a newly created offer.
+        VALUE_UPLOADED = 1;
+        // Status representing an approved offer, ready to be displayed on the public API and included in the aggregated result.
+        VALUE_APPROVED = 2;
+        // Status representing a disapporved offer, not to be displayed on the public API and included in the aggregated result.
+        VALUE_DISAPPROVED = 3;
+    }
+}
+
+message CompanyProfileImage {
+    uint64 id = 1;
+    string presign_put_url = 2; 
+}
+
+message Company {
+    uint64 id = 1;
+    string name = 2;
+    string profile_image_url = 3;
+}
+
+message Location {
+    uint64 id = 1;
+    // The 2-letter ISO country code of the country of the location.
+    string country = 2 [(validate.rules).string = {
+        pattern: "^[A-Z]{2}$",
+    }];
+    // Optional, the name of the state of the location.
+    string state = 3 [(validate.rules).string = {
+        pattern: "^[\\p{L}\\p{M}\\p{N}\\p{P}\\p{S}\\p{Z}]{0,64}$",
+    }];
+    // The name of the city of the location.
+    string city = 4 [(validate.rules).string = {
+        pattern: "^[\\p{L}\\p{M}\\p{N}\\p{P}\\p{S}\\p{Z}]{1,64}$",
+    }];
+}
+
+message PositionLevel {
+    enum Value {
+        VALUE_UNSPECIFIED = 0;
+        VALUE_INTERN = 1;
+        VALUE_ENTRY = 2;
+        VALUE_MIDDLE = 3;
+        VALUE_SENIOR = 4;
+        VALUE_PRINCIPAL = 5;
+    }
+}
+
+message Position {
+    uint64 id = 1;
+    // The title of the position - for example, Software Engineer, Senior Software Engineer, etc...
+    string title = 2 [(validate.rules).string = {
+        pattern: "^[\\p{L}\\p{M}\\p{N}\\p{P}\\p{S}\\p{Z}]{1,256}$",
+    }];
+    // Lhe level of the position.
+    PositionLevel level = 3;
+}
+
+message MonetaryValue {
+    // The amount of the monetary value, represented in the Inflated Integer format with multiplier of 10^5.
+    uint64 amount = 1;
+    // The 3-letter ISO currency code of the currency denoting the monetary value.
+    string currency = 2 [(validate.rules).string = {
+        pattern: "^[A-Z]{3}$",
+    }];
+}
+
+message OfferImage {
+    uint64 id = 1;
+    string presign_put_url = 2; 
+}
+
+message Offer {
+    uint64 id = 1;
+    Company company = 2;
+    Location location = 3;
+    Position position = 4;
+    MonetaryValue total_package = 5;
+    string image_url = 6;
+    OfferStatus.Value status = 7;
+    uint64 created_time = 8;
+}
+
+// Filter options when listing offers. Offers must match all of the provided conditions to be returned in the final result.
+message OfferListFilterOptions {
+    // The list of company IDs where the offers were extended from. Offers must belong to one of the provided company IDs.
+    repeated uint64 company_id_list = 1 [(validate.rules).repeated = {
+        max_items: 10,
+    }];
+    // The list of country ISO codes where the offers were extended from. Offers must belong to one of the provided countries.
+    repeated string country_list = 2 [(validate.rules).repeated = {
+        max_items: 10,
+        items: {
+            string: {
+                pattern: "^[A-Z]{2}$",
+            },
+        },
+    }];
+    // The list of state names where the offers were extended from. Offers must belong to one of the provided states.
+    repeated string state_list = 3 [(validate.rules).repeated = {
+        max_items: 10,
+        items: {
+            string: {
+                pattern: "^[\\p{L}\\p{M}\\p{N}\\p{P}\\p{S}\\p{Z}]{1,64}$",
+            },
+        },
+    }];
+    // The list of city names where the offers were extended from. Offers must belong to one of the provided cities.
+    repeated string city_list = 4 [(validate.rules).repeated = {
+        max_items: 10,
+        items: {
+            string: {
+                pattern: "^[\\p{L}\\p{M}\\p{N}\\p{P}\\p{S}\\p{Z}]{1,64}$",
+            },
+        },
+    }];
+    // The list of position titles of the requested offers. Offers must match one of the provided title using full-text index search.
+    repeated string position_title_list = 5 [(validate.rules).repeated = {
+        max_items: 10,
+        items: {
+            string: {
+                pattern: "^[\\p{L}\\p{M}\\p{N}\\p{P}\\p{S}\\p{Z}]{1,256}",
+            },
+        },
+    }];
+    // The list of position level codes of the requested offers. Offers must match one of the provided level codes.
+    repeated PositionLevel position_level_list = 6 [(validate.rules).repeated = {
+        max_items: 10,
+    }];
+    // The list of statuses the offer must be in. Any users can filter for offers with APPROVED status, but only whitelisted users can filter for offer of other statuses.
+    repeated OfferStatus.Value status_list = 7 [(validate.rules).repeated = {
+        max_items: 10,
+    }];
+}
+
+message OfferListSortOrder {
+    enum Value {
+        VALUE_UNSPECIFIED = 0;
+        // Sort offer by ascending created time first, ascending ID second.
+        VALUE_CREATED_TIME_ASCENDING = 1;
+        // Sort offer by descending created time first, descending ID second.
+        VALUE_CREATED_TIME_DESCENDING = 2;
+        // Sort offer by ascending company name first, ascending company ID second, aseconding ID last.
+        VALUE_COMPANY_ASCENDING = 3;
+        // Sort offer by descending company name first, descending company ID second, descending ID last.
+        VALUE_COMPANY_DESCENDING = 4;
+        // Sort offer by ascending country first, then ascending state, ascending city and ascending ID.
+        VALUE_LOCATION_ASCENDING = 5;
+        // Sort offer by descending country first, then descending state, descending city and descending ID.
+        VALUE_LOCATION_DESCENDING = 6;
+        // Sort offer by ascending position name first, ascending position ID second, aseconding ID last.
+        VALUE_POSITION_ASCENDING = 7;
+        // Sort offer by descending position name first, descending position ID second, descending ID last.
+        VALUE_POSITION_DESCENDING = 8;
+        // Sort offer by ascending position level first, ascending position ID second, aseconding ID last.
+        VALUE_POSITION_LEVEL_ASCENDING = 9;
+        // Sort offer by descending position level first, descending position ID second, descending ID last.
+        VALUE_POSITION_LEVEL_DESCENDING = 10;
+        // Sort offer by ascending currency name first, ascending amount second and aseconding ID last.
+        VALUE_TOTAL_PACKAGE_ASCENDING = 11;
+        // Sort offer by descending currency name first, descending amount second and descending ID last.
+        VALUE_TOTAL_PACKAGE_DESCENDING = 12;
+    }
+}
+
+message AggregatedOfferStats {
+    uint64 id = 1;
+    Company company = 2;
+    Location location = 3;
+    PositionLevel level = 4;
+    MonetaryValue minimum_total_package = 5;
+    MonetaryValue maximum_total_package = 6;
+}
+
+message CompanyAggregatedOfferStatsSortOrder {
+    enum Value {
+        VALUE_UNSPECIFIED = 0;
+        // Sort offer by ascending country first, then ascending state, ascending city and aseconding ID.
+        VALUE_LOCATION_ASCENDING = 5;
+        // Sort offer by descending country first, then descending state, descending city and descending ID.
+        VALUE_LOCATION_DESCENDING = 6;
+        // Sort offer by ascending position name first, ascending ID second.
+        VALUE_POSITION_ASCENDING = 7;
+        // Sort offer by descending position name first, descending ID second.
+        VALUE_POSITION_DESCENDING = 8;
+    }
+}
+
+message AggregatedCompanyStats {
+    Company company = 1;
+    uint64 total_submission_count = 2;
+}
+
+message AggregatedCompanyStatsSortOrder {
+    enum Value {
+        VALUE_UNSPECIFIED = 0;
+        // Sort offer by ascending company ID.
+        VALUE_ID_ASCENDING = 1;
+        // Sort offer by descending company ID.
+        VALUE_ID_DESCENDING = 2;
+        // Sort offer by ascending company name first, ascending company ID second.
+        VALUE_NAME_ASCENDING = 3;
+        // Sort offer by descending company name first, descending company ID second.
+        VALUE_NAME_DESCENDING = 4;
+    }
+}
+
+// Filter options when listing aggregated company statistics. Entries must match all of the provided conditions to be returned in the final result.
+message AggregatedCompanyStatsFilterOptions {
+    // The company name to search for. The company's name must match the provided query using full-text index search.
+    string company_name_query = 1;
+    // The list of country ISO codes where the offers were extended from.
+    // The company must have at least one aggregated offer information belonging to one of the provided countries.
+    repeated string country_list = 2 [(validate.rules).repeated = {
+        max_items: 10,
+        items: {
+            string: {
+                pattern: "^[A-Z]{2}$",
+            },
+        },
+    }];
+    // The list of state names where the offers were extended from.
+    // The company must have at least one aggregated offer information belonging to one of the provided states.
+    repeated string state_list = 3 [(validate.rules).repeated = {
+        max_items: 10,
+        items: {
+            string: {
+                pattern: "^[\\p{L}\\p{M}\\p{N}\\p{P}\\p{S}\\p{Z}]{1,64}$",
+            },
+        },
+    }];
+    // The list of city names where the offers were extended from.
+    // The company must have at least one aggregated offer information belonging to one of the provided cities.
+    repeated string city_list = 4 [(validate.rules).repeated = {
+        max_items: 10,
+        items: {
+            string: {
+                pattern: "^[\\p{L}\\p{M}\\p{N}\\p{P}\\p{S}\\p{Z}]{1,64}$",
+            },
+        },
+    }];
+    // The list of position titles of the requested offers.
+    // The company must have at least one aggregated offer information matching one of the provided title using full-text index search.
+    repeated string position_title_list = 5 [(validate.rules).repeated = {
+        max_items: 10,
+        items: {
+            string: {
+                pattern: "^[\\p{L}\\p{M}\\p{N}\\p{P}\\p{S}\\p{Z}]{1,256}",
+            },
+        },
+    }];
+    // The list of position level codes of the requested offers.
+    // The company must have at least one aggregated offer information matching one of the provided level codes.
+    repeated string position_level_list = 6 [(validate.rules).repeated = {
+        max_items: 10,
+        items: {
+            string: {
+                pattern: "^[\\p{L}\\p{M}\\p{N}\\p{P}\\p{S}\\p{Z}]{1,64}$",
+            },
+        },
+    }];
+}
+
+// Request payloads
+message CreateCompanyRequest{
+    string name = 1 [(validate.rules).string = {
+        pattern: "^[\\p{L}\\p{M}\\p{N}\\p{P}\\p{S}\\p{Z}]{1,256}$",
+    }];
+    uint64 company_profile_image_id = 2;
+}
+
+message CreateCompanyProfileImageRequest {}
+
+message CreateCompanyProfileImageResponse {
+    CompanyProfileImage image = 1;
+}
+
+message CreateCompanyResponse {
+    Company company = 1;
+}
+
+message UpdateCompanyRequest{
+    uint64 id = 1;
+    // If provided, will update the company's name.
+    string name = 2 [(validate.rules).string = {
+        pattern: "^[\\p{L}\\p{M}\\p{N}\\p{P}\\p{S}\\p{Z}]{0,256}$",
+    }];
+    // If provided, will update the company's profile image.
+    uint64 company_profile_image_id = 3;
+}
+
+message UpdateCompanyResponse {
+    Company company = 1;
+}
+
+message CreateOfferImageRequest {}
+
+message CreateOfferImageResponse {
+    OfferImage image = 1;
+}
+
+message CreateOfferRequest {
+    // If the company ID is provided and exists inside the database, the newly created offer will be associated to that company.
+    // Otherwise, if the company name is provided, Offer Core Service will try to match it with an existing company inside the database.
+    // If none is found, then a new company record is created inside the database.
+    Company company = 1;
+    // If the location ID is provided and exists inside the database, the newly created offer will be associated to that location.
+    // Otherwise, Offer Core Service will try to match the location's country, state and city with an existing location inside the database.
+    // If none is found, then a new location record is created inside the database.
+    Location location = 2;
+    // If the position ID is provided and exists inside the database, the newly created offer will be associated to that position.
+    // Otherwise, Offer Core Service will try to match the position's title and level with an existing position inside the database.
+    // If none is found, then a new position record is created inside the database.
+    Position position = 3;
+    MonetaryValue total_package = 4;
+    // Must be an image ID returned by the CreateOfferImage API, and the presigned URL associated with that image inside our database must
+    // have an image uploaded to it.
+    uint64 image_id = 5;
+}
+
+message CreateOfferResponse {
+    Offer offer = 1;
+}
+
+message UpdateOfferRequest {
+    uint64 id = 1;
+    Offer offer = 2;
+}
+
+message UpdateOfferResponse {
+    Offer offer = 1;
+}
+
+message GetOfferRequest {
+    uint64 id = 1;
+}
+
+message GetOfferResponse {
+    Offer offer = 1;
+}
+
+message GetOfferListRequest {
+    OfferListFilterOptions filter_options = 1;
+    OfferListSortOrder.Value sort_order = 2;
+    uint64 offset = 3;
+    uint64 limit = 4 [(validate.rules).uint64 = {
+        lte: 100,
+    }];
+}
+
+message GetOfferListResponse {
+    repeated Offer offer_list = 1;
+    uint64 total_offer_count = 2;
+}
+
+message GetAggregatedCompanyStatsListRequest {
+    oneof cursor {
+        uint64 company_id = 1;
+        string company_name = 2;
+    }
+    AggregatedCompanyStatsSortOrder.Value sort_order = 3;
+    uint64 limit = 4 [(validate.rules).uint64 = {
+        lte: 100,
+    }];
+}
+
+message GetAggregatedCompanyStatsListResponse {
+    repeated AggregatedCompanyStats company_stat_list = 1;
+    oneof previous_cursor {
+        uint64 previous_company_id = 2;
+        string previous_company_name = 3;
+    }
+    oneof next_cursor {
+        uint64 next_company_id = 4;
+        string next_company_name = 5;
+    }
+}
+
+message SearchAggregatedCompanyStatsListRequest {
+    AggregatedCompanyStatsFilterOptions filter_options = 1;
+    AggregatedCompanyStatsSortOrder.Value sort_order = 2;
+    uint64 offset = 3;
+    uint64 limit = 4 [(validate.rules).uint64 = {
+        lte: 100,
+    }];
+}
+
+message SearchAggregatedCompanyStatsListResponse {
+    repeated AggregatedCompanyStats company_stat_list = 1;
+    uint64 total_company_stat_count = 2;
+}
+
+message GetCompanyAggregatedOfferStatsListsRequest {
+    oneof cursor {
+        uint64 location_id = 1;
+        string position_name = 2;
+    }
+    CompanyAggregatedOfferStatsSortOrder.Value sort_order = 3;
+    uint64 limit = 4 [(validate.rules).uint64 = {
+        lte: 100,
+    }];
+}
+
+message GetCompanyAggregatedOfferStatsListsResponse {
+    repeated AggregatedCompanyStats offer_stat_list = 1;
+    oneof previous_cursor {
+        uint64 previous_location_id = 2;
+        string previous_position_id = 3;
+    }
+    oneof next_cursor {
+        uint64 next_location_id = 4;
+        string next_position_id = 5;
+    }
+}

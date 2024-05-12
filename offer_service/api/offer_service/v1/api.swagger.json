@@ -1,0 +1,1014 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "offer_service/v1/api.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "OfferCoreService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/offer_service.v1.OfferCoreService/CreateCompany": {
+      "post": {
+        "summary": "Create a new company entry in the database. This API endpoint is provided to allow admin users a mean to quickly add\npopular company entries for auto suggestion on the front end - regular users can create new company entries for newly\ncreated offer if the associating company does not exist.",
+        "description": "The requesting client's email address must be in the whitelisted list in the config for the request to be authorized.",
+        "operationId": "OfferCoreService_CreateCompany",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateCompanyResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateCompanyRequest"
+            }
+          }
+        ],
+        "tags": [
+          "OfferCoreService"
+        ]
+      }
+    },
+    "/offer_service.v1.OfferCoreService/CreateCompanyProfileImage": {
+      "post": {
+        "summary": "Create a new company image entry in the database, and returns a S3 presigned URL that can be used by the client to\nupload an image, which can be associated with a company in the future. This API endpoint is provided to allow admin\nusers a mean to quickly create/update popular company entries for auto suggestion on the front end.",
+        "description": "The requesting client's email address must be in the whitelisted list in the config for the request to be authorized.",
+        "operationId": "OfferCoreService_CreateCompanyProfileImage",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateCompanyProfileImageResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateCompanyProfileImageRequest"
+            }
+          }
+        ],
+        "tags": [
+          "OfferCoreService"
+        ]
+      }
+    },
+    "/offer_service.v1.OfferCoreService/CreateOffer": {
+      "post": {
+        "summary": "Create a new offer entry in the database.",
+        "operationId": "OfferCoreService_CreateOffer",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateOfferResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateOfferRequest"
+            }
+          }
+        ],
+        "tags": [
+          "OfferCoreService"
+        ]
+      }
+    },
+    "/offer_service.v1.OfferCoreService/CreateOfferImage": {
+      "post": {
+        "summary": "Create a new offer image entry in the database, and returns a S3 presigned URL that can be used by the client to\nupload an image, which can be associated with an offer in the future.",
+        "operationId": "OfferCoreService_CreateOfferImage",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateOfferImageResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateOfferImageRequest"
+            }
+          }
+        ],
+        "tags": [
+          "OfferCoreService"
+        ]
+      }
+    },
+    "/offer_service.v1.OfferCoreService/GetAggregatedCompanyStatsList": {
+      "post": {
+        "summary": "Get the list of aggregated company statisics.",
+        "description": "This API endpoint is meant to be used for simple, fast listing. For more in-depth searching and filtering\nof aggregated company statistics, use the API endpoint GetAggregatedCompanyStatsList.",
+        "operationId": "OfferCoreService_GetAggregatedCompanyStatsList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetAggregatedCompanyStatsListResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GetAggregatedCompanyStatsListRequest"
+            }
+          }
+        ],
+        "tags": [
+          "OfferCoreService"
+        ]
+      }
+    },
+    "/offer_service.v1.OfferCoreService/GetCompanyAggregatedOfferStatsLists": {
+      "post": {
+        "summary": "Get the list of aggregated offer statistic of a company.",
+        "operationId": "OfferCoreService_GetCompanyAggregatedOfferStatsLists",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetCompanyAggregatedOfferStatsListsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GetCompanyAggregatedOfferStatsListsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "OfferCoreService"
+        ]
+      }
+    },
+    "/offer_service.v1.OfferCoreService/GetOffer": {
+      "post": {
+        "summary": "Get an offer entry from the database.",
+        "description": "If the requested offer's status is not `APPROVED`, the requesting client's email address must be in the whitelisted\nlist in the config for the request to be authorized.",
+        "operationId": "OfferCoreService_GetOffer",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetOfferResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GetOfferRequest"
+            }
+          }
+        ],
+        "tags": [
+          "OfferCoreService"
+        ]
+      }
+    },
+    "/offer_service.v1.OfferCoreService/GetOfferList": {
+      "post": {
+        "summary": "Get the list of offer entrys from the database that match the provided filter options.",
+        "description": "If the request tries to filter for orders with non-`APPROVED` statuses, the requesting client's email address must be\nin the whitelisted list in the config for the request to be authorized.",
+        "operationId": "OfferCoreService_GetOfferList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetOfferListResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GetOfferListRequest"
+            }
+          }
+        ],
+        "tags": [
+          "OfferCoreService"
+        ]
+      }
+    },
+    "/offer_service.v1.OfferCoreService/SearchAggregatedCompanyStatsList": {
+      "post": {
+        "summary": "Search the list of aggregated company statisics.",
+        "description": "This API endpoint is meant to be used for more in-depth search and filtering of aggregated company statistic.\nFor simpler, faster listing without any filtering logic, use the API endpoint GetAggregatedCompanyStatsList.",
+        "operationId": "OfferCoreService_SearchAggregatedCompanyStatsList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1SearchAggregatedCompanyStatsListResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1SearchAggregatedCompanyStatsListRequest"
+            }
+          }
+        ],
+        "tags": [
+          "OfferCoreService"
+        ]
+      }
+    },
+    "/offer_service.v1.OfferCoreService/UpdateCompany": {
+      "post": {
+        "summary": "Update a new company entry in the database. This API endpoint is provided to allow admin users a mean to quickly edit\npopular company entries for auto suggestion on the front end.",
+        "description": "The requesting client's email address must be in the whitelisted list in the config for the request to be authorized.",
+        "operationId": "OfferCoreService_UpdateCompany",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateCompanyResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1UpdateCompanyRequest"
+            }
+          }
+        ],
+        "tags": [
+          "OfferCoreService"
+        ]
+      }
+    },
+    "/offer_service.v1.OfferCoreService/UpdateOffer": {
+      "post": {
+        "summary": "Update the status of an offer entry in the database.",
+        "description": "The requesting client's email address must be in the whitelisted list in the config for the request to be authorized.",
+        "operationId": "OfferCoreService_UpdateOffer",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateOfferResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1UpdateOfferRequest"
+            }
+          }
+        ],
+        "tags": [
+          "OfferCoreService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "offer_servicev1Location": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "country": {
+          "type": "string",
+          "description": "The 2-letter ISO country code of the country of the location."
+        },
+        "state": {
+          "type": "string",
+          "description": "Optional, the name of the state of the location."
+        },
+        "city": {
+          "type": "string",
+          "description": "The name of the city of the location."
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "v1AggregatedCompanyStats": {
+      "type": "object",
+      "properties": {
+        "company": {
+          "$ref": "#/definitions/v1Company"
+        },
+        "totalSubmissionCount": {
+          "type": "string",
+          "format": "uint64"
+        }
+      }
+    },
+    "v1AggregatedCompanyStatsFilterOptions": {
+      "type": "object",
+      "properties": {
+        "companyNameQuery": {
+          "type": "string",
+          "description": "The company name to search for. The company's name must match the provided query using full-text index search."
+        },
+        "countryList": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The list of country ISO codes where the offers were extended from.\nThe company must have at least one aggregated offer information belonging to one of the provided countries."
+        },
+        "stateList": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The list of state names where the offers were extended from.\nThe company must have at least one aggregated offer information belonging to one of the provided states."
+        },
+        "cityList": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The list of city names where the offers were extended from.\nThe company must have at least one aggregated offer information belonging to one of the provided cities."
+        },
+        "positionTitleList": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The list of position titles of the requested offers.\nThe company must have at least one aggregated offer information matching one of the provided title using full-text index search."
+        },
+        "positionLevelList": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The list of position level codes of the requested offers.\nThe company must have at least one aggregated offer information matching one of the provided level codes."
+        }
+      },
+      "description": "Filter options when listing aggregated company statistics. Entries must match all of the provided conditions to be returned in the final result."
+    },
+    "v1AggregatedCompanyStatsSortOrderValue": {
+      "type": "string",
+      "enum": [
+        "VALUE_UNSPECIFIED",
+        "VALUE_ID_ASCENDING",
+        "VALUE_ID_DESCENDING",
+        "VALUE_NAME_ASCENDING",
+        "VALUE_NAME_DESCENDING"
+      ],
+      "default": "VALUE_UNSPECIFIED",
+      "description": " - VALUE_ID_ASCENDING: Sort offer by ascending company ID.\n - VALUE_ID_DESCENDING: Sort offer by descending company ID.\n - VALUE_NAME_ASCENDING: Sort offer by ascending company name first, ascending company ID second.\n - VALUE_NAME_DESCENDING: Sort offer by descending company name first, descending company ID second."
+    },
+    "v1Company": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "profileImageUrl": {
+          "type": "string"
+        }
+      }
+    },
+    "v1CompanyAggregatedOfferStatsSortOrderValue": {
+      "type": "string",
+      "enum": [
+        "VALUE_UNSPECIFIED",
+        "VALUE_LOCATION_ASCENDING",
+        "VALUE_LOCATION_DESCENDING",
+        "VALUE_POSITION_ASCENDING",
+        "VALUE_POSITION_DESCENDING"
+      ],
+      "default": "VALUE_UNSPECIFIED",
+      "description": " - VALUE_LOCATION_ASCENDING: Sort offer by ascending country first, then ascending state, ascending city and aseconding ID.\n - VALUE_LOCATION_DESCENDING: Sort offer by descending country first, then descending state, descending city and descending ID.\n - VALUE_POSITION_ASCENDING: Sort offer by ascending position name first, ascending ID second.\n - VALUE_POSITION_DESCENDING: Sort offer by descending position name first, descending ID second."
+    },
+    "v1CompanyProfileImage": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "presignPostUrl": {
+          "type": "string"
+        }
+      }
+    },
+    "v1CreateCompanyProfileImageRequest": {
+      "type": "object"
+    },
+    "v1CreateCompanyProfileImageResponse": {
+      "type": "object",
+      "properties": {
+        "image": {
+          "$ref": "#/definitions/v1CompanyProfileImage"
+        }
+      }
+    },
+    "v1CreateCompanyRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "companyProfileImageId": {
+          "type": "string",
+          "format": "uint64"
+        }
+      },
+      "title": "Request payloads"
+    },
+    "v1CreateCompanyResponse": {
+      "type": "object",
+      "properties": {
+        "company": {
+          "$ref": "#/definitions/v1Company"
+        }
+      }
+    },
+    "v1CreateOfferImageRequest": {
+      "type": "object"
+    },
+    "v1CreateOfferImageResponse": {
+      "type": "object",
+      "properties": {
+        "image": {
+          "$ref": "#/definitions/v1OfferImage"
+        }
+      }
+    },
+    "v1CreateOfferRequest": {
+      "type": "object",
+      "properties": {
+        "company": {
+          "$ref": "#/definitions/v1Company",
+          "description": "If the company ID is provided and exists inside the database, the newly created offer will be associated to that company.\nOtherwise, if the company name is provided, Offer Core Service will try to match it with an existing company inside the database.\nIf none is found, then a new company record is created inside the database."
+        },
+        "location": {
+          "$ref": "#/definitions/offer_servicev1Location",
+          "description": "If the location ID is provided and exists inside the database, the newly created offer will be associated to that location.\nOtherwise, Offer Core Service will try to match the location's country, state and city with an existing location inside the database.\nIf none is found, then a new location record is created inside the database."
+        },
+        "position": {
+          "$ref": "#/definitions/v1Position",
+          "description": "If the position ID is provided and exists inside the database, the newly created offer will be associated to that position.\nOtherwise, Offer Core Service will try to match the position's title and level with an existing position inside the database.\nIf none is found, then a new position record is created inside the database."
+        },
+        "totalPackage": {
+          "$ref": "#/definitions/v1MonetaryValue"
+        },
+        "imageId": {
+          "type": "string",
+          "format": "uint64",
+          "description": "Must be an image ID returned by the CreateOfferImage API, and the presigned URL associated with that image inside our database must\nhave an image uploaded to it."
+        }
+      }
+    },
+    "v1CreateOfferResponse": {
+      "type": "object",
+      "properties": {
+        "offer": {
+          "$ref": "#/definitions/v1Offer"
+        }
+      }
+    },
+    "v1GetAggregatedCompanyStatsListRequest": {
+      "type": "object",
+      "properties": {
+        "companyId": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "companyName": {
+          "type": "string"
+        },
+        "sortOrder": {
+          "$ref": "#/definitions/v1AggregatedCompanyStatsSortOrderValue"
+        },
+        "limit": {
+          "type": "string",
+          "format": "uint64"
+        }
+      }
+    },
+    "v1GetAggregatedCompanyStatsListResponse": {
+      "type": "object",
+      "properties": {
+        "companyStatList": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1AggregatedCompanyStats"
+          }
+        },
+        "previousCompanyId": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "previousCompanyName": {
+          "type": "string"
+        },
+        "nextCompanyId": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "nextCompanyName": {
+          "type": "string"
+        }
+      }
+    },
+    "v1GetCompanyAggregatedOfferStatsListsRequest": {
+      "type": "object",
+      "properties": {
+        "locationId": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "positionName": {
+          "type": "string"
+        },
+        "sortOrder": {
+          "$ref": "#/definitions/v1CompanyAggregatedOfferStatsSortOrderValue"
+        },
+        "limit": {
+          "type": "string",
+          "format": "uint64"
+        }
+      }
+    },
+    "v1GetCompanyAggregatedOfferStatsListsResponse": {
+      "type": "object",
+      "properties": {
+        "offerStatList": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1AggregatedCompanyStats"
+          }
+        },
+        "previousLocationId": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "previousPositionId": {
+          "type": "string"
+        },
+        "nextLocationId": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "nextPositionId": {
+          "type": "string"
+        }
+      }
+    },
+    "v1GetOfferListRequest": {
+      "type": "object",
+      "properties": {
+        "filterOptions": {
+          "$ref": "#/definitions/v1OfferListFilterOptions"
+        },
+        "sortOrder": {
+          "$ref": "#/definitions/v1OfferListSortOrderValue"
+        },
+        "offset": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "limit": {
+          "type": "string",
+          "format": "uint64"
+        }
+      }
+    },
+    "v1GetOfferListResponse": {
+      "type": "object",
+      "properties": {
+        "offerList": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Offer"
+          }
+        },
+        "totalOfferCount": {
+          "type": "string",
+          "format": "uint64"
+        }
+      }
+    },
+    "v1GetOfferRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        }
+      }
+    },
+    "v1GetOfferResponse": {
+      "type": "object",
+      "properties": {
+        "offer": {
+          "$ref": "#/definitions/v1Offer"
+        }
+      }
+    },
+    "v1MonetaryValue": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "string",
+          "format": "uint64",
+          "description": "The amount of the monetary value, represented in the Inflated Integer format with multiplier of 10^5."
+        },
+        "currency": {
+          "type": "string",
+          "description": "The 3-letter ISO currency code of the currency denoting the monetary value."
+        }
+      }
+    },
+    "v1Offer": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "company": {
+          "$ref": "#/definitions/v1Company"
+        },
+        "location": {
+          "$ref": "#/definitions/offer_servicev1Location"
+        },
+        "position": {
+          "$ref": "#/definitions/v1Position"
+        },
+        "totalPackage": {
+          "$ref": "#/definitions/v1MonetaryValue"
+        },
+        "imageUrl": {
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/definitions/v1OfferStatusValue"
+        },
+        "createdTime": {
+          "type": "string",
+          "format": "uint64"
+        }
+      }
+    },
+    "v1OfferImage": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "presignPostUrl": {
+          "type": "string"
+        }
+      }
+    },
+    "v1OfferListFilterOptions": {
+      "type": "object",
+      "properties": {
+        "companyIdList": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uint64"
+          },
+          "description": "The list of company IDs where the offers were extended from. Offers must belong to one of the provided company IDs."
+        },
+        "countryList": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The list of country ISO codes where the offers were extended from. Offers must belong to one of the provided countries."
+        },
+        "stateList": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The list of state names where the offers were extended from. Offers must belong to one of the provided states."
+        },
+        "cityList": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The list of city names where the offers were extended from. Offers must belong to one of the provided cities."
+        },
+        "positionTitleList": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The list of position titles of the requested offers. Offers must match one of the provided title using full-text index search."
+        },
+        "positionLevelList": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1PositionLevel"
+          },
+          "description": "The list of position level codes of the requested offers. Offers must match one of the provided level codes."
+        },
+        "statusList": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1OfferStatusValue"
+          },
+          "description": "The list of statuses the offer must be in. Any users can filter for offers with APPROVED status, but only whitelisted users can filter for offer of other statuses."
+        }
+      },
+      "description": "Filter options when listing offers. Offers must match all of the provided conditions to be returned in the final result."
+    },
+    "v1OfferListSortOrderValue": {
+      "type": "string",
+      "enum": [
+        "VALUE_UNSPECIFIED",
+        "VALUE_CREATED_TIME_ASCENDING",
+        "VALUE_CREATED_TIME_DESCENDING",
+        "VALUE_COMPANY_ASCENDING",
+        "VALUE_COMPANY_DESCENDING",
+        "VALUE_LOCATION_ASCENDING",
+        "VALUE_LOCATION_DESCENDING",
+        "VALUE_POSITION_ASCENDING",
+        "VALUE_POSITION_DESCENDING",
+        "VALUE_POSITION_LEVEL_ASCENDING",
+        "VALUE_POSITION_LEVEL_DESCENDING",
+        "VALUE_TOTAL_PACKAGE_ASCENDING",
+        "VALUE_TOTAL_PACKAGE_DESCENDING"
+      ],
+      "default": "VALUE_UNSPECIFIED",
+      "description": " - VALUE_CREATED_TIME_ASCENDING: Sort offer by ascending created time first, ascending ID second.\n - VALUE_CREATED_TIME_DESCENDING: Sort offer by descending created time first, descending ID second.\n - VALUE_COMPANY_ASCENDING: Sort offer by ascending company name first, ascending company ID second, aseconding ID last.\n - VALUE_COMPANY_DESCENDING: Sort offer by descending company name first, descending company ID second, descending ID last.\n - VALUE_LOCATION_ASCENDING: Sort offer by ascending country first, then ascending state, ascending city and ascending ID.\n - VALUE_LOCATION_DESCENDING: Sort offer by descending country first, then descending state, descending city and descending ID.\n - VALUE_POSITION_ASCENDING: Sort offer by ascending position name first, ascending position ID second, aseconding ID last.\n - VALUE_POSITION_DESCENDING: Sort offer by descending position name first, descending position ID second, descending ID last.\n - VALUE_POSITION_LEVEL_ASCENDING: Sort offer by ascending position level first, ascending position ID second, aseconding ID last.\n - VALUE_POSITION_LEVEL_DESCENDING: Sort offer by descending position level first, descending position ID second, descending ID last.\n - VALUE_TOTAL_PACKAGE_ASCENDING: Sort offer by ascending currency name first, ascending amount second and aseconding ID last.\n - VALUE_TOTAL_PACKAGE_DESCENDING: Sort offer by descending currency name first, descending amount second and descending ID last."
+    },
+    "v1OfferStatusValue": {
+      "type": "string",
+      "enum": [
+        "VALUE_UNSPECIFIED",
+        "VALUE_UPLOADED",
+        "VALUE_APPROVED",
+        "VALUE_DISAPPROVED"
+      ],
+      "default": "VALUE_UNSPECIFIED",
+      "description": " - VALUE_UNSPECIFIED: Default status value.\n - VALUE_UPLOADED: Status representing a newly created offer.\n - VALUE_APPROVED: Status representing an approved offer, ready to be displayed on the public API and included in the aggregated result.\n - VALUE_DISAPPROVED: Status representing a disapporved offer, not to be displayed on the public API and included in the aggregated result."
+    },
+    "v1Position": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "title": {
+          "type": "string",
+          "description": "The title of the position - for example, Software Engineer, Senior Software Engineer, etc..."
+        },
+        "level": {
+          "$ref": "#/definitions/v1PositionLevel",
+          "description": "Lhe level of the position."
+        }
+      }
+    },
+    "v1PositionLevel": {
+      "type": "object"
+    },
+    "v1SearchAggregatedCompanyStatsListRequest": {
+      "type": "object",
+      "properties": {
+        "filterOptions": {
+          "$ref": "#/definitions/v1AggregatedCompanyStatsFilterOptions"
+        },
+        "sortOrder": {
+          "$ref": "#/definitions/v1AggregatedCompanyStatsSortOrderValue"
+        },
+        "offset": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "limit": {
+          "type": "string",
+          "format": "uint64"
+        }
+      }
+    },
+    "v1SearchAggregatedCompanyStatsListResponse": {
+      "type": "object",
+      "properties": {
+        "companyStatList": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1AggregatedCompanyStats"
+          }
+        },
+        "totalCompanyStatCount": {
+          "type": "string",
+          "format": "uint64"
+        }
+      }
+    },
+    "v1UpdateCompanyRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "name": {
+          "type": "string",
+          "description": "If provided, will update the company's name."
+        },
+        "companyProfileImageId": {
+          "type": "string",
+          "format": "uint64",
+          "description": "If provided, will update the company's profile image."
+        }
+      }
+    },
+    "v1UpdateCompanyResponse": {
+      "type": "object",
+      "properties": {
+        "company": {
+          "$ref": "#/definitions/v1Company"
+        }
+      }
+    },
+    "v1UpdateOfferRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "offer": {
+          "$ref": "#/definitions/v1Offer"
+        }
+      }
+    },
+    "v1UpdateOfferResponse": {
+      "type": "object",
+      "properties": {
+        "offer": {
+          "$ref": "#/definitions/v1Offer"
+        }
+      }
+    }
+  }
+}
