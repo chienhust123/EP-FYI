@@ -2,7 +2,7 @@ version: v1
 managed:
   enabled: true
   go_package_prefix:
-    default: offer_service
+    default: account_core
 plugins:
   - plugin: buf.build/protocolbuffers/go
     out: internal/generated
