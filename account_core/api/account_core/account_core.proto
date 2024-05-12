@@ -1,0 +1,77 @@
+syntax = "proto3";
+
+package account_core;
+
+// TO DO: create validators
+
+message Account {
+  optional uint64  id = 1;
+  optional string  email = 2;
+  optional string  name = 3;
+  optional string  picture = 4;
+  optional string  created_at = 99;
+  optional string  updated_at = 100;
+}
+
+message CreateAccountRequest {
+  optional Account account = 1;
+}
+
+message CreateAccountResponse {
+  optional Account  account = 1;
+}
+
+message ModifyAccountRequest {
+  optional Account  account = 1; // must pass id, can only modify name, picture, role
+  // TO DO: support modify email
+}
+
+message ModifyAccountResponse {
+  optional Account  account = 1;
+}
+
+message GetAccountRequest {
+  optional uint64 account_id = 1;
+}
+
+message GetAccountResponse {
+  optional Account  account = 1;
+}
+
+message AccountSession {
+  optional string token = 1;
+  optional uint64 expiry_time_ms = 2; // TIMESTAMP_MS
+  optional uint64 account_id = 3;
+}
+
+message CreateAccountSessionRequest {
+  optional uint64 account_id = 1;
+}
+
+message CreateAccountSessionResponse {
+  optional AccountSession session = 1;
+}
+
+message VerifyAccountSessionRequest {
+  optional string token = 1;
+  optional uint64 account_id = 2;
+}
+
+message VerifyAccountSessionResponse {
+  optional bool is_valid = 1;
+  optional AccountSession session = 2;
+}
+
+
+
+service AccountService {
+  rpc CreateAccount (CreateAccountRequest) returns (CreateAccountResponse) {}
+
+  rpc ModifyAccount (ModifyAccountRequest) returns (ModifyAccountResponse) {}
+
+  rpc GetAccount (GetAccountRequest) returns (GetAccountResponse) {}
+
+  rpc CreateAccountSession (CreateAccountSessionRequest) returns (CreateAccountSessionResponse) {}
+
+  rpc VerifyAccountSession (VerifyAccountSessionRequest) returns (VerifyAccountSessionResponse) {}
+}
