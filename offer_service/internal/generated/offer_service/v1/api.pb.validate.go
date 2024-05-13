@@ -158,7 +158,7 @@ func (m *CompanyProfileImage) validate(all bool) error {
 
 	// no validation rules for Id
 
-	// no validation rules for PresignPostUrl
+	// no validation rules for PresignPutUrl
 
 	if len(errors) > 0 {
 		return CompanyProfileImageMultiError(errors)
@@ -866,7 +866,7 @@ func (m *OfferImage) validate(all bool) error {
 
 	// no validation rules for Id
 
-	// no validation rules for PresignPostUrl
+	// no validation rules for PresignPutUrl
 
 	if len(errors) > 0 {
 		return OfferImageMultiError(errors)
@@ -5168,6 +5168,17 @@ func (m *GetCompanyAggregatedOfferStatsListsRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
+	if !_GetCompanyAggregatedOfferStatsListsRequest_BaseCurrency_Pattern.MatchString(m.GetBaseCurrency()) {
+		err := GetCompanyAggregatedOfferStatsListsRequestValidationError{
+			field:  "BaseCurrency",
+			reason: "value does not match regex pattern \"^[A-Z]{3}$\"",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
 	switch v := m.Cursor.(type) {
 	case *GetCompanyAggregatedOfferStatsListsRequest_LocationId:
 		if v == nil {
@@ -5278,6 +5289,8 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = GetCompanyAggregatedOfferStatsListsRequestValidationError{}
+
+var _GetCompanyAggregatedOfferStatsListsRequest_BaseCurrency_Pattern = regexp.MustCompile("^[A-Z]{3}$")
 
 // Validate checks the field values on
 // GetCompanyAggregatedOfferStatsListsResponse with the rules defined in the
