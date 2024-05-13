@@ -462,7 +462,7 @@ message GetCompanyAggregatedOfferStatsListsRequest {
     }];
     // The 3-letter ISO currency code of the currency denoting the currency to return the aggregated offer stats in.
     string base_currency = 5 [(validate.rules).string = {
-        pattern: "^[A-Z]{3}$",
+        in: ["USD", "SGD", "JPY", "VND", "EUR", "CNY", "AUD"]
     }];
 }
 

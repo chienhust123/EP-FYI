@@ -5168,10 +5168,10 @@ func (m *GetCompanyAggregatedOfferStatsListsRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if !_GetCompanyAggregatedOfferStatsListsRequest_BaseCurrency_Pattern.MatchString(m.GetBaseCurrency()) {
+	if _, ok := _GetCompanyAggregatedOfferStatsListsRequest_BaseCurrency_InLookup[m.GetBaseCurrency()]; !ok {
 		err := GetCompanyAggregatedOfferStatsListsRequestValidationError{
 			field:  "BaseCurrency",
-			reason: "value does not match regex pattern \"^[A-Z]{3}$\"",
+			reason: "value must be in list [USD SGD JPY VND EUR CNY AUD]",
 		}
 		if !all {
 			return err
@@ -5290,7 +5290,15 @@ var _ interface {
 	ErrorName() string
 } = GetCompanyAggregatedOfferStatsListsRequestValidationError{}
 
-var _GetCompanyAggregatedOfferStatsListsRequest_BaseCurrency_Pattern = regexp.MustCompile("^[A-Z]{3}$")
+var _GetCompanyAggregatedOfferStatsListsRequest_BaseCurrency_InLookup = map[string]struct{}{
+	"USD": {},
+	"SGD": {},
+	"JPY": {},
+	"VND": {},
+	"EUR": {},
+	"CNY": {},
+	"AUD": {},
+}
 
 // Validate checks the field values on
 // GetCompanyAggregatedOfferStatsListsResponse with the rules defined in the
