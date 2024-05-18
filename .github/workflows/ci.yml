@@ -7,8 +7,8 @@ on:
     branches: [ '**' ]
 
 jobs:
-  build:
-
+  offer_service:
+    name: Offer Service CI
     runs-on: ubuntu-latest
 
     steps:
@@ -30,6 +30,9 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-go-
 
+    - name: Change directory to offer_service
+      run: cd fyi/offer_service
+
     - name: Install dependencies
       run: go mod tidy
 
@@ -37,7 +40,7 @@ jobs:
       run: go run golang.org/x/lint/golint ./...
 
     - name: Build
-      run: make build
+      run: go build -v ./...
 
     - name: Test
-      run: make test
+      run: go test -v ./...
