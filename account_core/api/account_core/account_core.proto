@@ -52,26 +52,32 @@ message CreateAccountSessionResponse {
   optional AccountSession session = 1;
 }
 
-message VerifyAccountSessionRequest {
+message DeleteAccountSessionRequest {
+  optional uint64 account_id = 1;
+}
+
+message DeleteAccountSessionResponse {
+  optional AccountSession session = 1;
+}
+
+message GetAccountSessionRequest {
   optional string token = 1;
-  optional uint64 account_id = 2;
 }
 
-message VerifyAccountSessionResponse {
+message GetAccountSessionResponse {
   optional bool is_valid = 1;
-  optional AccountSession session = 2;
+  optional Account account = 2;
 }
-
 
 
 service AccountService {
   rpc CreateAccount (CreateAccountRequest) returns (CreateAccountResponse) {}
 
-  rpc ModifyAccount (ModifyAccountRequest) returns (ModifyAccountResponse) {}
+  rpc UpdateAccount (ModifyAccountRequest) returns (ModifyAccountResponse) {}
 
   rpc GetAccount (GetAccountRequest) returns (GetAccountResponse) {}
 
   rpc CreateAccountSession (CreateAccountSessionRequest) returns (CreateAccountSessionResponse) {}
 
-  rpc VerifyAccountSession (VerifyAccountSessionRequest) returns (VerifyAccountSessionResponse) {}
+  rpc GetAccountSession (GetAccountSessionRequest) returns (GetAccountSessionResponse) {}
 }
