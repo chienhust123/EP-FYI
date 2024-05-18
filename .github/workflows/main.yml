@@ -5,12 +5,12 @@ on:
     branches: [main]
     paths:
       - 'offer_service/**'
-      - 'auth_service/**'
+      - 'account_core/**'
   pull_request:
     branches: ['**']
     paths:
       - 'offer_service/**'
-      - 'auth_service/**'
+      - 'account_core/**'
 
 jobs:
   offer_service:
@@ -52,3 +52,44 @@ jobs:
 
       - name: Test
         run: go test -v ./...
+  
+  account_core:
+    name: Account Core CI
+    runs-on: ubuntu-latest
+
+    if: contains(github.event.head_commit.message, 'account_core/') || contains(github.event.pull_request.base.ref, 'account_core/')
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.18
+
+      - name: Cache Go modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/offer_account_coreservice/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+      - name: Change directory to account_core
+        run: cd account_core
+
+      - name: Install dependencies
+        run: go mod tidy
+
+      - name: Lint
+        run: go run golang.org/x/lint/golint ./...
+
+      - name: Build
+        run: go build -v ./...
+
+      - name: Test
+        run: go test -v ./...
+
