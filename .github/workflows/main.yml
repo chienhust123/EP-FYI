@@ -20,9 +20,6 @@ jobs:
     # if: contains(github.event.head_commit.message, 'offer_service/') || contains(github.event.pull_request.base.ref, 'offer_service/')
 
     steps:
-      - name: Change directory to offer_service
-        run: cd ./offer_service
-
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -41,6 +38,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-go-
 
+      - name: Change directory to offer_service
+        run: |
+          cd offer_service
+          ls
+
       - name: Install dependencies
         run: go mod tidy
 
@@ -52,7 +54,7 @@ jobs:
 
       - name: Test
         run: go test -v ./...
-
+  
   account_core:
     name: Account Core CI
     runs-on: ubuntu-latest
@@ -60,9 +62,6 @@ jobs:
     if: contains(github.event.head_commit.message, 'account_core/') || contains(github.event.pull_request.base.ref, 'account_core/')
 
     steps:
-      - name: Change directory to account_core
-        run: cd ./account_core
-
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -81,6 +80,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-go-
 
+      - name: Change directory to account_core
+        run: cd account_core
+
       - name: Install dependencies
         run: go mod tidy
 
@@ -92,3 +94,4 @@ jobs:
 
       - name: Test
         run: go test -v ./...
+
