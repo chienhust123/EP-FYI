@@ -21,7 +21,7 @@ jobs:
 
     steps:
       - name: Change directory to offer_service
-        run: cd offer_service
+        run: cd ./offer_service
 
       - name: Checkout code
         uses: actions/checkout@v2
@@ -61,7 +61,7 @@ jobs:
 
     steps:
       - name: Change directory to account_core
-        run: cd account_core
+        run: cd ./account_core
 
       - name: Checkout code
         uses: actions/checkout@v2
@@ -77,7 +77,7 @@ jobs:
           path: |
             ~/.cache/go-build
             ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ hashFiles('**/offer_account_coreservice/go.sum') }}
+          key: ${{ runner.os }}-go-${{ hashFiles('**/account_core/go.sum') }}
           restore-keys: |
             ${{ runner.os }}-go-
 
