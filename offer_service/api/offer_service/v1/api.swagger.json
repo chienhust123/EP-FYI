@@ -541,7 +541,7 @@
           "type": "string",
           "format": "uint64"
         },
-        "presignPostUrl": {
+        "presignPutUrl": {
           "type": "string"
         }
       }
@@ -683,6 +683,10 @@
         "limit": {
           "type": "string",
           "format": "uint64"
+        },
+        "baseCurrency": {
+          "type": "string",
+          "description": "The 3-letter ISO currency code of the currency denoting the currency to return the aggregated offer stats in."
         }
       }
     },
@@ -816,7 +820,7 @@
           "type": "string",
           "format": "uint64"
         },
-        "presignPostUrl": {
+        "presignPutUrl": {
           "type": "string"
         }
       }

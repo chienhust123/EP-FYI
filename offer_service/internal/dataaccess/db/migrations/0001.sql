@@ -67,3 +67,10 @@ CREATE TABLE IF NOT EXISTS aggregated_company_offer_stat_tab (
     FOREIGN KEY (location_id) REFERENCES location_tab(id),
     FOREIGN KEY (position_id) REFERENCES position_tab(id)
 );
+
+CREATE TABLE IF NOT EXISTS currency_conversion_rate_tab (
+    from_currency CHAR(3) NOT NULL,
+    to_currency CHAR(3) NOT NULL,
+    conversion_rate BIGINT UNSIGNED NOT NULL,
+    PRIMARY KEY (from_currency, to_currency)
+);
