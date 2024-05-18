@@ -28,6 +28,12 @@ jobs:
         with:
           go-version: 1.22
 
+      - name: Set up env
+        run: |
+          echo "::set-env name=GOPATH::$(go env GOPATH)"
+          echo "::add-path::$(go env GOPATH)/bin"
+        shell: bash
+
       - name: Cache Go modules
         uses: actions/cache@v3
         with:
@@ -41,6 +47,7 @@ jobs:
       - name: Install dependencies
         working-directory: offer_service
         run: |
+          go env
           go mod tidy
           go install golang.org/x/lint/golint
 
