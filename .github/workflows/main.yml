@@ -1,0 +1,54 @@
+name: EP CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'offer_service/**'
+      - 'auth_service/**'
+  pull_request:
+    branches: ['**']
+    paths:
+      - 'offer_service/**'
+      - 'auth_service/**'
+
+jobs:
+  offer_service:
+    name: Offer Service CI
+    runs-on: ubuntu-latest
+
+    if: contains(github.event.head_commit.message, 'offer_service/') || contains(github.event.pull_request.base.ref, 'offer_service/')
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.18
+
+      - name: Cache Go modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/offer_service/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+      - name: Change directory to offer_service
+        run: cd offer_service
+
+      - name: Install dependencies
+        run: go mod tidy
+
+      - name: Lint
+        run: go run golang.org/x/lint/golint ./...
+
+      - name: Build
+        run: go build -v ./...
+
+      - name: Test
+        run: go test -v ./...
