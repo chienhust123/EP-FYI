@@ -24,6 +24,9 @@ jobs:
 
     name: Offer Service CI
     runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: offer_service
 
     # if: contains(github.event.head_commit.message, 'offer_service/') || contains(github.event.pull_request.base.ref, 'offer_service/')
 
@@ -50,21 +53,15 @@ jobs:
         working-directory: offer_service
         run: go mod tidy
 
-      - name: golangci-lint
+      - name: Lint
         uses: golangci/golangci-lint-action@v6
         with:
           version: v1.58
 
-      - name: Lint
-        working-directory: offer_service
-        run: make lint
-
       - name: Build
-        working-directory: offer_service
         run: make build
 
       - name: Test
-        working-directory: offer_service
         run: make test
 
   account_core:
