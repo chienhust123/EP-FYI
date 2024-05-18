@@ -40,19 +40,21 @@ jobs:
 
       - name: Install dependencies
         working-directory: offer_service
-        run: go mod tidy
+        run: |
+          go mod tidy
+          go get golang.org/x/lint/golint
 
       - name: Lint
         working-directory: offer_service
-        run: go run golang.org/x/lint/golint ./...
+        run: make lint
 
       - name: Build
         working-directory: offer_service
-        run: go build -v ./...
+        run: make build
 
       - name: Test
         working-directory: offer_service
-        run: go test -v ./...
+        run: make test
   
   account_core:
     name: Account Core CI
