@@ -5,12 +5,10 @@ on:
     branches: [main]
     paths:
       - 'offer_service/**'
-      - 'account_core/**'
   pull_request:
     branches: ['**']
     paths:
       - 'offer_service/**'
-      - 'account_core/**'
 
 permissions:
   contents: read
@@ -57,54 +55,6 @@ jobs:
         with:
           version: v1.58
           working-directory: offer_service
-
-      - name: Build
-        run: make build
-
-      - name: Test
-        run: make test
-
-  account_core:
-    strategy:
-      matrix:
-        go: ['1.22']
-        os: [ubuntu-latest]
-
-    name: Account Core CI
-    runs-on: ${{ matrix.os }}
-    defaults:
-      run:
-        working-directory: offer_service
-
-    if: contains(github.event.head_commit.message, 'account_core/') || contains(github.event.pull_request.base.ref, 'account_core/')
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: ${{ matrix.go }}
-
-      - name: Cache Go modules
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cache/go-build
-            ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ hashFiles('**/account_core/go.sum') }}
-          restore-keys: |
-            ${{ runner.os }}-go-
-
-      - name: Install dependencies
-        run: go mod tidy
-
-      - name: Lint
-        uses: golangci/golangci-lint-action@v6
-        with:
-          version: v1.58
-          working-directory: account_core
 
       - name: Build
         run: make build
