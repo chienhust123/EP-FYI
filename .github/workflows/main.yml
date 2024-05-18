@@ -50,13 +50,13 @@ jobs:
             ${{ runner.os }}-go-
 
       - name: Install dependencies
-        working-directory: offer_service
         run: go mod tidy
 
       - name: Lint
         uses: golangci/golangci-lint-action@v6
         with:
           version: v1.58
+          working-directory: offer_service
 
       - name: Build
         run: make build
