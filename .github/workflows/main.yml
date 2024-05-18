@@ -15,7 +15,7 @@ on:
 jobs:
   offer_service:
     name: Offer Service CI
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest 
 
     # if: contains(github.event.head_commit.message, 'offer_service/') || contains(github.event.pull_request.base.ref, 'offer_service/')
 
@@ -38,21 +38,20 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-go-
 
-      - name: Change directory to offer_service
-        run: |
-          cd offer_service
-          ls
-
       - name: Install dependencies
+        working-directory: offer_service
         run: go mod tidy
 
       - name: Lint
+        working-directory: offer_service
         run: go run golang.org/x/lint/golint ./...
 
       - name: Build
+        working-directory: offer_service
         run: go build -v ./...
 
       - name: Test
+        working-directory: offer_service
         run: go test -v ./...
   
   account_core:
