@@ -1,0 +1,88 @@
+name: Offer Service CI
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'EP-FYI/offer_service/**'
+      - 'EP-FYI/auth_service/**'
+  pull_request:
+    branches: [ '**' ]
+    paths:
+      - 'EP-FYI/offer_service/**'
+      - 'EP-FYI/auth_service/**'
+
+jobs:
+  offer_service:
+    name: Offer Service CI
+    runs-on: ubuntu-latest
+
+    if: contains(github.event.head_commit.message, 'EP-FYI/offer_service/') || contains(github.event.pull_request.base.ref, 'EP-FYI/offer_service/')
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v3
+      with:
+        go-version: 1.18
+
+    - name: Cache Go modules
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.cache/go-build
+          ~/go/pkg/mod
+        key: ${{ runner.os }}-go-${{ hashFiles('**/offer_service/go.sum') }}
+        restore-keys: |
+          ${{ runner.os }}-go-
+
+    - name: Change directory to offer_service
+      run: cd fyi/offer_service
+
+    - name: Install dependencies
+      run: go mod tidy
+
+    - name: Run Makefile commands
+      run: |
+        make lint
+        make build
+        make test
+
+  auth_service:
+    name: Auth Service CI
+    runs-on: ubuntu-latest
+
+    if: contains(github.event.head_commit.message, 'fyi/auth_service/') || contains(github.event.pull_request.base.ref, 'fyi/auth_service/')
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v3
+      with:
+        go-version: 1.18
+
+    - name: Cache Go modules
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.cache/go-build
+          ~/go/pkg/mod
+        key: ${{ runner.os }}-go-${{ hashFiles('**/auth_service/go.sum') }}
+        restore-keys: |
+          ${{ runner.os }}-go-
+
+    - name: Change directory to auth_service
+      run: cd fyi/auth_service
+
+    - name: Install dependencies
+      run: go mod tidy
+
+    - name: Run Makefile commands
+      run: |
+        make lint
+        make build
+        make test
