@@ -12,27 +12,29 @@ on:
       - 'offer_service/**'
       - 'account_core/**'
 
+permissions:
+  contents: read
+
 jobs:
   offer_service:
+    strategy:
+      matrix:
+        go: ['1.22']
+        os: [ubuntu-latest, macos-latest, windows-latest]
+
     name: Offer Service CI
-    runs-on: ubuntu-latest 
+    runs-on: ${{ matrix.os }}
 
     # if: contains(github.event.head_commit.message, 'offer_service/') || contains(github.event.pull_request.base.ref, 'offer_service/')
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Go
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@v5
         with:
-          go-version: 1.22
-
-      - name: Set up env
-        run: |
-          echo "::set-env name=GOPATH::$(go env GOPATH)"
-          echo "::add-path::$(go env GOPATH)/bin"
-        shell: bash
+          go-version: ${{ matrix.os }}
 
       - name: Cache Go modules
         uses: actions/cache@v3
@@ -46,10 +48,12 @@ jobs:
 
       - name: Install dependencies
         working-directory: offer_service
-        run: |
-          go env
-          go mod tidy
-          go install golang.org/x/lint/golint
+        run: go mod tidy
+
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: v1.58
 
       - name: Lint
         working-directory: offer_service
@@ -62,7 +66,7 @@ jobs:
       - name: Test
         working-directory: offer_service
         run: make test
-  
+
   account_core:
     name: Account Core CI
     runs-on: ubuntu-latest
@@ -102,4 +106,3 @@ jobs:
 
       - name: Test
         run: go test -v ./...
-
