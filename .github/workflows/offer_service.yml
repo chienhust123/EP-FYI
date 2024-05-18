@@ -26,8 +26,6 @@ jobs:
       run:
         working-directory: offer_service
 
-    if: contains(github.event.head_commit.message, 'offer_service/') || contains(github.event.pull_request.base.ref, 'offer_service/')
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4

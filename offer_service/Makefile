@@ -7,6 +7,8 @@ all: generate build-all
 .PHONY: generate
 generate:
 	buf generate api
+	wire internal/wiring/wire.go
+	go generate ./...
 
 .PHONY: build
 build:
@@ -21,16 +23,24 @@ clean:
 
 .PHONY: docker-compose-dev-up
 docker-compose-dev-up:
-	docker-compose -f deployments/docker-compose.dev.yaml up -d
+	docker compose -f deployments/docker/docker-compose.dev.yaml up -d
 
 .PHONY: docker-compose-dev-down
 docker-compose-dev-down:
-	docker-compose -f deployments/docker-compose.dev.yaml down
+	docker compose -f deployments/docker/docker-compose.dev.yaml down
 
 .PHONY: run
 run:
 	go run cmd/$(PROJECT_NAME)/*.go
 
+.PHONY: run-standalone-server
+run-standalone-server:
+	go run cmd/$(PROJECT_NAME)/*.go standalone-server --with-http=true
+
 .PHONY: lint
 lint:
 	golangci-lint run ./...
+
+.PHONY: test
+test:
+	go test ./...

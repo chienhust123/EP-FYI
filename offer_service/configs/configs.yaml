@@ -1,4 +1,34 @@
+database:
+  type: "mysql"
+  host: 127.0.0.1
+  port: 3306
+  username: root
+  password: example
+  database: fyi
+
+cache:
+  type: "redis"
+  address: "127.0.0.1:6379"
+  username: ""
+  password: ""
+
 grpc:
   address: "0.0.0.0:8080"
+  create_company_profile_image:
+    bucket_name: upload-company-profile-image
+    presign_url_expiry_time: 30s
+  create_offer_image:
+    bucket_name: upload-offer-image
+    presign_url_expiry_time: 30s
+
 http:
   address: "0.0.0.0:8081"
+
+s3:
+  address: "127.0.0.1:9000"
+  username: "ROOTUSER"
+  password: "CHANGEME123"
+
+log_config:
+  level: INFO
+  filename: offer_core_log
