@@ -28,7 +28,7 @@ jobs:
       run:
         working-directory: offer_service
 
-    # if: contains(github.event.head_commit.message, 'offer_service/') || contains(github.event.pull_request.base.ref, 'offer_service/')
+    if: contains(github.event.head_commit.message, 'offer_service/') || contains(github.event.pull_request.base.ref, 'offer_service/')
 
     steps:
       - name: Checkout code
@@ -65,19 +65,27 @@ jobs:
         run: make test
 
   account_core:
+    strategy:
+      matrix:
+        go: ['1.22']
+        os: [ubuntu-latest]
+
     name: Account Core CI
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: offer_service
 
     if: contains(github.event.head_commit.message, 'account_core/') || contains(github.event.pull_request.base.ref, 'account_core/')
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Go
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@v5
         with:
-          go-version: 1.22
+          go-version: ${{ matrix.go }}
 
       - name: Cache Go modules
         uses: actions/cache@v3
@@ -89,17 +97,17 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-go-
 
-      - name: Change directory to account_core
-        run: cd account_core
-
       - name: Install dependencies
         run: go mod tidy
 
       - name: Lint
-        run: go run golang.org/x/lint/golint ./...
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: v1.58
+          working-directory: account_core
 
       - name: Build
-        run: go build -v ./...
+        run: make build
 
       - name: Test
-        run: go test -v ./...
+        run: make test
