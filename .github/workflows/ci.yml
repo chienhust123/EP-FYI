@@ -31,7 +31,7 @@ jobs:
           ${{ runner.os }}-go-
 
     - name: Change directory to offer_service
-      run: cd fyi/offer_service
+      run: cd ./offer_service
 
     - name: Install dependencies
       run: go mod tidy
