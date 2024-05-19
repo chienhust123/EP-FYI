@@ -16,7 +16,6 @@ module.exports = {
     'import/extensions': 'off',
     'no-tabs': 'off',
     'react/jsx-closing-tag-location': 'off',
-    'react/jsx-indent-props': 'off',
-    'max-len': 'off'
+    'react/jsx-indent-props': 'off'
   },
 };
