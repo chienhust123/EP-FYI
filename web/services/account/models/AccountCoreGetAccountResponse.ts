@@ -1,5 +1,5 @@
 import { AccountCoreAccount } from "./AccountCoreAccount";
 
- export type AccountCoreGetAccountResponse = {
+export type AccountCoreGetAccountResponse = {
     account?: AccountCoreAccount;
 };
