@@ -1,5 +1,4 @@
 import constate from 'constate';
-import useCookie from 'react-use-cookie';
 
 type UserInfo = {
   userName: string;
@@ -14,15 +13,12 @@ const defaultUserInfo = {
 };
 
 export const useAuth = (): { userInfo: UserInfo; login: () => void; logout: () => void; isLoggedIn: boolean } => {
-  const [userToken, setUserToken, removeUserToken] = useCookie('userInfo', '{}');
-  const userInfo = JSON.parse(userToken ?? '{}');
+  const userInfo = JSON.parse('{}');
 
   const login = () => {
-    setUserToken(JSON.stringify(defaultUserInfo));
   };
 
   const logout = () => {
-    removeUserToken();
   };
 
   return { userInfo, login, logout, isLoggedIn: !!Object.keys(userInfo).length };

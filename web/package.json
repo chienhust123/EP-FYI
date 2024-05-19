@@ -13,9 +13,15 @@
     "lint:stylelint": "stylelint '**/*.css' --cache",
     "prettier:check": "prettier --check \"**/*.{ts,tsx}\"",
     "prettier:write": "prettier --write \"**/*.{ts,tsx}\"",
-    "gen-service": "sh ./scripts/gentype.sh"
+    "gen-service": "yarn kubb generate --config kubb.config.ts"
   },
   "dependencies": {
+    "@kubb/cli": "^2.18.8",
+    "@kubb/core": "^2.18.8",
+    "@kubb/swagger": "^2.18.8",
+    "@kubb/swagger-client": "^2.18.8",
+    "@kubb/swagger-tanstack-query": "^2.18.8",
+    "@kubb/swagger-ts": "^2.18.8",
     "@mantine/carousel": "^7.8.1",
     "@mantine/core": "7.8.1",
     "@mantine/dates": "^7.8.1",
@@ -23,6 +29,8 @@
     "@mantine/hooks": "7.8.1",
     "@next/bundle-analyzer": "^14.1.3",
     "@tabler/icons-react": "^3.0.0",
+    "@tanstack/react-query": "^5.37.1",
+    "axios": "^1.6.8",
     "constate": "^3.3.2",
     "dayjs": "^1.11.11",
     "next": "14.1.3",
@@ -54,8 +62,6 @@
     "prettier": "^3.2.5",
     "stylelint": "^16.2.1",
     "stylelint-config-standard-scss": "^13.0.0",
-    "swagger-typescript-api": "^13.0.3",
-    "ts-proto": "^1.176.0",
     "typescript": "5.4.2"
   }
 }
