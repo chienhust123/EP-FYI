@@ -8,19 +8,19 @@ import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { MantineProvider } from '@mantine/core';
 import { theme } from '../theme';
-import { Layout } from '@/components/layout';
+import { Layout } from '@/share/layout';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from '@/services/query';
-import { AuthContext } from '@/context/auth';
-
+import { AuthContext } from '@/share/hooks/auth';
+import '@/services/mock'
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <QueryClientProvider client={queryClient}>
-      <MantineProvider theme={theme}>
+    <MantineProvider theme={theme}>
+      <QueryClientProvider client={queryClient}>
         <AuthContext>
           <Head>
-            <title>Offers Engineer Pro</title>
+            <title>Health App</title>
             <meta
               name="viewport"
               content="minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no"
@@ -31,7 +31,8 @@ export default function App({ Component, pageProps }: AppProps) {
             <Component {...pageProps} />
           </Layout>
         </AuthContext>
-      </MantineProvider>
-    </QueryClientProvider>
+      </QueryClientProvider>
+    </MantineProvider>
+
   );
 }

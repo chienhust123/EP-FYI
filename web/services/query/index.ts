@@ -1,5 +1,4 @@
-import { QueryClient, useQuery, UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
-import { offerCoreServiceGetAggregatedCompanyStatsList, OfferCoreServiceGetAggregatedCompanyStatsListMutationRequest, OfferCoreServiceGetAggregatedCompanyStatsListMutationResponse, OfferCoreServiceGetCompanyAggregatedOfferStatsListsMutationResponse, v1CompanyAggregatedOfferStatsSortOrderValue, V1GetAggregatedCompanyStatsListRequest, V1GetAggregatedCompanyStatsListResponse } from "../offer";
+import { QueryClient } from "@tanstack/react-query";
 
 export const queryClient = new QueryClient({
   defaultOptions: {},
