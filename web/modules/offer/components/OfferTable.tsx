@@ -1,10 +1,10 @@
 import React from 'react';
 import { Table, ActionIcon, Box, Pagination, Flex } from '@mantine/core';
 import { Offer } from '@/services/offer';
-import { formatCurrency } from '@/helpers/format-currency';
+import { formatCurrency } from '@/share/helpers/format-currency';
 import Link from 'next/link';
 import { IconEye } from '@tabler/icons-react';
-import { OfferStatusMap } from '@/consts';
+import { OfferStatusMap } from '@/share/consts';
 
 type Props = {
   offerList: Offer[];

@@ -1,4 +1,4 @@
-import { useAuth } from "@/context/auth"
+import { useAuth } from "@/share/hooks/auth"
 import { Avatar, Menu } from "@mantine/core"
 import { IconBrandGoogleFilled, IconLogout } from "@tabler/icons-react";
 

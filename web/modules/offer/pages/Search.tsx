@@ -4,11 +4,11 @@ import { useSearchParams } from 'next/navigation';
 
 import * as R from 'ramda';
 import React from 'react';
-import { SearchForm } from './SearchForm';
-import { OfferList } from './OfferList';
-import OfferTable from './OfferTable';
+import { SearchForm } from '../components/SearchForm';
+import { OfferList } from '../components/OfferList';
+import OfferTable from '../components/OfferTable';
 
-export default () => {
+export const SearchPage: React.FC = () => {
   const searchParams = useSearchParams();
 
   const companyId = searchParams.get('company_id');

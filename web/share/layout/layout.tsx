@@ -1,6 +1,6 @@
 import { AppShell, Button, Flex, Group, Image } from '@mantine/core';
 import { UserInfo } from './user-info/UserInfo';
-import { useAuth } from '@/context/auth';
+import { useAuth } from '@/share/hooks/auth';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import Link from 'next/link';

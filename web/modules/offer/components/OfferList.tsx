@@ -1,4 +1,4 @@
-import { formatCurrency } from "@/helpers/format-currency";
+import { formatCurrency } from "@/share/helpers/format-currency";
 import { Offer } from "@/services/offer"
 import { Box, Flex, Group, Image, SimpleGrid, Text } from "@mantine/core"
 

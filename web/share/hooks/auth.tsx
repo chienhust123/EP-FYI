@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import constate from 'constate';
-import { isEmpty, isNotEmpty } from 'ramda';
+import { isNotEmpty } from 'ramda';
 import { Account, useGetAccountSession } from '@/services/account';
 
 type ReturnTypeUseAuth = {
