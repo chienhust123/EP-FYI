@@ -227,6 +227,11 @@
   resolved "https://registry.yarnpkg.com/@csstools/selector-specificity/-/selector-specificity-3.1.1.tgz#63085d2995ca0f0e55aa8b8a07d69bfd48b844fe"
   integrity sha512-a7cxGcJ2wIlMFLlh8z2ONm+715QkPHiyJcxwQlKOz/03GPw1COpfhcmC9wm4xlZfp//jWHNNMwzjtqHXVWU9KA==
 
+"@dinero.js/currencies@^2.0.0-alpha.1":
+  version "2.0.0-alpha.1"
+  resolved "https://registry.yarnpkg.com/@dinero.js/currencies/-/currencies-2.0.0-alpha.1.tgz#bcee84319c14bdb1de0e09778005b59d56f37237"
+  integrity sha512-JoKY6q3AOm2II44qLp6VMGn+j+p6QC39m3DFogKZXsucWIIvzt7c2v04DZrrHWLNnDYNzITOnbQ7f2pGbONjig==
+
 "@discoveryjs/json-ext@0.5.7":
   version "0.5.7"
   resolved "https://registry.yarnpkg.com/@discoveryjs/json-ext/-/json-ext-0.5.7.tgz#1d572bfbbe14b7704e0ba0f39b74815b84870d70"
@@ -953,6 +958,11 @@
   integrity sha512-EhtBNA8GL3XFeSx6VYUjXQ96n44xe3JGKZCzBINrCYlxbZP6UwBafv7ti4eSRWc2Fy+fybQre0w17gR6lMzULA==
   dependencies:
     "@tanstack/query-core" "5.36.1"
+
+"@types/dinero.js@^1.9.4":
+  version "1.9.4"
+  resolved "https://registry.yarnpkg.com/@types/dinero.js/-/dinero.js-1.9.4.tgz#429034315b82573ea5fc4dce25877ec7e843c12b"
+  integrity sha512-mtJnan4ajy9MqvoJGVXu0tC9EAAzFjeoKc3d+8AW+H/Od9+8IiC59ymjrZF+JdTToyDvkLReacTsc50Z8eYr6Q==
 
 "@types/json-schema@^7.0.11", "@types/json-schema@^7.0.4", "@types/json-schema@^7.0.6", "@types/json-schema@^7.0.9":
   version "7.0.15"
@@ -1850,6 +1860,11 @@ detect-node-es@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/detect-node-es/-/detect-node-es-1.1.0.tgz#163acdf643330caa0b4cd7c21e7ee7755d6fa493"
   integrity sha512-ypdmJU/TbBby2Dxibuv7ZLW3Bs1QEmM7nHjEANfohJLvE0XVujisn1qPJcZxg+qDucsr+bP6fLD1rPS3AhJ7EQ==
+
+dinero.js@^1.9.1:
+  version "1.9.1"
+  resolved "https://registry.yarnpkg.com/dinero.js/-/dinero.js-1.9.1.tgz#64b10ce7277a07805dac9c8cd6500e9b7d0aee96"
+  integrity sha512-1HXiF2vv3ZeRQ23yr+9lFxj/PbZqutuYWJnE0qfCB9xYBPnuaJ8lXtli1cJM0TvUXW1JTOaePldmqN5JVNxKSA==
 
 dir-glob@^3.0.1:
   version "3.0.1"

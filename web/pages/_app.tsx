@@ -9,7 +9,14 @@ import Head from 'next/head';
 import { MantineProvider } from '@mantine/core';
 import { theme } from '../theme';
 import { Layout } from '@/components/layout';
+<<<<<<< Updated upstream
 import { AuthContext } from '../components/_context';
+=======
+import { QueryClientProvider } from '@tanstack/react-query';
+import { queryClient } from '@/services/query';
+import { AuthContext } from '@/context/auth';
+import '@/services/mock'
+>>>>>>> Stashed changes
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
