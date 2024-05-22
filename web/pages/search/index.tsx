@@ -1,6 +1,5 @@
-import { formatCurrency } from '@/helpers/format-currency';
 import { useGetOfferList } from '@/services/offer';
-import { Box, Center, Flex, Group, Image, LoadingOverlay, SimpleGrid, Stack, Table, Text, TextInput } from '@mantine/core';
+import { Box, Center, LoadingOverlay } from '@mantine/core';
 import { useSearchParams } from 'next/navigation';
 
 import * as R from 'ramda';

@@ -1,31 +1,10 @@
-<<<<<<< Updated upstream
-import { AppShell } from '@mantine/core';
-import { Header } from './header';
-=======
 import { AppShell, Button, Flex, Group, Image } from '@mantine/core';
 import { UserInfo } from './user-info/UserInfo';
 import { useAuth } from '@/context/auth';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import Link from 'next/link';
->>>>>>> Stashed changes
 
-export const Layout: React.FC<React.PropsWithChildren> = ({ children }) => (
-  <>
-    <AppShell
-      padding="xl"
-    >
-
-      <AppShell.Main>
-        <Header />
-
-<<<<<<< Updated upstream
-        {children}
-      </AppShell.Main>
-    </AppShell>
-  </>
-);
-=======
 export const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { isLoggedIn, loading } = useAuth();
   const { replace, pathname } = useRouter()
@@ -58,4 +37,3 @@ export const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
     </>
   )
 };
->>>>>>> Stashed changes
