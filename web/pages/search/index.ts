@@ -1,3 +1,3 @@
-import { SearchPage } from "@/modules/offer/pages/Search";
+import { SearchPage } from '@/modules/offer/pages/Search';
 
-export default SearchPage
+export default SearchPage;

@@ -1,17 +1,16 @@
 import React from 'react';
-import { Table, ActionIcon, Box, Pagination, Flex } from '@mantine/core';
-import { Offer } from '@/services/offer';
-import { formatCurrency } from '@/share/helpers/format-currency';
+import { Table, ActionIcon, Box, Pagination, Flex, Center, Stack } from '@mantine/core';
 import Link from 'next/link';
 import { IconEye } from '@tabler/icons-react';
+import { Offer } from '@/services/offer';
+import { formatCurrency } from '@/share/helpers/format-currency';
 import { OfferStatusMap } from '@/share/consts';
 
 type Props = {
   offerList: Offer[];
-}
+};
 
 const OfferTable: React.FC<Props> = ({ offerList }) => {
-
   const rows = offerList.map((offer) => (
     <Table.Tr
       key={offer.id}
@@ -20,10 +19,10 @@ const OfferTable: React.FC<Props> = ({ offerList }) => {
       <Table.Td>{offer.location.city}</Table.Td>
       <Table.Td>{offer.position.title}</Table.Td>
       <Table.Td> {formatCurrency(offer.total_package)}</Table.Td>
-      <Table.Td>{OfferStatusMap[offer.status]}</Table.Td>
+      <Table.Td>{OfferStatusMap[offer.status] ?? 'NA'}</Table.Td>
       <Table.Td>
         <Link href={`/offer/detail?id=${offer.id}`}>
-          <ActionIcon variant='outline' >
+          <ActionIcon variant="outline">
             <IconEye />
           </ActionIcon>
         </Link>
@@ -44,13 +43,18 @@ const OfferTable: React.FC<Props> = ({ offerList }) => {
             <Table.Th />
           </Table.Tr>
         </Table.Thead>
-        <Table.Tbody>{rows}</Table.Tbody>
+        <Table.Tbody>
+          {rows.length ? rows : <Center>
+            <Stack>
+              No offers available
+            </Stack>
+          </Center>}</Table.Tbody>
       </Table>
-      <Flex mt='lg' justify='end'>
+      <Flex mt="lg" justify="end">
         <Pagination total={10} />
       </Flex>
     </Box>
   );
-}
+};
 
 export default OfferTable;

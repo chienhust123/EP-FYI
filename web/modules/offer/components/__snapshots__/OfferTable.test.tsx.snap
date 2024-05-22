@@ -1,0 +1,188 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`OfferTable #rendering renders the table with offer data 1`] = `
+<table
+  class="m_b23fa0ef mantine-Table-table"
+  style="--table-vertical-spacing: calc(0.4375rem * var(--mantine-scale));"
+>
+  <thead
+    class="m_b242d975 mantine-Table-thead"
+  >
+    <tr
+      class="m_4e7aa4fd mantine-Table-tr"
+      data-with-row-border="true"
+    >
+      <th
+        class="m_4e7aa4f3 mantine-Table-th"
+      >
+        Company
+      </th>
+      <th
+        class="m_4e7aa4f3 mantine-Table-th"
+      >
+        Location
+      </th>
+      <th
+        class="m_4e7aa4f3 mantine-Table-th"
+      >
+        Position
+      </th>
+      <th
+        class="m_4e7aa4f3 mantine-Table-th"
+      >
+        Total Package
+      </th>
+      <th
+        class="m_4e7aa4f3 mantine-Table-th"
+      >
+        Status
+      </th>
+      <th
+        class="m_4e7aa4f3 mantine-Table-th"
+      />
+    </tr>
+  </thead>
+  <tbody
+    class="m_b2404537 mantine-Table-tbody"
+  >
+    <tr
+      class="m_4e7aa4fd mantine-Table-tr"
+      data-with-row-border="true"
+    >
+      <td
+        class="m_4e7aa4ef mantine-Table-td"
+      >
+        Tech Innovators
+      </td>
+      <td
+        class="m_4e7aa4ef mantine-Table-td"
+      >
+        San Francisco
+      </td>
+      <td
+        class="m_4e7aa4ef mantine-Table-td"
+      >
+        Software Engineer
+      </td>
+      <td
+        class="m_4e7aa4ef mantine-Table-td"
+      >
+         
+        $120,000
+      </td>
+      <td
+        class="m_4e7aa4ef mantine-Table-td"
+      >
+        Uploaded
+      </td>
+      <td
+        class="m_4e7aa4ef mantine-Table-td"
+      >
+        <a
+          href="/offer/detail?id=1"
+        >
+          <button
+            class="mantine-focus-auto mantine-active m_8d3f4000 mantine-ActionIcon-root m_87cf2631 mantine-UnstyledButton-root"
+            data-variant="outline"
+            style="--ai-bg: transparent; --ai-hover: var(--mantine-color-blue-outline-hover); --ai-color: var(--mantine-color-blue-outline); --ai-bd: calc(0.0625rem * var(--mantine-scale)) solid var(--mantine-color-blue-outline);"
+            type="button"
+          >
+            <span
+              class="m_8d3afb97 mantine-ActionIcon-icon"
+            >
+              <svg
+                class="tabler-icon tabler-icon-eye "
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"
+                />
+                <path
+                  d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"
+                />
+              </svg>
+            </span>
+          </button>
+        </a>
+      </td>
+    </tr>
+    <tr
+      class="m_4e7aa4fd mantine-Table-tr"
+      data-with-row-border="true"
+    >
+      <td
+        class="m_4e7aa4ef mantine-Table-td"
+      >
+        Global Finance
+      </td>
+      <td
+        class="m_4e7aa4ef mantine-Table-td"
+      >
+        London
+      </td>
+      <td
+        class="m_4e7aa4ef mantine-Table-td"
+      >
+        Financial Analyst
+      </td>
+      <td
+        class="m_4e7aa4ef mantine-Table-td"
+      >
+         
+        £70,000
+      </td>
+      <td
+        class="m_4e7aa4ef mantine-Table-td"
+      >
+        Approved
+      </td>
+      <td
+        class="m_4e7aa4ef mantine-Table-td"
+      >
+        <a
+          href="/offer/detail?id=2"
+        >
+          <button
+            class="mantine-focus-auto mantine-active m_8d3f4000 mantine-ActionIcon-root m_87cf2631 mantine-UnstyledButton-root"
+            data-variant="outline"
+            style="--ai-bg: transparent; --ai-hover: var(--mantine-color-blue-outline-hover); --ai-color: var(--mantine-color-blue-outline); --ai-bd: calc(0.0625rem * var(--mantine-scale)) solid var(--mantine-color-blue-outline);"
+            type="button"
+          >
+            <span
+              class="m_8d3afb97 mantine-ActionIcon-icon"
+            >
+              <svg
+                class="tabler-icon tabler-icon-eye "
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"
+                />
+                <path
+                  d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"
+                />
+              </svg>
+            </span>
+          </button>
+        </a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+`;
