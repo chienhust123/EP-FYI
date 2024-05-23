@@ -8,7 +8,6 @@ var WireSet = wire.NewSet(
 	NewCompanyAccessor,
 	NewCompanyProfileImageAccessor,
 	NewOfferImageAccessor,
-	NewCompanyAccessor,
 	NewPositionAccessor,
 	NewLocationAccessor,
 	NewOfferAccessor,
