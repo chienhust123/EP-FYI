@@ -40,6 +40,20 @@ func (m *MockClient) EXPECT() *MockClientMockRecorder {
 	return m.recorder
 }
 
+// CreateBucketIfNotExists mocks base method.
+func (m *MockClient) CreateBucketIfNotExists(ctx context.Context, bucketName, location string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateBucketIfNotExists", ctx, bucketName, location)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// CreateBucketIfNotExists indicates an expected call of CreateBucketIfNotExists.
+func (mr *MockClientMockRecorder) CreateBucketIfNotExists(ctx, bucketName, location any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateBucketIfNotExists", reflect.TypeOf((*MockClient)(nil).CreateBucketIfNotExists), ctx, bucketName, location)
+}
+
 // GeneratePresignedUploadURL mocks base method.
 func (m *MockClient) GeneratePresignedUploadURL(ctx context.Context, bucketName, key string, expiry time.Duration) (string, error) {
 	m.ctrl.T.Helper()

@@ -17,9 +17,11 @@ grpc:
   create_company_profile_image:
     bucket_name: upload-company-profile-image
     presign_url_expiry_time: 30s
+    location: us-east-1
   create_offer_image:
     bucket_name: upload-offer-image
     presign_url_expiry_time: 30s
+    location: us-east-1
 
 http:
   address: "0.0.0.0:8081"

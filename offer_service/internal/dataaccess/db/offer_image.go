@@ -11,40 +11,40 @@ import (
 )
 
 const (
-	tableNameCompanyProfileImage         = "company_profile_image_tab"
-	colNameCompanyProfileImageID         = "id"
-	colNameCompanyProfileImageObjectName = "object_name"
-	colNameCompanyProfileImageExpireTime = "expire_time"
+	tableNameOfferImage         = "offer_image_tab"
+	colNameOfferImageID         = "id"
+	colNameOfferImageObjectName = "object_name"
+	colNameOfferImageExpireTime = "expire_time"
 )
 
-type CompanyProfileImageTab struct {
+type OfferImageTab struct {
 	ID         uint64        `db:"id"          goqu:"skipupdate"`
 	ObjectName string        `db:"object_name" goqu:"skipupdate"`
 	ExpireTime time.Duration `db:"expire_time" goqu:"skipupdate"`
 }
 
-//go:generate mockgen -source=./company_profile_image.go -destination=../../../test/mocks/dataaccess/db/company_profile_image_mock.go -package=mockdatabase
-type CompanyProfileImageAccessor interface {
-	CreateCompanyProfileImage(ctx context.Context, data *CompanyProfileImageTab) error
+//go:generate mockgen -source=./offer_image.go -destination=../../../test/mocks/dataaccess/db/offer_image_mock.go -package=mockdatabase
+type OfferImageAccessor interface {
+	CreateOfferImage(ctx context.Context, data *OfferImageTab) error
 }
 
-type companyProfileImageAccessor struct {
+type offerImageAccessor struct {
 	db     *goqu.Database
 	logger *zap.Logger
 }
 
-func NewCompanyProfileImageAccessor(
+func NewOfferImageAccessor(
 	db *goqu.Database,
 	logger *zap.Logger,
-) CompanyProfileImageAccessor {
-	return &companyProfileImageAccessor{db: db, logger: logger}
+) OfferImageAccessor {
+	return &offerImageAccessor{db: db, logger: logger}
 }
 
-func (o companyProfileImageAccessor) CreateCompanyProfileImage(
+func (o offerImageAccessor) CreateOfferImage(
 	ctx context.Context,
-	data *CompanyProfileImageTab,
+	data *OfferImageTab,
 ) error {
-	logger := utils.LoggerWithContext(ctx, o.logger).Named("CreateCompanyProfileImage")
+	logger := utils.LoggerWithContext(ctx, o.logger).Named("CreateOfferImage")
 	tx, txErr := o.db.BeginTx(ctx, nil)
 	if txErr != nil {
 		logger.With(zap.Error(txErr)).
@@ -52,7 +52,7 @@ func (o companyProfileImageAccessor) CreateCompanyProfileImage(
 		return txErr
 	}
 
-	ds := tx.Insert(tableNameCompanyProfileImage).Rows(data).Executor()
+	ds := tx.Insert(tableNameOfferImage).Rows(data).Executor()
 	_, createErr := ds.ExecContext(ctx)
 	if createErr != nil {
 		logger.With(zap.Error(createErr)).Error("failed to create company profile image")

@@ -48,9 +48,15 @@ func InitializeStandaloneServer(configFilePath configs.ConfigFilePath, runWithHT
 		cleanup()
 		return nil, nil, err
 	}
-	offerCoreAccessor := database.NewOfferCoreAccessor(goquDatabase, logger)
+	companyProfileImageAccessor := database.NewCompanyProfileImageAccessor(goquDatabase, logger)
+	offerImageAccessor := database.NewOfferImageAccessor(goquDatabase, logger)
 	idGenerator := common.NewIDGenerator()
-	offerManagement := logic.NewOfferManagement(config, client, offerCoreAccessor, logger, idGenerator)
+	offerManagement, err := logic.NewOfferManagement(config, client, companyProfileImageAccessor, offerImageAccessor, logger, idGenerator)
+	if err != nil {
+		cleanup2()
+		cleanup()
+		return nil, nil, err
+	}
 	offerCoreServiceServer, err := grpc.NewHandler(configsGRPC, offerManagement)
 	if err != nil {
 		cleanup2()

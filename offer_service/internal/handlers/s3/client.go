@@ -10,6 +10,11 @@ import (
 
 //go:generate mockgen -source=./client.go -destination=../../../test/mocks/handlers/s3/client_mock.go -package=mocks3client
 type Client interface {
+	CreateBucketIfNotExists(
+		ctx context.Context,
+		bucketName,
+		location string,
+	) error
 	GeneratePresignedUploadURL(
 		ctx context.Context,
 		bucketName,

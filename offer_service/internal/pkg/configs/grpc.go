@@ -9,9 +9,11 @@ type GRPC struct {
 type CreateCompanyProfileImage struct {
 	BucketName           string `yaml:"bucket_name"`
 	PresignURLExpiryTime string `yaml:"presign_url_expiry_time"`
+	Location             string `yaml:"location"`
 }
 
 type CreateOfferImage struct {
 	BucketName           string `yaml:"bucket_name"`
 	PresignURLExpiryTime string `yaml:"presign_url_expiry_time"`
+	Location             string `yaml:"location"`
 }
