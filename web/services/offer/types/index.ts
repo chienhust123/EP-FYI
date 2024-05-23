@@ -1,4 +1,3 @@
-
 // Enums
 export enum OfferStatus {
   VALUE_UNSPECIFIED = 0,
@@ -51,36 +50,36 @@ export enum AggregatedCompanyStatsSortOrder {
 export type CompanyProfileImage = {
   id: number;
   presign_put_url: string;
-}
+};
 
 export type Company = {
   id: number;
   name: string;
   profile_image_url: string;
-}
+};
 
 export type Location = {
   id: number;
   country: string;
   state?: string;
   city: string;
-}
+};
 
 export type Position = {
   id: number;
   title: string;
   level: PositionLevel;
-}
+};
 
 export type MonetaryValue = {
   amount: number;
   currency: string;
-}
+};
 
 export type OfferImage = {
   id: number;
   presign_put_url: string;
-}
+};
 
 export type Offer = {
   id: number;
@@ -91,7 +90,7 @@ export type Offer = {
   image_url: string;
   status: OfferStatus;
   created_time: number;
-}
+};
 
 export type OfferListFilterOptions = {
   company_id_list?: number[];
@@ -101,7 +100,7 @@ export type OfferListFilterOptions = {
   position_title_list?: string[];
   position_level_list?: PositionLevel[];
   status_list?: OfferStatus[];
-}
+};
 
 export type AggregatedOfferStats = {
   id: number;
@@ -110,12 +109,12 @@ export type AggregatedOfferStats = {
   level: PositionLevel;
   minimum_total_package: MonetaryValue;
   maximum_total_package: MonetaryValue;
-}
+};
 
 export type AggregatedCompanyStats = {
   company: Company;
   total_submission_count: number;
-}
+};
 
 export type AggregatedCompanyStatsFilterOptions = {
   company_name_query?: string;
@@ -124,39 +123,39 @@ export type AggregatedCompanyStatsFilterOptions = {
   city_list?: string[];
   position_title_list?: string[];
   position_level_list?: PositionLevel[];
-}
+};
 
 // Request and Response Types
 export type CreateCompanyRequest = {
   name: string;
   company_profile_image_id: number;
-}
+};
 
-export type CreateCompanyProfileImageRequest = {}
+export type CreateCompanyProfileImageRequest = {};
 
 export type CreateCompanyProfileImageResponse = {
   image: CompanyProfileImage;
-}
+};
 
 export type CreateCompanyResponse = {
   company: Company;
-}
+};
 
 export type UpdateCompanyRequest = {
   id: number;
   name?: string;
   company_profile_image_id?: number;
-}
+};
 
 export type UpdateCompanyResponse = {
   company: Company;
-}
+};
 
-export type CreateOfferImageRequest = {}
+export type CreateOfferImageRequest = {};
 
 export type CreateOfferImageResponse = {
   image: OfferImage;
-}
+};
 
 export type CreateOfferRequest = {
   company: Company;
@@ -164,74 +163,74 @@ export type CreateOfferRequest = {
   position: Position;
   total_package: MonetaryValue;
   image_id: number;
-}
+};
 
 export type CreateOfferResponse = {
   offer: Offer;
-}
+};
 
 export type UpdateOfferRequest = {
   id: number;
   offer: Offer;
-}
+};
 
 export type UpdateOfferResponse = {
   offer: Offer;
-}
+};
 
 export type GetOfferRequest = {
   id: number;
-}
+};
 
 export type GetOfferResponse = {
   offer: Offer;
-}
+};
 
 export type GetOfferListRequest = {
   filter_options?: OfferListFilterOptions;
   sort_order?: OfferListSortOrder;
   offset?: number;
   limit?: number;
-}
+};
 
 export type GetOfferListResponse = {
   offer_list: Offer[];
   total_offer_count: number;
-}
+};
 
 export type GetAggregatedCompanyStatsListRequest = {
   cursor?: { company_id?: number; company_name?: string };
   sort_order?: AggregatedCompanyStatsSortOrder;
   limit?: number;
-}
+};
 
 export type GetAggregatedCompanyStatsListResponse = {
   company_stat_list: AggregatedCompanyStats[];
   previous_cursor?: { previous_company_id?: number; previous_company_name?: string };
   next_cursor?: { next_company_id?: number; next_company_name?: string };
-}
+};
 
 export type SearchAggregatedCompanyStatsListRequest = {
   filter_options?: AggregatedCompanyStatsFilterOptions;
   sort_order?: AggregatedCompanyStatsSortOrder;
   offset?: number;
   limit?: number;
-}
+};
 
 export type SearchAggregatedCompanyStatsListResponse = {
   company_stat_list: AggregatedCompanyStats[];
   total_company_stat_count: number;
-}
+};
 
 export type GetCompanyAggregatedOfferStatsListsRequest = {
   cursor?: { location_id?: number; position_name?: string };
   sort_order?: CompanyAggregatedOfferStatsSortOrder;
   limit?: number;
   base_currency: string;
-}
+};
 
 export type GetCompanyAggregatedOfferStatsListsResponse = {
   offer_stat_list: AggregatedCompanyStats[];
   previous_cursor?: { previous_location_id?: number; previous_position_id?: string };
   next_cursor?: { next_location_id?: number; next_position_id?: string };
-}
+};

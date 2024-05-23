@@ -1,8 +1,19 @@
-import { Button, Center, Stack, TextInput } from '@mantine/core';
+import { Button, Center, ComboboxItem, Select, Stack } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
+import countryCodes from 'country-codes-list';
+import { AsyncSearch } from '@/share/components/combobox';
+import { searchOffersByCompany } from '../services';
+
+const countryOptions = R.uniqBy(
+  (country) => country.value,
+  countryCodes.all().map((country) => ({
+    label: country.countryNameEn,
+    value: country.countryCode,
+  }))
+);
 
 export const SearchForm = () => {
   const searchParams = useSearchParams();
@@ -18,21 +29,52 @@ export const SearchForm = () => {
     },
   });
 
-  return <Center>
-    <Stack>
-      <form onSubmit={form.onSubmit((value) => {
-        router.push({
-          pathname: '/search',
-          query: R.reject(R.isNil)({
-            company_id: value.company_id,
-            location_id: value.location_id,
-          }),
-        });
-      })}>
-        <TextInput mb="md" label="Search by company" placeholder="Search by company" {...form.getInputProps('company_id')} key={form.key('company_id')} />
-        <TextInput mb="md" name="location_id" label="Search by location" placeholder="Search by location" {...form.getInputProps('location_id')} key={form.key('location_id')} />
-        <Button type="submit">Search</Button>
-      </form>
-    </Stack>
-  </Center>;
+  return (
+    <Center>
+      <Stack>
+        <form
+          onSubmit={form.onSubmit((value) => {
+            router.push({
+              pathname: '/search',
+              query: R.reject(R.isNil)({
+                company_id: value.company_id,
+                location_id: value.location_id,
+              }),
+            });
+          })}
+        >
+          <AsyncSearch
+            mb="md"
+            label="Search by company"
+            clearable
+            placeholder="Search by company"
+            asyncFn={searchOffersByCompany}
+            {...form.getInputProps('company_id')}
+            key={form.key('company_id')}
+          />
+          <Select
+            mb="md"
+            name="location_id"
+            label="Search by location"
+            placeholder="Search by location"
+            searchable
+            clearable
+            {...form.getInputProps('location_id')}
+            data={countryOptions}
+            filter={({ options, search }) => {
+              const splittedSearch = search.toLowerCase().trim().split(' ');
+              return (options as ComboboxItem[]).filter((option) => {
+                const words = option.label.toLowerCase().trim().split(' ');
+                return splittedSearch.every((searchWord) =>
+                  words.some((word) => word.includes(searchWord))
+                );
+              });
+            }}
+            key={form.key('location_id')}
+          />
+          <Button type="submit">Search</Button>
+        </form>
+      </Stack>
+    </Center>
+  );
 };

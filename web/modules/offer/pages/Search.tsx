@@ -25,18 +25,23 @@ export const SearchPage: React.FC = () => {
     },
   });
 
-  return <Box>
-    <SearchForm />
-    <Box mt="lg">
-      <Center>
-        <LoadingOverlay visible={isLoading} zIndex={1000} overlayProps={{ radius: 'sm', blur: 2 }} />
-        {
-          !hasSearchSomething ?
+  return (
+    <Box>
+      <SearchForm />
+      <Box mt="lg">
+        <Center>
+          <LoadingOverlay
+            visible={isLoading}
+            zIndex={1000}
+            overlayProps={{ radius: 'sm', blur: 2 }}
+          />
+          {!hasSearchSomething ? (
             <OfferList offerList={offerListData?.offer_list ?? []} />
-            :
+          ) : (
             <OfferTable offerList={offerListData?.offer_list ?? []} />
-        }
-      </Center>
+          )}
+        </Center>
+      </Box>
     </Box>
-  </Box>;
+  );
 };
