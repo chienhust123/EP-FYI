@@ -14,13 +14,13 @@ type OfferTab struct {
 	ID                   uint64 `db:"id"`
 	AccountID            uint64 `db:"account_id"`
 	CompanyID            uint64 `db:"company_id"`
-	Company              CompanyTab
+	Company              *CompanyTab
 	LocationID           uint64 `db:"location_id"`
-	Location             LocationTab
+	Location             *LocationTab
 	PositionID           uint64 `db:"position_id"`
-	Position             PositionTab
+	Position             *PositionTab
 	OfferImageID         uint64 `db:"offer_image_id"`
-	OfferImage           OfferImageTab
+	OfferImage           *OfferImageTab
 	TotalPackageAmount   uint64 `db:"total_package_amount"`
 	TotalPackageCurrency string `db:"total_package_currency"`
 	CreatedTime          uint64 `db:"created_time"`

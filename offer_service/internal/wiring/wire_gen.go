@@ -51,8 +51,12 @@ func InitializeStandaloneServer(configFilePath configs.ConfigFilePath, runWithHT
 	companyAccessor := database.NewCompanyAccessor(goquDatabase, logger)
 	companyProfileImageAccessor := database.NewCompanyProfileImageAccessor(goquDatabase, logger)
 	offerImageAccessor := database.NewOfferImageAccessor(goquDatabase, logger)
+	offerAccessor := database.NewOfferAccessor(goquDatabase, logger)
+	companyAccessor := database.NewCompanyAccessor(goquDatabase, logger)
+	locationAccessor := database.NewLocationAccessor(goquDatabase, logger)
+	positionAccessor := database.NewPositionAccessor(goquDatabase, logger)
 	idGenerator := common.NewIDGenerator()
-	offerManagement, err := logic.NewOfferManagement(config, client, companyAccessor, companyProfileImageAccessor, offerImageAccessor, logger, idGenerator)
+	offerManagement, err := logic.NewOfferManagement(config, client, companyProfileImageAccessor, offerImageAccessor, offerAccessor, companyAccessor, locationAccessor, positionAccessor, logger, idGenerator)
 	if err != nil {
 		cleanup2()
 		cleanup()
