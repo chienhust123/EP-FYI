@@ -43,7 +43,9 @@ const (
 
 func (o *locationAccessor) GetByID(ctx context.Context, id uint64) (*LocationTab, error) {
 	var location LocationTab
-	found, err := o.db.From(TableLocationName).Where(goqu.Ex{"id": id}).ScanStructContext(ctx, &location)
+	found, err := o.db.From(TableLocationName).
+		Where(goqu.Ex{"id": id}).
+		ScanStructContext(ctx, &location)
 	if err != nil {
 		o.logger.Error("Failed to get location by ID", zap.Error(err))
 		return nil, err
@@ -75,7 +77,10 @@ func (o *locationAccessor) Create(ctx context.Context, location *LocationTab) er
 
 func (o *locationAccessor) Update(ctx context.Context, location *LocationTab) error {
 	record := structToRecord(location)
-	updateSQL, _, err := o.db.Update(TableLocationName).Set(record).Where(goqu.Ex{"id": location.ID}).ToSQL()
+	updateSQL, _, err := o.db.Update(TableLocationName).
+		Set(record).
+		Where(goqu.Ex{"id": location.ID}).
+		ToSQL()
 	if err != nil {
 		o.logger.Error("Failed to create update SQL", zap.Error(err))
 		return err
@@ -108,16 +113,28 @@ func (o *locationAccessor) GetByCountryStateCity(ctx context.Context,
 	country, state, city string,
 ) (*LocationTab, error) {
 	var location LocationTab
-	found, err := o.db.From(TableLocationName).Where(goqu.Ex{"country": country, "state": state, "city": city}).ScanStructContext(ctx, &location)
+	found, err := o.db.From(TableLocationName).
+		Where(goqu.Ex{"country": country, "state": state, "city": city}).
+		ScanStructContext(ctx, &location)
 	if err != nil {
 		o.logger.Error("Failed to get location by country, state and city", zap.Error(err))
 		return nil, err
 	}
 	if !found {
-		o.logger.Info("Location not found", zap.String("country", country), zap.String("state", state), zap.String("city", city))
+		o.logger.Info(
+			"Location not found",
+			zap.String("country", country),
+			zap.String("state", state),
+			zap.String("city", city),
+		)
 		return nil, errors.New("location not found")
 	}
 
-	o.logger.Info("Location found", zap.String("country", country), zap.String("state", state), zap.String("city", city))
+	o.logger.Info(
+		"Location found",
+		zap.String("country", country),
+		zap.String("state", state),
+		zap.String("city", city),
+	)
 	return &location, nil
 }

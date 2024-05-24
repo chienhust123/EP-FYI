@@ -53,7 +53,9 @@ const (
 
 func (o *positionAccessor) GetByID(ctx context.Context, id uint64) (*PositionTab, error) {
 	var position PositionTab
-	found, err := o.db.From(TablePositionName).Where(goqu.Ex{"id": id}).ScanStructContext(ctx, &position)
+	found, err := o.db.From(TablePositionName).
+		Where(goqu.Ex{"id": id}).
+		ScanStructContext(ctx, &position)
 	if err != nil {
 		o.logger.Error("Failed to get position by ID", zap.Error(err))
 		return nil, err
@@ -85,7 +87,10 @@ func (o *positionAccessor) Create(ctx context.Context, position *PositionTab) er
 
 func (o *positionAccessor) Update(ctx context.Context, position *PositionTab) error {
 	record := structToRecord(position)
-	updateSQL, _, err := o.db.Update(TablePositionName).Set(record).Where(goqu.Ex{"id": position.ID}).ToSQL()
+	updateSQL, _, err := o.db.Update(TablePositionName).
+		Set(record).
+		Where(goqu.Ex{"id": position.ID}).
+		ToSQL()
 	if err != nil {
 		o.logger.Error("Failed to create update SQL", zap.Error(err))
 		return err
@@ -114,19 +119,33 @@ func (o *positionAccessor) Delete(ctx context.Context, id uint64) error {
 	return nil
 }
 
-func (o *positionAccessor) GetByTitleLevel(ctx context.Context, title string, level PositionLevel) (*PositionTab, error) {
+func (o *positionAccessor) GetByTitleLevel(
+	ctx context.Context,
+	title string,
+	level PositionLevel,
+) (*PositionTab, error) {
 	var position PositionTab
 
-	found, err := o.db.From(TablePositionName).Where(goqu.Ex{"title": title, "level": level}).ScanStructContext(ctx, &position)
+	found, err := o.db.From(TablePositionName).
+		Where(goqu.Ex{"title": title, "level": level}).
+		ScanStructContext(ctx, &position)
 	if err != nil {
 		o.logger.Error("Failed to get position by title and level", zap.Error(err))
 		return nil, err
 	}
 	if !found {
-		o.logger.Info("Position not found by title and level", zap.String("title", title), zap.String("level", string(level)))
+		o.logger.Info(
+			"Position not found by title and level",
+			zap.String("title", title),
+			zap.String("level", string(level)),
+		)
 		return nil, nil
 	}
 
-	o.logger.Info("Position found by title and level", zap.String("title", title), zap.String("level", string(level)))
+	o.logger.Info(
+		"Position found by title and level",
+		zap.String("title", title),
+		zap.String("level", string(level)),
+	)
 	return &position, nil
 }
