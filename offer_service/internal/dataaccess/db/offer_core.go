@@ -11,10 +11,10 @@ type CreateOfferParams struct {
 }
 
 type OfferTab struct {
-	ID                   uint64 `db:"id"`
-	AccountID            uint64 `db:"account_id"`
-	CompanyID            uint64 `db:"company_id"`
-	Company              *CompanyTab
+	ID        uint64 `db:"id"`
+	AccountID uint64 `db:"account_id"`
+	CompanyID uint64 `db:"company_id"`
+	// Company              *CompanyTab
 	LocationID           uint64 `db:"location_id"`
 	Location             *LocationTab
 	PositionID           uint64 `db:"position_id"`

@@ -11,12 +11,12 @@ import (
 type PositionLevel int32
 
 const (
-	PositionLevel_VALUE_UNSPECIFIED PositionLevel = 0
-	PositionLevel_VALUE_INTERN      PositionLevel = 1
-	PositionLevel_VALUE_ENTRY       PositionLevel = 2
-	PositionLevel_VALUE_MIDDLE      PositionLevel = 3
-	PositionLevel_VALUE_SENIOR      PositionLevel = 4
-	PositionLevel_VALUE_PRINCIPAL   PositionLevel = 5
+	PositionLevelValueUnspecified PositionLevel = 0
+	PositionLevelValueIntern      PositionLevel = 1
+	PositionLevelValueEntry       PositionLevel = 2
+	PositionLevelValueMiddle      PositionLevel = 3
+	PositionLevelValueSenior      PositionLevel = 4
+	PositionLevelValuePrinciple   PositionLevel = 5
 )
 
 type PositionTab struct {

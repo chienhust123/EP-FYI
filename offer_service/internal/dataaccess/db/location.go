@@ -50,7 +50,7 @@ func (o *locationAccessor) GetByID(ctx context.Context, id uint64) (*LocationTab
 	}
 	if !found {
 		o.logger.Info("Location not found", zap.Uint64("id", id))
-		return nil, errors.New("Location not found")
+		return nil, errors.New("location not found")
 	}
 
 	o.logger.Info("Location found", zap.Uint64("id", id))
@@ -104,7 +104,9 @@ func (o *locationAccessor) Delete(ctx context.Context, id uint64) error {
 	return nil
 }
 
-func (o *locationAccessor) GetByCountryStateCity(ctx context.Context, country, state, city string) (*LocationTab, error) {
+func (o *locationAccessor) GetByCountryStateCity(ctx context.Context,
+	country, state, city string,
+) (*LocationTab, error) {
 	var location LocationTab
 	found, err := o.db.From(TableLocationName).Where(goqu.Ex{"country": country, "state": state, "city": city}).ScanStructContext(ctx, &location)
 	if err != nil {
@@ -113,7 +115,7 @@ func (o *locationAccessor) GetByCountryStateCity(ctx context.Context, country, s
 	}
 	if !found {
 		o.logger.Info("Location not found", zap.String("country", country), zap.String("state", state), zap.String("city", city))
-		return nil, errors.New("Location not found")
+		return nil, errors.New("location not found")
 	}
 
 	o.logger.Info("Location found", zap.String("country", country), zap.String("state", state), zap.String("city", city))
