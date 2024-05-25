@@ -17,31 +17,31 @@ import (
 	gomock "go.uber.org/mock/gomock"
 )
 
-// MockOfferCoreAccessor is a mock of OfferCoreAccessor interface.
-type MockOfferCoreAccessor struct {
+// MockCompanyProfileImageAccessor is a mock of CompanyProfileImageAccessor interface.
+type MockCompanyProfileImageAccessor struct {
 	ctrl     *gomock.Controller
-	recorder *MockOfferCoreAccessorMockRecorder
+	recorder *MockCompanyProfileImageAccessorMockRecorder
 }
 
-// MockOfferCoreAccessorMockRecorder is the mock recorder for MockOfferCoreAccessor.
-type MockOfferCoreAccessorMockRecorder struct {
-	mock *MockOfferCoreAccessor
+// MockCompanyProfileImageAccessorMockRecorder is the mock recorder for MockCompanyProfileImageAccessor.
+type MockCompanyProfileImageAccessorMockRecorder struct {
+	mock *MockCompanyProfileImageAccessor
 }
 
-// NewMockOfferCoreAccessor creates a new mock instance.
-func NewMockOfferCoreAccessor(ctrl *gomock.Controller) *MockOfferCoreAccessor {
-	mock := &MockOfferCoreAccessor{ctrl: ctrl}
-	mock.recorder = &MockOfferCoreAccessorMockRecorder{mock}
+// NewMockCompanyProfileImageAccessor creates a new mock instance.
+func NewMockCompanyProfileImageAccessor(ctrl *gomock.Controller) *MockCompanyProfileImageAccessor {
+	mock := &MockCompanyProfileImageAccessor{ctrl: ctrl}
+	mock.recorder = &MockCompanyProfileImageAccessorMockRecorder{mock}
 	return mock
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockOfferCoreAccessor) EXPECT() *MockOfferCoreAccessorMockRecorder {
+func (m *MockCompanyProfileImageAccessor) EXPECT() *MockCompanyProfileImageAccessorMockRecorder {
 	return m.recorder
 }
 
 // CreateCompanyProfileImage mocks base method.
-func (m *MockOfferCoreAccessor) CreateCompanyProfileImage(ctx context.Context, data *database.CompanyProfileImageTab) error {
+func (m *MockCompanyProfileImageAccessor) CreateCompanyProfileImage(ctx context.Context, data *database.CompanyProfileImageTab) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateCompanyProfileImage", ctx, data)
 	ret0, _ := ret[0].(error)
@@ -49,7 +49,7 @@ func (m *MockOfferCoreAccessor) CreateCompanyProfileImage(ctx context.Context, d
 }
 
 // CreateCompanyProfileImage indicates an expected call of CreateCompanyProfileImage.
-func (mr *MockOfferCoreAccessorMockRecorder) CreateCompanyProfileImage(ctx, data any) *gomock.Call {
+func (mr *MockCompanyProfileImageAccessorMockRecorder) CreateCompanyProfileImage(ctx, data any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateCompanyProfileImage", reflect.TypeOf((*MockOfferCoreAccessor)(nil).CreateCompanyProfileImage), ctx, data)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateCompanyProfileImage", reflect.TypeOf((*MockCompanyProfileImageAccessor)(nil).CreateCompanyProfileImage), ctx, data)
 }

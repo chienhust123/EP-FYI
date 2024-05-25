@@ -13,7 +13,7 @@ type Handler struct {
 	logic      logic.OfferManagement
 }
 
-func (h *Handler) CreateCompanyProfileImage(
+func (h Handler) CreateCompanyProfileImage(
 	ctx context.Context,
 	_ *offer_servicev1.CreateCompanyProfileImageRequest,
 ) (*offer_servicev1.CreateCompanyProfileImageResponse, error) {
@@ -27,70 +27,77 @@ func (h *Handler) CreateCompanyProfileImage(
 	}, nil
 }
 
-func (h *Handler) CreateCompany(
+func (h Handler) CreateCompany(
 	_ context.Context,
 	_ *offer_servicev1.CreateCompanyRequest,
 ) (*offer_servicev1.CreateCompanyResponse, error) {
 	panic("TODO: Remove or impl (available through emb type)")
 }
 
-func (h *Handler) UpdateCompany(
+func (h Handler) UpdateCompany(
 	_ context.Context,
 	_ *offer_servicev1.UpdateCompanyRequest,
 ) (*offer_servicev1.UpdateCompanyResponse, error) {
 	panic("TODO: Remove or impl (available through emb type)")
 }
 
-func (h *Handler) CreateOfferImage(
-	_ context.Context,
+func (h Handler) CreateOfferImage(
+	ctx context.Context,
 	_ *offer_servicev1.CreateOfferImageRequest,
 ) (*offer_servicev1.CreateOfferImageResponse, error) {
-	panic("TODO: Remove or impl (available through emb type)")
+	output, err := h.logic.CreateOfferImage(ctx)
+	if err != nil {
+		return &offer_servicev1.CreateOfferImageResponse{}, err
+	}
+
+	return &offer_servicev1.CreateOfferImageResponse{
+		Image: &output.OfferImage,
+	}, nil
 }
 
-func (h *Handler) CreateOffer(
+func (h Handler) CreateOffer(
 	_ context.Context,
 	_ *offer_servicev1.CreateOfferRequest,
 ) (*offer_servicev1.CreateOfferResponse, error) {
 	panic("TODO: Remove or impl (available through emb type)")
 }
 
-func (h *Handler) UpdateOffer(
+func (h Handler) UpdateOffer(
 	_ context.Context,
 	_ *offer_servicev1.UpdateOfferRequest,
 ) (*offer_servicev1.UpdateOfferResponse, error) {
 	panic("TODO: Remove or impl (available through emb type)")
 }
 
-func (h *Handler) GetOffer(
+func (h Handler) GetOffer(
 	_ context.Context,
 	_ *offer_servicev1.GetOfferRequest,
 ) (*offer_servicev1.GetOfferResponse, error) {
 	panic("TODO: Remove or impl (available through emb type)")
 }
 
-func (h *Handler) GetOfferList(
+func (h Handler) GetOfferList(
 	_ context.Context,
 	_ *offer_servicev1.GetOfferListRequest,
 ) (*offer_servicev1.GetOfferListResponse, error) {
 	panic("TODO: Remove or impl (available through emb type)")
 }
 
-func (h *Handler) GetAggregatedCompanyStatsList(
+func (h Handler) GetAggregatedCompanyStatsList(
 	_ context.Context,
 	_ *offer_servicev1.GetAggregatedCompanyStatsListRequest,
 ) (*offer_servicev1.GetAggregatedCompanyStatsListResponse, error) {
 	panic("TODO: Remove or impl (available through emb type)")
 }
 
-func (h *Handler) SearchAggregatedCompanyStatsList(
+func (h Handler) SearchAggregatedCompanyStatsList(
 	_ context.Context,
 	_ *offer_servicev1.SearchAggregatedCompanyStatsListRequest,
 ) (*offer_servicev1.SearchAggregatedCompanyStatsListResponse, error) {
 	panic("TODO: Remove or impl (available through emb type)")
 }
 
-func (h *Handler) GetCompanyAggregatedOfferStatsLists(
+func (h Handler) GetCompanyAggregatedOfferStatsLists(
 	_ context.Context,
 	_ *offer_servicev1.GetCompanyAggregatedOfferStatsListsRequest,
 ) (*offer_servicev1.GetCompanyAggregatedOfferStatsListsResponse, error) {

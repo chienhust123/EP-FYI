@@ -28,13 +28,33 @@ func NewMinioClient(config configs.S3, logger *zap.Logger) (Client, error) {
 	}, nil
 }
 
-func (m *minioClient) GeneratePresignedUploadURL(
+func (m minioClient) CreateBucketIfNotExists(
+	ctx context.Context,
+	bucketName,
+	location string,
+) error {
+	logger := utils.LoggerWithContext(ctx, m.logger).With(zap.String("bucket", bucketName))
+	exists, errBucketExists := m.client.BucketExists(bucketName)
+	if errBucketExists == nil && exists {
+		logger.Warn("bucket already exists")
+		return nil
+	}
+
+	if makeBucketErr := m.client.MakeBucket(bucketName, location); makeBucketErr != nil {
+		logger.With(zap.Error(makeBucketErr)).Error("failed to create new bucket")
+		return makeBucketErr
+	}
+	logger.Info("bucket created successfully")
+	return nil
+}
+
+func (m minioClient) GeneratePresignedUploadURL(
 	ctx context.Context,
 	bucketName,
 	key string,
 	expiry time.Duration,
 ) (string, error) {
-	logger := utils.LoggerWithContext(ctx, m.logger)
+	logger := utils.LoggerWithContext(ctx, m.logger).With(zap.String("bucket", bucketName))
 	presignedURL, err := m.client.PresignedPutObject(bucketName, key, expiry)
 	if err != nil {
 		logger.With(zap.Error(err)).Error("failed to generate presigned upload url")
