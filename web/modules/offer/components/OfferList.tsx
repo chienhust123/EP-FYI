@@ -1,5 +1,5 @@
 import { Box, Flex, Group, Image, SimpleGrid, Text } from '@mantine/core';
-import { formatCurrency } from '@/share/helpers/format-currency';
+import { formatCurrency } from '@/share/helpers/currency';
 import { Offer } from '@/services/offer';
 
 type Props = {

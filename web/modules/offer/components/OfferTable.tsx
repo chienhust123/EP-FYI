@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { IconEye } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 import { Offer } from '@/services/offer';
-import { formatCurrency } from '@/share/helpers/format-currency';
+import { formatCurrency } from '@/share/helpers/currency';
 
 type Props = {
   offerList: Offer[];

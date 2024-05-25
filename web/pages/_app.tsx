@@ -13,6 +13,8 @@ import { Layout } from '@/share/layout';
 import { queryClient } from '@/services/query';
 import { AuthContext } from '@/share/hooks/auth';
 import '@/services/mock';
+import '@mantine/dropzone/styles.css';
+import '@mantine/notifications/styles.css';
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -33,6 +35,5 @@ export default function App({ Component, pageProps }: AppProps) {
         </AuthContext>
       </QueryClientProvider>
     </MantineProvider>
-
   );
 }

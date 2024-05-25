@@ -1,7 +1,11 @@
-import { useMutation, UseMutationOptions, useQuery, useQueryClient, UseQueryOptions } from '@tanstack/react-query';
+import { useMutation, UseMutationOptions, useQuery, UseQueryOptions } from '@tanstack/react-query';
 import {
-  createCompanyProfileImage, createCompany, updateCompany,
-  createOfferImage, createOffer, updateOffer,
+  createCompanyProfileImage,
+  createCompany,
+  updateCompany,
+  createOfferImage,
+  createOffer,
+  updateOffer,
   getOffer,
   getOfferList,
   getAggregatedCompanyStatsList,
@@ -9,12 +13,18 @@ import {
   getCompanayAggregatedOfferStatsList,
 } from '../http';
 import {
-  CreateCompanyProfileImageRequest, CreateCompanyProfileImageResponse,
-  CreateCompanyRequest, CreateCompanyResponse,
-  UpdateCompanyRequest, UpdateCompanyResponse,
-  CreateOfferImageRequest, CreateOfferImageResponse,
-  CreateOfferRequest, CreateOfferResponse,
-  UpdateOfferRequest, UpdateOfferResponse,
+  CreateCompanyProfileImageRequest,
+  CreateCompanyProfileImageResponse,
+  CreateCompanyRequest,
+  CreateCompanyResponse,
+  UpdateCompanyRequest,
+  UpdateCompanyResponse,
+  CreateOfferImageRequest,
+  CreateOfferImageResponse,
+  CreateOfferRequest,
+  CreateOfferResponse,
+  UpdateOfferRequest,
+  UpdateOfferResponse,
   GetOfferRequest,
   GetOfferResponse,
   GetOfferListResponse,
@@ -24,46 +34,61 @@ import {
   GetCompanyAggregatedOfferStatsListsRequest,
   GetCompanyAggregatedOfferStatsListsResponse,
   SearchAggregatedCompanyStatsListRequest,
-  SearchAggregatedCompanyStatsListResponse
+  SearchAggregatedCompanyStatsListResponse,
 } from '../types';
 
-
-export const useCreateCompanyProfileImage = (options?: UseMutationOptions<CreateCompanyProfileImageResponse, unknown, CreateCompanyProfileImageRequest>) => {
+export const useCreateCompanyProfileImage = (
+  options?: UseMutationOptions<
+    CreateCompanyProfileImageResponse,
+    unknown,
+    CreateCompanyProfileImageRequest
+  >
+) => {
   return useMutation<CreateCompanyProfileImageResponse, unknown, CreateCompanyProfileImageRequest>({
     mutationFn: createCompanyProfileImage,
     ...options,
   });
 };
 
-export const useCreateCompany = (options?: UseMutationOptions<CreateCompanyResponse, unknown, CreateCompanyRequest>) => {
+export const useCreateCompany = (
+  options?: UseMutationOptions<CreateCompanyResponse, unknown, CreateCompanyRequest>
+) => {
   return useMutation<CreateCompanyResponse, unknown, CreateCompanyRequest>({
     mutationFn: createCompany,
     ...options,
   });
 };
 
-export const useUpdateCompany = (options?: UseMutationOptions<UpdateCompanyResponse, unknown, UpdateCompanyRequest>) => {
+export const useUpdateCompany = (
+  options?: UseMutationOptions<UpdateCompanyResponse, unknown, UpdateCompanyRequest>
+) => {
   return useMutation<UpdateCompanyResponse, unknown, UpdateCompanyRequest>({
     mutationFn: updateCompany,
     ...options,
   });
 };
 
-export const useCreateOfferImage = (options?: UseMutationOptions<CreateOfferImageResponse, unknown, CreateOfferImageRequest>) => {
+export const useCreateOfferImage = (
+  options?: UseMutationOptions<CreateOfferImageResponse, unknown, CreateOfferImageRequest>
+) => {
   return useMutation<CreateOfferImageResponse, unknown, CreateOfferImageRequest>({
     mutationFn: createOfferImage,
     ...options,
   });
 };
 
-export const useCreateOffer = (options?: UseMutationOptions<CreateOfferResponse, unknown, CreateOfferRequest>) => {
+export const useCreateOffer = (
+  options?: UseMutationOptions<CreateOfferResponse, unknown, CreateOfferRequest>
+) => {
   return useMutation<CreateOfferResponse, unknown, CreateOfferRequest>({
     mutationFn: createOffer,
     ...options,
   });
 };
 
-export const useUpdateOffer = (options?: UseMutationOptions<UpdateOfferResponse, unknown, UpdateOfferRequest>) => {
+export const useUpdateOffer = (
+  options?: UseMutationOptions<UpdateOfferResponse, unknown, UpdateOfferRequest>
+) => {
   return useMutation<UpdateOfferResponse, unknown, UpdateOfferRequest>({
     mutationFn: updateOffer,
     ...options,
@@ -78,7 +103,10 @@ export const useGetOffer = (data: GetOfferRequest, options?: UseQueryOptions<Get
   });
 };
 
-export const useGetOfferList = (data: GetOfferListRequest, options?: UseQueryOptions<GetOfferListResponse>) => {
+export const useGetOfferList = (
+  data: GetOfferListRequest,
+  options?: UseQueryOptions<GetOfferListResponse>
+) => {
   return useQuery<GetOfferListResponse>({
     queryKey: ['offer', data],
     queryFn: () => getOfferList(data),
@@ -86,7 +114,10 @@ export const useGetOfferList = (data: GetOfferListRequest, options?: UseQueryOpt
   });
 };
 
-export const useGetAggregatedCompanyStatsList = (data: GetAggregatedCompanyStatsListRequest, options?: UseQueryOptions<GetAggregatedCompanyStatsListResponse>) => {
+export const useGetAggregatedCompanyStatsList = (
+  data: GetAggregatedCompanyStatsListRequest,
+  options?: UseQueryOptions<GetAggregatedCompanyStatsListResponse>
+) => {
   return useQuery<GetAggregatedCompanyStatsListResponse>({
     queryKey: ['getAggregatedCompanyStatsList', data],
     queryFn: () => getAggregatedCompanyStatsList(data),
@@ -94,7 +125,10 @@ export const useGetAggregatedCompanyStatsList = (data: GetAggregatedCompanyStats
   });
 };
 
-export const useSearchAggregatedCompanyStatsList = (data: SearchAggregatedCompanyStatsListRequest, options?: UseQueryOptions<SearchAggregatedCompanyStatsListResponse>) => {
+export const useSearchAggregatedCompanyStatsList = (
+  data: SearchAggregatedCompanyStatsListRequest,
+  options?: UseQueryOptions<SearchAggregatedCompanyStatsListResponse>
+) => {
   return useQuery<SearchAggregatedCompanyStatsListResponse>({
     queryKey: ['searchAggregatedCompanyStatsList', data],
     queryFn: () => searchAggregatedCompanyStatsList(data),
@@ -102,7 +136,10 @@ export const useSearchAggregatedCompanyStatsList = (data: SearchAggregatedCompan
   });
 };
 
-export const useGetCompanyAggregatedOfferStatsList = (data: GetCompanyAggregatedOfferStatsListsRequest, options?: UseQueryOptions<GetCompanyAggregatedOfferStatsListsResponse>) => {
+export const useGetCompanyAggregatedOfferStatsList = (
+  data: GetCompanyAggregatedOfferStatsListsRequest,
+  options?: UseQueryOptions<GetCompanyAggregatedOfferStatsListsResponse>
+) => {
   return useQuery<GetCompanyAggregatedOfferStatsListsResponse>({
     queryKey: ['getCompanyAggregatedOfferStatsList', data],
     queryFn: () => getCompanayAggregatedOfferStatsList(data),
