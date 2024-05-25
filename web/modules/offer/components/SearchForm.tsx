@@ -27,7 +27,7 @@ export const SearchForm = () => {
         <form
           onSubmit={form.onSubmit((value) => {
             router.push({
-              pathname: '/search',
+              pathname: '/offer/list',
               query: R.reject(R.isNil)({
                 company_id: value.company_id,
                 location_id: value.location_id,

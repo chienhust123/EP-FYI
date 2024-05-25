@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { searchAggregatedCompanyStatsList } from '@/services/offer';
 
 export const searchOffersByCompany = (searchValue: string, offset: number, limit: number) =>

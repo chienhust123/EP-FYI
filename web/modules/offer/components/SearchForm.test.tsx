@@ -58,7 +58,7 @@ describe('SearchForm', () => {
       fireEvent.submit(screen.getByRole('button', { name: 'Search' }));
 
       expect(pushMock).toHaveBeenCalledWith({
-        pathname: '/search',
+        pathname: '/offer/list',
         query: {
           company_id: '123',
           location_id: '456',
@@ -77,7 +77,7 @@ describe('SearchForm', () => {
       fireEvent.submit(screen.getByRole('button', { name: 'Search' }));
 
       expect(pushMock).toHaveBeenCalledWith({
-        pathname: '/search',
+        pathname: '/offer/list',
         query: {
           location_id: '456',
         },

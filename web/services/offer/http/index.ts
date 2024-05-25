@@ -72,6 +72,7 @@ export const createOfferImage = async (
     OFFER_API_PATH.CREATE_OFFER_IMAGE,
     data
   );
+
   return response.data;
 };
 

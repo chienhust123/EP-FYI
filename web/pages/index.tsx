@@ -1,4 +1,4 @@
-import { Box, Flex, Group, Image, LoadingOverlay, SimpleGrid, Text } from '@mantine/core';
+import { Box, Flex, Group, Image, LoadingOverlay, Text } from '@mantine/core';
 import Marquee from 'react-fast-marquee';
 import Link from 'next/link';
 import { useGetAggregatedCompanyStatsList } from '@/services/offer';
@@ -20,7 +20,7 @@ export default function HomePage() {
             <Group gap="xl">
               {data?.company_stat_list?.map((item) => (
                 <Box key={item.company?.id}>
-                  <Link href={`/search?company_id=${item.company.id}`}>
+                  <Link href={`/offer/list?company_id=${item.company.id}`}>
                     <Group wrap="nowrap">
                       <Image w={40} h={40} src={item.company?.profile_image_url} />
                       <Text color="#1ba68d" fw="bold" size="xl">

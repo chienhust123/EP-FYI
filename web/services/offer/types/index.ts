@@ -158,9 +158,9 @@ export type CreateOfferImageResponse = {
 };
 
 export type CreateOfferRequest = {
-  company: Company;
-  location: Location;
-  position: Position;
+  company: Partial<Company>;
+  location: Partial<Location>;
+  position: Partial<Position>;
   total_package: MonetaryValue;
   image_id: number;
 };

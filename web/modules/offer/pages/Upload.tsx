@@ -1,8 +1,18 @@
-import { Box, Button, Center, InputBase, InputWrapper, Select, TextInput } from '@mantine/core';
+import {
+  Box,
+  Button,
+  Center,
+  InputBase,
+  InputWrapper,
+  LoadingOverlay,
+  Select,
+  TextInput,
+} from '@mantine/core';
 import { useForm } from '@mantine/form';
 import CurrencyInput from 'react-currency-input-field';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { DateTimePicker } from '@mantine/dates';
+import { notifications } from '@mantine/notifications';
 import { SearchByCountry } from '@/share/components/search-by-country';
 import { getIntlByCountryCode } from '@/share/helpers/currency';
 import { getOptionsByObj } from '@/share/helpers/options';
@@ -23,6 +33,7 @@ type FEFormValues = {
   offer_at: number;
   level: PositionLevel;
   offer_image: string;
+  offer_image_id: number;
 };
 
 const transformToBEFormat = (values: FEFormValues): CreateOfferRequest => {
@@ -32,17 +43,31 @@ const transformToBEFormat = (values: FEFormValues): CreateOfferRequest => {
     },
 
     location: {
-      country: values.country_code
+      country: values.country_code,
     },
-    position: Position;
-    total_package: MonetaryValue;
-    image_id: number;
-  }
+    position: {
+      level: values.level,
+    },
+    total_package: {
+      amount: values.total_package,
+      currency: getIntlByCountryCode(values.country_code).currency,
+    },
+    image_id: values.offer_image_id,
+  };
 };
 
 export const UploadPage = () => {
-  const form = useForm();
+  const form = useForm<FEFormValues>();
   const { data, mutate, isPending } = useCreateOffer();
+
+  useEffect(() => {
+    if (data?.offer) {
+      notifications.show({
+        title: 'Upload offer',
+        message: 'Upload offer successfully',
+      });
+    }
+  }, [data?.offer]);
 
   const intlConfig = useMemo(() => {
     return getIntlByCountryCode(form.values.country_code);
@@ -50,10 +75,11 @@ export const UploadPage = () => {
 
   return (
     <Box>
+      <LoadingOverlay visible={isPending} />
       <Center>
         <form
           onSubmit={form.onSubmit((values) => {
-            mutate(values);
+            mutate(transformToBEFormat(values));
           })}
         >
           <TextInput
@@ -120,6 +146,7 @@ export const UploadPage = () => {
 
                 const offerImageUrl = presignUrl.split('?')[0];
                 form.getInputProps('offer_image').onChange(offerImageUrl);
+                form.getInputProps('offer_image_id').onChange(presignUrlData.image.id);
               }}
             />
           </InputWrapper>

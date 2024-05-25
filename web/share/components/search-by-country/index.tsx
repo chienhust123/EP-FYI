@@ -1,14 +1,5 @@
 import { ComboboxItem, Select, SelectProps } from '@mantine/core';
-import countryCodes from 'country-codes-list';
-import * as R from 'ramda';
-
-const countryOptions = R.uniqBy(
-  (country) => country.value,
-  countryCodes.all().map((country) => ({
-    label: country.countryNameEn,
-    value: country.countryCode,
-  }))
-);
+import { countryOptions } from '@/share/consts';
 
 export const SearchByCountry: React.FC<
   SelectProps & {
