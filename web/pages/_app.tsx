@@ -7,12 +7,14 @@ import './global.scss';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { MantineProvider } from '@mantine/core';
+import { QueryClientProvider } from '@tanstack/react-query';
 import { theme } from '../theme';
 import { Layout } from '@/share/layout';
-import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from '@/services/query';
 import { AuthContext } from '@/share/hooks/auth';
-import '@/services/mock'
+import '@/services/mock';
+import '@mantine/dropzone/styles.css';
+import '@mantine/notifications/styles.css';
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -33,6 +35,5 @@ export default function App({ Component, pageProps }: AppProps) {
         </AuthContext>
       </QueryClientProvider>
     </MantineProvider>
-
   );
 }

@@ -1,12 +1,18 @@
 // api/offerCoreService.ts
 import queryClient from '../../api-client';
 import {
-  CreateCompanyProfileImageRequest, CreateCompanyProfileImageResponse,
-  CreateCompanyRequest, CreateCompanyResponse,
-  UpdateCompanyRequest, UpdateCompanyResponse,
-  CreateOfferImageRequest, CreateOfferImageResponse,
-  CreateOfferRequest, CreateOfferResponse,
-  UpdateOfferRequest, UpdateOfferResponse,
+  CreateCompanyProfileImageRequest,
+  CreateCompanyProfileImageResponse,
+  CreateCompanyRequest,
+  CreateCompanyResponse,
+  UpdateCompanyRequest,
+  UpdateCompanyResponse,
+  CreateOfferImageRequest,
+  CreateOfferImageResponse,
+  CreateOfferRequest,
+  CreateOfferResponse,
+  UpdateOfferRequest,
+  UpdateOfferResponse,
   GetOfferRequest,
   GetOfferResponse,
   GetAggregatedCompanyStatsListRequest,
@@ -33,23 +39,40 @@ export const OFFER_API_PATH = {
   GET_COMPANY_AGGREGATED_OFFER_STATS_LIST: '/offer/get_company_aggregated_offer_stats_lists',
 };
 
-export const createCompanyProfileImage = async (data: CreateCompanyProfileImageRequest): Promise<CreateCompanyProfileImageResponse> => {
-  const response = await queryClient.post<CreateCompanyProfileImageResponse>(OFFER_API_PATH.CREATE_COMPANY_PROFILE_IMAGE, data);
+export const createCompanyProfileImage = async (
+  data: CreateCompanyProfileImageRequest
+): Promise<CreateCompanyProfileImageResponse> => {
+  const response = await queryClient.post<CreateCompanyProfileImageResponse>(
+    OFFER_API_PATH.CREATE_COMPANY_PROFILE_IMAGE,
+    data
+  );
   return response.data;
 };
 
 export const createCompany = async (data: CreateCompanyRequest): Promise<CreateCompanyResponse> => {
-  const response = await queryClient.post<CreateCompanyResponse>(OFFER_API_PATH.CREATE_COMPANY, data);
+  const response = await queryClient.post<CreateCompanyResponse>(
+    OFFER_API_PATH.CREATE_COMPANY,
+    data
+  );
   return response.data;
 };
 
 export const updateCompany = async (data: UpdateCompanyRequest): Promise<UpdateCompanyResponse> => {
-  const response = await queryClient.post<UpdateCompanyResponse>(OFFER_API_PATH.UPDATE_COMPANY, data);
+  const response = await queryClient.post<UpdateCompanyResponse>(
+    OFFER_API_PATH.UPDATE_COMPANY,
+    data
+  );
   return response.data;
 };
 
-export const createOfferImage = async (data: CreateOfferImageRequest): Promise<CreateOfferImageResponse> => {
-  const response = await queryClient.post<CreateOfferImageResponse>(OFFER_API_PATH.CREATE_OFFER_IMAGE, data);
+export const createOfferImage = async (
+  data: CreateOfferImageRequest
+): Promise<CreateOfferImageResponse> => {
+  const response = await queryClient.post<CreateOfferImageResponse>(
+    OFFER_API_PATH.CREATE_OFFER_IMAGE,
+    data
+  );
+
   return response.data;
 };
 
@@ -69,21 +92,39 @@ export const getOffer = async (data: GetOfferRequest): Promise<GetOfferResponse>
 };
 
 export const getOfferList = async (data: GetOfferListRequest): Promise<GetOfferListResponse> => {
-  const response = await queryClient.post<GetOfferListResponse>(OFFER_API_PATH.GET_OFFER_LIST, data);
+  const response = await queryClient.post<GetOfferListResponse>(
+    OFFER_API_PATH.GET_OFFER_LIST,
+    data
+  );
   return response.data;
 };
 
-export const getAggregatedCompanyStatsList = async (data: GetAggregatedCompanyStatsListRequest): Promise<GetAggregatedCompanyStatsListResponse> => {
-  const response = await queryClient.post<GetAggregatedCompanyStatsListResponse>(OFFER_API_PATH.GET_AGGREGATED_COMPANY_STATS_LIST, data);
+export const getAggregatedCompanyStatsList = async (
+  data: GetAggregatedCompanyStatsListRequest
+): Promise<GetAggregatedCompanyStatsListResponse> => {
+  const response = await queryClient.post<GetAggregatedCompanyStatsListResponse>(
+    OFFER_API_PATH.GET_AGGREGATED_COMPANY_STATS_LIST,
+    data
+  );
   return response.data;
 };
 
-export const searchAggregatedCompanyStatsList = async (data: SearchAggregatedCompanyStatsListRequest): Promise<SearchAggregatedCompanyStatsListResponse> => {
-  const response = await queryClient.post<SearchAggregatedCompanyStatsListResponse>(OFFER_API_PATH.SEARCH_AGGREGATED_COMPANY_STATS_LIST, data);
+export const searchAggregatedCompanyStatsList = async (
+  data: SearchAggregatedCompanyStatsListRequest
+): Promise<SearchAggregatedCompanyStatsListResponse> => {
+  const response = await queryClient.post<SearchAggregatedCompanyStatsListResponse>(
+    OFFER_API_PATH.SEARCH_AGGREGATED_COMPANY_STATS_LIST,
+    data
+  );
   return response.data;
 };
 
-export const getCompanayAggregatedOfferStatsList = async (data: GetCompanyAggregatedOfferStatsListsRequest): Promise<GetCompanyAggregatedOfferStatsListsResponse> => {
-  const response = await queryClient.post<GetCompanyAggregatedOfferStatsListsResponse>(OFFER_API_PATH.GET_COMPANY_AGGREGATED_OFFER_STATS_LIST, data);
+export const getCompanayAggregatedOfferStatsList = async (
+  data: GetCompanyAggregatedOfferStatsListsRequest
+): Promise<GetCompanyAggregatedOfferStatsListsResponse> => {
+  const response = await queryClient.post<GetCompanyAggregatedOfferStatsListsResponse>(
+    OFFER_API_PATH.GET_COMPANY_AGGREGATED_OFFER_STATS_LIST,
+    data
+  );
   return response.data;
 };
