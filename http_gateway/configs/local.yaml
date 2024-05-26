@@ -1,0 +1,7 @@
+auth:
+  duration: 24h
+gateway:
+  address: "0.0.0.0:8080"
+grpc:
+  account_core_address: "0.0.0.0:8081"
+  offer_service_address: "0.0.0.0:8082"
