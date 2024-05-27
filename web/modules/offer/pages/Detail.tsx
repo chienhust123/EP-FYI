@@ -1,13 +1,4 @@
-import {
-  Box,
-  Center,
-  Flex,
-  Group,
-  Image,
-  InputWrapper,
-  LoadingOverlay,
-  Stack,
-} from '@mantine/core';
+import { Box, Center, Group, Image, InputWrapper, LoadingOverlay, Stack } from '@mantine/core';
 
 import dayjs from 'dayjs';
 import { useParams } from 'next/navigation';
@@ -20,7 +11,6 @@ export const DetailPage = () => {
 
   const { data, isLoading } = useGetOffer({ id: Number(params?.id) });
 
-  console.log(data, params);
   const offer = data?.offer;
 
   if (!offer && !isLoading) {
