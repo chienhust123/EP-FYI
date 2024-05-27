@@ -8,7 +8,7 @@ import (
 	"go.uber.org/zap"
 )
 
-//go:generate mockgen -source=./client.go -destination=../../../test/mocks/handlers/s3/client_mock.go -package=mocks3client
+//go:generate mockgen -source=./client.go -destination=./client_mock.go -package=s3
 type Client interface {
 	CreateBucketIfNotExists(
 		ctx context.Context,

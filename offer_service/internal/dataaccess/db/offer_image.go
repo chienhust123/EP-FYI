@@ -17,15 +17,15 @@ const (
 	colNameOfferImageExpireTime = "expire_time"
 )
 
-type OfferImageTab struct {
+type OfferImage struct {
 	ID         uint64        `db:"id"          goqu:"skipupdate"`
 	ObjectName string        `db:"object_name" goqu:"skipupdate"`
 	ExpireTime time.Duration `db:"expire_time" goqu:"skipupdate"`
 }
 
-//go:generate mockgen -source=./offer_image.go -destination=../../../test/mocks/dataaccess/db/offer_image_mock.go -package=mockdatabase
+//go:generate mockgen -source=./offer_image.go -destination=./offer_image_mock.go -package=database
 type OfferImageAccessor interface {
-	CreateOfferImage(ctx context.Context, data *OfferImageTab) error
+	CreateOfferImage(ctx context.Context, data *OfferImage) error
 }
 
 type offerImageAccessor struct {
@@ -37,15 +37,16 @@ func NewOfferImageAccessor(
 	db *goqu.Database,
 	logger *zap.Logger,
 ) OfferImageAccessor {
+	logger = logger.Named("OfferImageAccessor")
 	return &offerImageAccessor{db: db, logger: logger}
 }
 
-func (o offerImageAccessor) CreateOfferImage(
+func (a offerImageAccessor) CreateOfferImage(
 	ctx context.Context,
-	data *OfferImageTab,
+	data *OfferImage,
 ) error {
-	logger := utils.LoggerWithContext(ctx, o.logger).Named("CreateOfferImage")
-	tx, txErr := o.db.BeginTx(ctx, nil)
+	logger := utils.LoggerWithContext(ctx, a.logger).Named("CreateOfferImage")
+	tx, txErr := a.db.BeginTx(ctx, nil)
 	if txErr != nil {
 		logger.With(zap.Error(txErr)).
 			Error("failed to create transaction to create company profile image")
@@ -56,8 +57,7 @@ func (o offerImageAccessor) CreateOfferImage(
 	_, createErr := ds.ExecContext(ctx)
 	if createErr != nil {
 		logger.With(zap.Error(createErr)).Error("failed to create company profile image")
-		rollbackErr := tx.Rollback()
-		if rollbackErr != nil {
+		if rollbackErr := tx.Rollback(); rollbackErr != nil {
 			logger.With(zap.Error(rollbackErr)).Error("failed to rollback insert database")
 			return rollbackErr
 		}
@@ -66,8 +66,7 @@ func (o offerImageAccessor) CreateOfferImage(
 
 	if commitErr := tx.Commit(); commitErr != nil {
 		logger.With(zap.Error(commitErr)).Error("failed to commit create company profile image")
-		rollbackErr := tx.Rollback()
-		if rollbackErr != nil {
+		if rollbackErr := tx.Rollback(); rollbackErr != nil {
 			logger.With(zap.Error(rollbackErr)).Error("failed to rollback commit")
 			return rollbackErr
 		}

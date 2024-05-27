@@ -28,17 +28,38 @@ func (h Handler) CreateCompanyProfileImage(
 }
 
 func (h Handler) CreateCompany(
-	_ context.Context,
-	_ *offer_servicev1.CreateCompanyRequest,
+	ctx context.Context,
+	req *offer_servicev1.CreateCompanyRequest,
 ) (*offer_servicev1.CreateCompanyResponse, error) {
-	panic("TODO: Remove or impl (available through emb type)")
+	output, err := h.logic.CreateCompany(ctx, logic.CreateCompanyParams{
+		CompanyName:    req.GetName(),
+		ProfileImageID: req.GetCompanyProfileImageId(),
+	})
+	if err != nil {
+		return &offer_servicev1.CreateCompanyResponse{}, err
+	}
+
+	return &offer_servicev1.CreateCompanyResponse{
+		Company: &output.Company,
+	}, nil
 }
 
 func (h Handler) UpdateCompany(
-	_ context.Context,
-	_ *offer_servicev1.UpdateCompanyRequest,
+	ctx context.Context,
+	req *offer_servicev1.UpdateCompanyRequest,
 ) (*offer_servicev1.UpdateCompanyResponse, error) {
-	panic("TODO: Remove or impl (available through emb type)")
+	output, err := h.logic.UpdateCompany(ctx, logic.UpdateCompanyParams{
+		CompanyID:      req.GetId(),
+		CompanyName:    req.GetName(),
+		ProfileImageID: req.GetCompanyProfileImageId(),
+	})
+	if err != nil {
+		return &offer_servicev1.UpdateCompanyResponse{}, err
+	}
+
+	return &offer_servicev1.UpdateCompanyResponse{
+		Company: &output.Company,
+	}, nil
 }
 
 func (h Handler) CreateOfferImage(

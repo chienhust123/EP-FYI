@@ -2,7 +2,7 @@ package common
 
 import "github.com/godruoyi/go-snowflake"
 
-//go:generate mockgen -source=./id_generator.go -destination=../../../test/mocks/pkg/common/id_generator_mock.go -package=mockcommon
+//go:generate mockgen -source=./id_generator.go -destination=./id_generator_mock.go -package=common
 type IDGenerator interface {
 	GenerateID() uint64
 }

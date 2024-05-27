@@ -3,6 +3,7 @@ package logic
 import (
 	"context"
 	"fmt"
+	"html"
 	database "offer_service/internal/dataaccess/db"
 	offer_servicev1 "offer_service/internal/generated/offer_service/v1"
 	"offer_service/internal/handlers/s3"
@@ -10,6 +11,8 @@ import (
 	"offer_service/internal/pkg/configs"
 	"offer_service/internal/pkg/utils"
 	"time"
+
+	"strings"
 
 	"go.uber.org/zap"
 	"google.golang.org/grpc/codes"
@@ -21,6 +24,25 @@ const (
 	OfferImageObjectName          = "offer_image"
 )
 
+type CreateCompanyParams struct {
+	CompanyName    string
+	ProfileImageID uint64
+}
+
+type CreateCompanyOutput struct {
+	Company offer_servicev1.Company
+}
+
+type UpdateCompanyParams struct {
+	CompanyID      uint64
+	CompanyName    string
+	ProfileImageID uint64
+}
+
+type UpdateCompanyOutput struct {
+	Company offer_servicev1.Company
+}
+
 type CreateCompanyProfileImageOutput struct {
 	CompanyProfileImage offer_servicev1.CompanyProfileImage
 }
@@ -30,6 +52,8 @@ type CreateOfferImageOutput struct {
 }
 
 type OfferManagement interface {
+	CreateCompany(context.Context, CreateCompanyParams) (*CreateCompanyOutput, error)
+	UpdateCompany(context.Context, UpdateCompanyParams) (*UpdateCompanyOutput, error)
 	CreateCompanyProfileImage(context.Context) (*CreateCompanyProfileImageOutput, error)
 	CreateOfferImage(context.Context) (*CreateOfferImageOutput, error)
 }
@@ -37,6 +61,7 @@ type OfferManagement interface {
 type offerManagement struct {
 	config               configs.Config
 	s3Client             s3.Client
+	companyAccessor      database.CompanyAccessor
 	companyImageAccessor database.CompanyProfileImageAccessor
 	offerImageAccessor   database.OfferImageAccessor
 	logger               *zap.Logger
@@ -46,6 +71,7 @@ type offerManagement struct {
 func NewOfferManagement(
 	config configs.Config,
 	s3Client s3.Client,
+	companyAccessor database.CompanyAccessor,
 	companyImageAccessor database.CompanyProfileImageAccessor,
 	offerImageAccessor database.OfferImageAccessor,
 	logger *zap.Logger,
@@ -74,6 +100,7 @@ func NewOfferManagement(
 	return &offerManagement{
 		config:               config,
 		s3Client:             s3Client,
+		companyAccessor:      companyAccessor,
 		companyImageAccessor: companyImageAccessor,
 		offerImageAccessor:   offerImageAccessor,
 		logger:               logger,
@@ -129,7 +156,7 @@ func (o offerManagement) CreateCompanyProfileImage(
 	id := o.idGenerator.GenerateID()
 	objName := o.getCompanyProfileImageObjectName(id)
 
-	companyProfileImage := &database.CompanyProfileImageTab{
+	companyProfileImage := &database.CompanyProfileImage{
 		ID:         id,
 		ObjectName: objName,
 		ExpireTime: expireTime,
@@ -187,7 +214,7 @@ func (o offerManagement) CreateOfferImage(ctx context.Context) (*CreateOfferImag
 	id := o.idGenerator.GenerateID()
 	objName := o.getOfferImageObjectName(id)
 
-	offerImage := &database.OfferImageTab{
+	offerImage := &database.OfferImage{
 		ID:         id,
 		ObjectName: objName,
 		ExpireTime: expireTime,
@@ -218,6 +245,73 @@ func (o offerManagement) CreateOfferImage(ctx context.Context) (*CreateOfferImag
 		OfferImage: offer_servicev1.OfferImage{
 			Id:            offerImage.ID,
 			PresignPutUrl: presignPutURL,
+		},
+	}, nil
+}
+
+func (o offerManagement) getSanitizedCompanyName(name string) string {
+	trimmedNamed := strings.TrimSpace(name)
+	escapedName := html.EscapeString(trimmedNamed)
+	return escapedName
+}
+
+func (o offerManagement) CreateCompany(
+	ctx context.Context,
+	params CreateCompanyParams,
+) (*CreateCompanyOutput, error) {
+	logger := utils.LoggerWithContext(ctx, o.logger).Named("CreateCompany")
+
+	sanitizedCompanyName := o.getSanitizedCompanyName(params.CompanyName)
+
+	company := &database.Company{
+		ID:             o.idGenerator.GenerateID(),
+		Name:           sanitizedCompanyName,
+		NameLowerCase:  strings.ToLower(sanitizedCompanyName),
+		ProfileImageID: params.ProfileImageID,
+	}
+
+	if dbErr := o.companyAccessor.CreateCompany(ctx, company); dbErr != nil {
+		logger.With(zap.Error(dbErr)).Error("failed to create company")
+		return &CreateCompanyOutput{}, status.Error(codes.Internal, dbErr.Error())
+	}
+
+	return &CreateCompanyOutput{
+		Company: offer_servicev1.Company{
+			Id:              company.ID,
+			Name:            company.Name,
+			ProfileImageUrl: o.getCompanyProfileImageObjectName(company.ID),
+		},
+	}, nil
+}
+
+func (o offerManagement) UpdateCompany(
+	ctx context.Context,
+	params UpdateCompanyParams,
+) (*UpdateCompanyOutput, error) {
+	logger := utils.LoggerWithContext(ctx, o.logger).Named("UpdateCompany")
+
+	sanitizedCompanyName := o.getSanitizedCompanyName(params.CompanyName)
+
+	company := &database.Company{
+		ID:             params.CompanyID,
+		Name:           sanitizedCompanyName,
+		NameLowerCase:  strings.ToLower(sanitizedCompanyName),
+		ProfileImageID: params.ProfileImageID,
+	}
+
+	if dbErr := o.companyAccessor.UpdateCompany(
+		ctx,
+		company,
+	); dbErr != nil {
+		logger.With(zap.Error(dbErr)).Error("failed to update company")
+		return &UpdateCompanyOutput{}, status.Error(codes.Internal, dbErr.Error())
+	}
+
+	return &UpdateCompanyOutput{
+		Company: offer_servicev1.Company{
+			Id:              company.ID,
+			Name:            company.Name,
+			ProfileImageUrl: o.getCompanyProfileImageObjectName(company.ID),
 		},
 	}, nil
 }
