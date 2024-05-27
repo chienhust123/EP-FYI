@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	colNamePositionID         = "id"
+	colNamePositionID = "id"
 	tableNamePosition = "position_tab"
 )
 
@@ -26,9 +26,9 @@ const (
 )
 
 type PositionTab struct {
-	ID     uint64        `db:"id" goqu:"skipupdate"`
-	Title  string        `db:"title"`
-	Level  PositionLevel `db:"level"`
+	ID    uint64        `db:"id" goqu:"skipupdate"`
+	Title string        `db:"title"`
+	Level PositionLevel `db:"level"`
 }
 
 //go:generate mockgen -source=./position.go -destination=../../../test/mocks/dataaccess/db/position_mock.go -package=mockdatabase

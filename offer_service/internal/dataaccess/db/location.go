@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	colNameLocationID         = "id"
+	colNameLocationID = "id"
 	tableNameLocation = "location_tab"
 )
 

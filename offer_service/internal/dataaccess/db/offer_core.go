@@ -11,9 +11,9 @@ type CreateOfferParams struct {
 }
 
 type OfferTab struct {
-	ID        uint64 `db:"id" goqu:"skipupdate"`
-	AccountID uint64 `db:"account_id"`
-	CompanyID uint64 `db:"company_id"`
+	ID                   uint64 `db:"id" goqu:"skipupdate"`
+	AccountID            uint64 `db:"account_id"`
+	CompanyID            uint64 `db:"company_id"`
 	LocationID           uint64 `db:"location_id"`
 	PositionID           uint64 `db:"position_id"`
 	OfferImageID         uint64 `db:"offer_image_id"`
