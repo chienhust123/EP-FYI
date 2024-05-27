@@ -6,7 +6,6 @@ import {
   InputWrapper,
   LoadingOverlay,
   Select,
-  TextInput,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import CurrencyInput from 'react-currency-input-field';
@@ -25,6 +24,8 @@ import {
   useCreateOffer,
 } from '@/services/offer';
 import { uploadImageToPresignedUrl } from '@/share/services';
+import { AsyncAutoComplete } from '@/share/components/async-autocomplete';
+import { searchCompanyByName } from '../services';
 
 type FEFormValues = {
   company_name: string;
@@ -82,13 +83,14 @@ export const UploadPage = () => {
             mutate(transformToBEFormat(values));
           })}
         >
-          <TextInput
+          <AsyncAutoComplete
             mb="md"
             required
             label="Company"
             placeholder="Input company"
             {...form.getInputProps('company_name')}
             key={form.key('company_name')}
+            asyncFn={searchCompanyByName}
           />
           <SearchByCountry
             mb="md"
