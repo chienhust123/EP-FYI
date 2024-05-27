@@ -11,10 +11,22 @@ import (
 
 const (
 	colNameLocationID = "id"
+	colCountry        = "country"
+	colState          = "state"
+	colCity           = "city"
 	tableNameLocation = "location_tab"
+
+	ErrLocationNotFound              = "location not found"
+	ErrGetLocationByID               = "failed to get location by ID"
+	ErrGetLastInsertID               = "failed to get last inserted ID"
+	ErrCreateLocation                = "failed to create location"
+	ErrExcecuteSQL                   = "failed to execute insert SQL"
+	ErrUpdateLocation                = "failed to update location"
+	ErrDeleteLocation                = "failed to delete location"
+	ErrGetLocationByCountryStateCity = "failed to get location by country, state, city"
 )
 
-type LocationTab struct {
+type Location struct {
 	ID      uint64 `db:"id" goqu:"skipupdate"`
 	Country string `db:"country"`
 	State   string `db:"state"`
@@ -23,11 +35,11 @@ type LocationTab struct {
 
 //go:generate mockgen -source=./location.go -destination=../../../test/mocks/dataaccess/db/location_mock.go -package=mockdatabase
 type LocationAccessor interface {
-	GetByID(ctx context.Context, id uint64) (*LocationTab, error)
-	Create(ctx context.Context, offer *LocationTab) error
-	Update(ctx context.Context, offer *LocationTab) error
+	GetByID(ctx context.Context, id uint64) (*Location, error)
+	Create(ctx context.Context, offer *Location) error
+	Update(ctx context.Context, offer *Location) error
 	Delete(ctx context.Context, id uint64) error
-	GetByCountryStateCity(ctx context.Context, country, state, city string) (*LocationTab, error)
+	GetByCountryStateCity(ctx context.Context, country, state, city string) (*Location, error)
 }
 
 type locationAccessor struct {
@@ -42,96 +54,93 @@ func NewLocationAccessor(
 	return &locationAccessor{db: db, logger: logger}
 }
 
-func (o *locationAccessor) GetByID(ctx context.Context, id uint64) (*LocationTab, error) {
+func (o *locationAccessor) GetByID(ctx context.Context, id uint64) (*Location, error) {
 	logger := utils.LoggerWithContext(ctx, o.logger).Named("LocationAccessor_GetByID")
-	var location LocationTab
+
+	var location Location
 	found, err := o.db.From(tableNameLocation).
 		Where(goqu.Ex{colNameLocationID: id}).
 		ScanStructContext(ctx, &location)
 	if err != nil {
-		logger.Error("Failed to get location by ID", zap.Error(err))
+		logger.Error(ErrGetLocationByID, zap.Error(err))
 		return nil, err
 	}
 	if !found {
-		logger.Info("Location not found", zap.Uint64(colNameLocationID, id))
-		return nil, errors.New("location not found")
+		logger.Info(ErrLocationNotFound, zap.Uint64(colNameLocationID, id))
+		return nil, errors.New(ErrLocationNotFound)
 	}
 
 	logger.Info("Location found", zap.Uint64(colNameLocationID, id))
 	return &location, nil
 }
 
-func (o *locationAccessor) Create(ctx context.Context, location *LocationTab) error {
+func (o *locationAccessor) Create(ctx context.Context, location *Location) error {
 	logger := utils.LoggerWithContext(ctx, o.logger).Named("LocationAccessor_Create")
-	insertSQL, _, err := o.db.Insert(tableNameLocation).Rows(location).ToSQL()
+	result, err := o.db.Insert(tableNameLocation).Rows(location).Executor().ExecContext(ctx)
 	if err != nil {
-		logger.Error("Failed to create SQL", zap.Error(err))
+		logger.Error(ErrCreateLocation, zap.Error(err))
 		return err
 	}
-	_, err = o.db.ExecContext(ctx, insertSQL)
+
+	lastInsertedID, err := result.LastInsertId()
 	if err != nil {
-		logger.Error("Failed to execute insert SQL", zap.Error(err))
+		logger.Error(ErrGetLastInsertID, zap.Error(err))
 		return err
 	}
-	logger.Info("Location created", zap.Uint64(colNameLocationID, location.ID))
+
+	logger.Info("Location created", zap.Uint64(colNameLocationID, uint64(lastInsertedID)))
 	return nil
 }
 
-func (o *locationAccessor) Update(ctx context.Context, location *LocationTab) error {
+func (o *locationAccessor) Update(ctx context.Context, location *Location) error {
 	logger := utils.LoggerWithContext(ctx, o.logger).Named("LocationAccessor_Update")
-	updateSQL, _, err := o.db.Update(tableNameLocation).
+	_, err := o.db.Update(tableNameLocation).
 		Set(location).
 		Where(goqu.Ex{colNameLocationID: location.ID}).
-		ToSQL()
+		Executor().
+		ExecContext(ctx)
 	if err != nil {
-		logger.Error("Failed to create update SQL", zap.Error(err))
+		logger.Error(ErrUpdateLocation, zap.Error(err))
 		return err
 	}
-	_, err = o.db.ExecContext(ctx, updateSQL)
-	if err != nil {
-		logger.Error("Failed to execute update SQL", zap.Error(err))
-		return err
-	}
+
 	logger.Info("Location updated", zap.Uint64(colNameLocationID, location.ID))
 	return nil
 }
 
 func (o *locationAccessor) Delete(ctx context.Context, id uint64) error {
 	logger := utils.LoggerWithContext(ctx, o.logger).Named("LocationAccessor_Delete")
-	deleteSQL, _, err := o.db.Delete(tableNameLocation).Where(goqu.Ex{colNameLocationID: id}).ToSQL()
+	_, err := o.db.Delete(tableNameLocation).Where(goqu.Ex{colNameLocationID: id}).Executor().ExecContext(ctx)
 	if err != nil {
-		logger.Error("Failed to create delete SQL", zap.Error(err))
+		logger.Error(ErrDeleteLocation, zap.Error(err))
 		return err
 	}
-	_, err = o.db.ExecContext(ctx, deleteSQL)
-	if err != nil {
-		logger.Error("Failed to execute delete SQL", zap.Error(err))
-		return err
-	}
+
 	logger.Info("Location deleted", zap.Uint64(colNameLocationID, id))
 	return nil
 }
 
 func (o *locationAccessor) GetByCountryStateCity(ctx context.Context,
 	country, state, city string,
-) (*LocationTab, error) {
+) (*Location, error) {
 	logger := utils.LoggerWithContext(ctx, o.logger).Named("LocationAccessor_GetByCountryStateCity")
-	var location LocationTab
+
+	var location Location
 	found, err := o.db.From(tableNameLocation).
-		Where(goqu.Ex{"country": country, "state": state, "city": city}).
+		Where(goqu.Ex{colCountry: country, colState: state, colCity: city}).
 		ScanStructContext(ctx, &location)
 	if err != nil {
-		logger.Error("Failed to get location by country, state and city", zap.Error(err))
+		logger.Error(ErrGetLocationByCountryStateCity, zap.Error(err))
 		return nil, err
 	}
 	if !found {
 		logger.Info(
-			"Location not found",
+			ErrLocationNotFound,
 			zap.String("country", country),
 			zap.String("state", state),
 			zap.String("city", city),
 		)
-		return nil, errors.New("location not found")
+		return nil, errors.New(ErrLocationNotFound)
 	}
 
 	logger.Info(

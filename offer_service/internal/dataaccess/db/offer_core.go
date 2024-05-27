@@ -10,7 +10,7 @@ type CreateOfferParams struct {
 	Password    string
 }
 
-type OfferTab struct {
+type Offer struct {
 	ID                   uint64 `db:"id" goqu:"skipupdate"`
 	AccountID            uint64 `db:"account_id"`
 	CompanyID            uint64 `db:"company_id"`

@@ -12,6 +12,15 @@ import (
 const (
 	colNamePositionID = "id"
 	tableNamePosition = "position_tab"
+	colTitle          = "title"
+	colLevel          = "level"
+
+	ErrPositionNotFound   = "position not found"
+	ErrGetPositionByID    = "failed to get position by ID"
+	ErrCreatePosition     = "failed to create position"
+	ErrUpdatePosition     = "failed to update position"
+	ErrDeletePosition     = "failed to delete position"
+	ErrGetGetByTitleLevel = "failed to get position by title, level"
 )
 
 type PositionLevel int32
@@ -25,7 +34,7 @@ const (
 	PositionLevelValuePrinciple   PositionLevel = 5
 )
 
-type PositionTab struct {
+type Position struct {
 	ID    uint64        `db:"id" goqu:"skipupdate"`
 	Title string        `db:"title"`
 	Level PositionLevel `db:"level"`
@@ -33,11 +42,11 @@ type PositionTab struct {
 
 //go:generate mockgen -source=./position.go -destination=../../../test/mocks/dataaccess/db/position_mock.go -package=mockdatabase
 type PositionAccessor interface {
-	GetByID(ctx context.Context, id uint64) (*PositionTab, error)
-	Create(ctx context.Context, offer *PositionTab) error
-	Update(ctx context.Context, offer *PositionTab) error
+	GetByID(ctx context.Context, id uint64) (*Position, error)
+	Create(ctx context.Context, offer *Position) error
+	Update(ctx context.Context, offer *Position) error
 	Delete(ctx context.Context, id uint64) error
-	GetByTitleLevel(ctx context.Context, title string, level PositionLevel) (*PositionTab, error)
+	GetByTitleLevel(ctx context.Context, title string, level PositionLevel) (*Position, error)
 }
 
 type positionAccessor struct {
@@ -52,72 +61,63 @@ func NewPositionAccessor(
 	return &positionAccessor{db: db, logger: logger}
 }
 
-func (o *positionAccessor) GetByID(ctx context.Context, id uint64) (*PositionTab, error) {
+func (o *positionAccessor) GetByID(ctx context.Context, id uint64) (*Position, error) {
 	logger := utils.LoggerWithContext(ctx, o.logger).Named("PositionAccessor_GetByID")
-	var position PositionTab
+
+	var position Position
 	found, err := o.db.From(tableNamePosition).
 		Where(goqu.Ex{colNamePositionID: id}).
 		ScanStructContext(ctx, &position)
 	if err != nil {
-		logger.Error("Failed to get position by ID", zap.Error(err))
+		logger.Error(ErrGetLocationByID, zap.Error(err))
 		return nil, err
 	}
 	if !found {
-		logger.Info("Position not found", zap.Uint64(colNamePositionID, id))
-		return nil, errors.New("position not found")
+		logger.Info(ErrLocationNotFound, zap.Uint64(colNamePositionID, id))
+		return nil, errors.New(ErrPositionNotFound)
 	}
 
 	logger.Info("Position found", zap.Uint64(colNamePositionID, id))
 	return &position, nil
 }
 
-func (o *positionAccessor) Create(ctx context.Context, position *PositionTab) error {
+func (o *positionAccessor) Create(ctx context.Context, position *Position) error {
 	logger := utils.LoggerWithContext(ctx, o.logger).Named("PositionAccessor_Create")
-	insertSQL, _, err := o.db.Insert(tableNamePosition).Rows(position).ToSQL()
+	_, err := o.db.Insert(tableNamePosition).Rows(position).Executor().ExecContext(ctx)
 	if err != nil {
-		logger.Error("Failed to create SQL", zap.Error(err))
+		logger.Error(ErrCreatePosition, zap.Error(err))
 		return err
 	}
-	_, err = o.db.ExecContext(ctx, insertSQL)
-	if err != nil {
-		logger.Error("Failed to execute insert SQL", zap.Error(err))
-		return err
-	}
+
 	logger.Info("Position created", zap.Uint64(colNamePositionID, position.ID))
 	return nil
 }
 
-func (o *positionAccessor) Update(ctx context.Context, position *PositionTab) error {
+func (o *positionAccessor) Update(ctx context.Context, position *Position) error {
 	logger := utils.LoggerWithContext(ctx, o.logger).Named("PositionAccessor_Update")
-	updateSQL, _, err := o.db.Update(tableNamePosition).
+
+	_, err := o.db.Update(tableNamePosition).
 		Set(position).
 		Where(goqu.Ex{colNamePositionID: position.ID}).
-		ToSQL()
+		Executor().
+		ExecContext(ctx)
 	if err != nil {
-		logger.Error("Failed to create update SQL", zap.Error(err))
+		logger.Error(ErrUpdatePosition, zap.Error(err))
 		return err
 	}
-	_, err = o.db.ExecContext(ctx, updateSQL)
-	if err != nil {
-		logger.Error("Failed to execute update SQL", zap.Error(err))
-		return err
-	}
+
 	logger.Info("Position updated", zap.Uint64(colNamePositionID, position.ID))
 	return nil
 }
 
 func (o *positionAccessor) Delete(ctx context.Context, id uint64) error {
 	logger := utils.LoggerWithContext(ctx, o.logger).Named("PositionAccessor_Delete")
-	deleteSQL, _, err := o.db.Delete(tableNamePosition).Where(goqu.Ex{colNamePositionID: id}).ToSQL()
+	_, err := o.db.Delete(tableNamePosition).Where(goqu.Ex{colNamePositionID: id}).Executor().ExecContext(ctx)
 	if err != nil {
-		logger.Error("Failed to create delete SQL", zap.Error(err))
+		logger.Error(ErrDeletePosition, zap.Error(err))
 		return err
 	}
-	_, err = o.db.ExecContext(ctx, deleteSQL)
-	if err != nil {
-		logger.Error("Failed to execute delete SQL", zap.Error(err))
-		return err
-	}
+
 	logger.Info("Position deleted", zap.Uint64(colNamePositionID, id))
 	return nil
 }
@@ -126,15 +126,15 @@ func (o *positionAccessor) GetByTitleLevel(
 	ctx context.Context,
 	title string,
 	level PositionLevel,
-) (*PositionTab, error) {
+) (*Position, error) {
 	logger := utils.LoggerWithContext(ctx, o.logger).Named("PositionAccessor_GetByTitleLevel")
-	var position PositionTab
+	var position Position
 
 	found, err := o.db.From(tableNamePosition).
-		Where(goqu.Ex{"title": title, "level": level}).
+		Where(goqu.Ex{colTitle: title, colLevel: level}).
 		ScanStructContext(ctx, &position)
 	if err != nil {
-		logger.Error("Failed to get position by title and level", zap.Error(err))
+		logger.Error(ErrGetGetByTitleLevel, zap.Error(err))
 		return nil, err
 	}
 	if !found {
