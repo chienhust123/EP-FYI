@@ -15,6 +15,7 @@ type Config struct {
 	Database Database `yaml:"database"`
 	Log      Log      `yaml:"log"`
 	Cache    Cache    `yaml:"cache"`
+	GRPC     GRPC     `yaml:"grpc"`
 }
 
 func NewConfig(configFilePath ConfigFilePath) (Config, error) {

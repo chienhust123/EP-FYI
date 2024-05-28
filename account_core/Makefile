@@ -50,3 +50,11 @@ proto:
 	--grpc-gateway_out ./internal/generated --grpc-gateway_opt generate_unbound_methods=true \
 	--experimental_allow_proto3_optional \
 	api/account_core/account_core.proto
+
+.PHONY: wire
+wire:
+	wire ./internal/wiring/wire.go
+
+.PHONY: standalone-server
+standalone-server:
+	go run ./cmd/account_core/main.go standalone-server

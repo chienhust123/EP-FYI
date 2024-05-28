@@ -41,10 +41,10 @@ func (h *Handler) CreateSession(ctx context.Context, in *pb.CreateSessionRequest
 
 	return &pb.CreateSessionResponse{
 		Account: &pb.Account{
-			Id:        &output.Account.Id,
-			Email:     &output.Account.Email,
-			Name:      &output.Account.Name,
-			Picture:   &output.Account.Picture,
+			Id:        output.Account.Id,
+			Email:     output.Account.Email,
+			Name:      output.Account.Name,
+			Picture:   output.Account.Picture,
 			CreatedAt: output.Account.CreatedAt.String(),
 			UpdatedAt: output.Account.UpdatedAt.String(),
 		},
