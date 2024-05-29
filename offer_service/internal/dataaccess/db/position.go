@@ -2,11 +2,12 @@ package database
 
 import (
 	"context"
-	"errors"
 	"offer_service/internal/pkg/utils"
 
 	"github.com/doug-martin/goqu/v9"
 	"go.uber.org/zap"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 const (
@@ -69,44 +70,49 @@ func (o *positionAccessor) GetByID(ctx context.Context, id uint64) (*Position, e
 		Where(goqu.Ex{colNamePositionID: id}).
 		ScanStructContext(ctx, &position)
 	if err != nil {
-		logger.Error(ErrGetLocationByID, zap.Error(err))
-		return nil, err
+		logger.With(zap.Error(err)).Error("failed to get position by ID")
+		return nil, status.Error(codes.Internal, "failed to get position by ID")
 	}
 	if !found {
-		logger.Info(ErrLocationNotFound, zap.Uint64(colNamePositionID, id))
-		return nil, errors.New(ErrPositionNotFound)
+		logger.With(zap.Uint64(colNamePositionID, id)).Warn("position not found")
+		return nil, status.Error(codes.NotFound, "position not found")
 	}
 
-	logger.Info("Position found", zap.Uint64(colNamePositionID, id))
+	logger.With(zap.Uint64(colNamePositionID, id)).Info("position found")
 	return &position, nil
 }
 
 func (o *positionAccessor) Create(ctx context.Context, position *Position) error {
 	logger := utils.LoggerWithContext(ctx, o.logger).Named("PositionAccessor_Create")
-	_, err := o.db.Insert(tableNamePosition).Rows(position).Executor().ExecContext(ctx)
+	result, err := o.db.Insert(tableNamePosition).Rows(position).Executor().ExecContext(ctx)
 	if err != nil {
-		logger.Error(ErrCreatePosition, zap.Error(err))
-		return err
+		logger.With(zap.Error(err)).Error("failed to create position")
+		return status.Error(codes.Internal, "failed to create position")
 	}
 
-	logger.Info("Position created", zap.Uint64(colNamePositionID, position.ID))
+	lastInsertedID, err := result.LastInsertId()
+	if err != nil {
+		logger.With(zap.Error(err)).Error("failed to get last inserted ID")
+		return status.Error(codes.Internal, "failed to get last inserted ID")
+	}
+
+	logger.With(zap.Uint64(colNamePositionID, uint64(lastInsertedID))).Info("position created")
 	return nil
 }
 
 func (o *positionAccessor) Update(ctx context.Context, position *Position) error {
 	logger := utils.LoggerWithContext(ctx, o.logger).Named("PositionAccessor_Update")
-
 	_, err := o.db.Update(tableNamePosition).
 		Set(position).
 		Where(goqu.Ex{colNamePositionID: position.ID}).
 		Executor().
 		ExecContext(ctx)
 	if err != nil {
-		logger.Error(ErrUpdatePosition, zap.Error(err))
-		return err
+		logger.With(zap.Error(err)).Error("failed to update position")
+		return status.Error(codes.Internal, "failed to update position")
 	}
 
-	logger.Info("Position updated", zap.Uint64(colNamePositionID, position.ID))
+	logger.With(zap.Uint64(colNamePositionID, position.ID)).Info("position updated")
 	return nil
 }
 
@@ -114,11 +120,11 @@ func (o *positionAccessor) Delete(ctx context.Context, id uint64) error {
 	logger := utils.LoggerWithContext(ctx, o.logger).Named("PositionAccessor_Delete")
 	_, err := o.db.Delete(tableNamePosition).Where(goqu.Ex{colNamePositionID: id}).Executor().ExecContext(ctx)
 	if err != nil {
-		logger.Error(ErrDeletePosition, zap.Error(err))
-		return err
+		logger.With(zap.Error(err)).Error("failed to delete position")
+		return status.Error(codes.Internal, "failed to delete position")
 	}
 
-	logger.Info("Position deleted", zap.Uint64(colNamePositionID, id))
+	logger.With(zap.Uint64(colNamePositionID, id)).Info("position deleted")
 	return nil
 }
 
@@ -128,28 +134,28 @@ func (o *positionAccessor) GetByTitleLevel(
 	level PositionLevel,
 ) (*Position, error) {
 	logger := utils.LoggerWithContext(ctx, o.logger).Named("PositionAccessor_GetByTitleLevel")
-	var position Position
 
+	var position Position
 	found, err := o.db.From(tableNamePosition).
 		Where(goqu.Ex{colTitle: title, colLevel: level}).
 		ScanStructContext(ctx, &position)
 	if err != nil {
-		logger.Error(ErrGetGetByTitleLevel, zap.Error(err))
-		return nil, err
+		logger.With(zap.Error(err)).Error("failed to get position by title, level")
+		return nil, status.Error(codes.Internal, "failed to get position by title, level")
 	}
 	if !found {
 		logger.Info(
-			"Position not found by title and level",
-			zap.String("title", title),
-			zap.String("level", string(level)),
+			"position not found",
+			zap.String(colTitle, title),
+			zap.Int32(colLevel, int32(level)),
 		)
-		return nil, nil
+		return nil, status.Error(codes.NotFound, "position not found")
 	}
 
 	logger.Info(
-		"Position found by title and level",
-		zap.String("title", title),
-		zap.String("level", string(level)),
+		"position found",
+		zap.String(colTitle, title),
+		zap.Int32(colLevel, int32(level)),
 	)
 	return &position, nil
 }

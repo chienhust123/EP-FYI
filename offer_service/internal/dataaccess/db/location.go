@@ -2,11 +2,12 @@ package database
 
 import (
 	"context"
-	"errors"
 	"offer_service/internal/pkg/utils"
 
 	"github.com/doug-martin/goqu/v9"
 	"go.uber.org/zap"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 const (
@@ -16,8 +17,6 @@ const (
 	colCity           = "city"
 	tableNameLocation = "location_tab"
 
-	ErrLocationNotFound              = "location not found"
-	ErrGetLocationByID               = "failed to get location by ID"
 	ErrGetLastInsertID               = "failed to get last inserted ID"
 	ErrCreateLocation                = "failed to create location"
 	ErrExcecuteSQL                   = "failed to execute insert SQL"
@@ -62,15 +61,15 @@ func (o *locationAccessor) GetByID(ctx context.Context, id uint64) (*Location, e
 		Where(goqu.Ex{colNameLocationID: id}).
 		ScanStructContext(ctx, &location)
 	if err != nil {
-		logger.Error(ErrGetLocationByID, zap.Error(err))
-		return nil, err
+		logger.With(zap.Error(err)).Error("failed to get location by ID")
+		return nil, status.Error(codes.Internal, "failed to get location by ID")
 	}
 	if !found {
-		logger.Info(ErrLocationNotFound, zap.Uint64(colNameLocationID, id))
-		return nil, errors.New(ErrLocationNotFound)
+		logger.With(zap.Uint64(colNameLocationID, id)).Warn("location not found")
+		return nil, status.Error(codes.NotFound, "location not found")
 	}
 
-	logger.Info("Location found", zap.Uint64(colNameLocationID, id))
+	logger.With(zap.Uint64(colNameLocationID, id)).Info("location found")
 	return &location, nil
 }
 
@@ -78,17 +77,17 @@ func (o *locationAccessor) Create(ctx context.Context, location *Location) error
 	logger := utils.LoggerWithContext(ctx, o.logger).Named("LocationAccessor_Create")
 	result, err := o.db.Insert(tableNameLocation).Rows(location).Executor().ExecContext(ctx)
 	if err != nil {
-		logger.Error(ErrCreateLocation, zap.Error(err))
-		return err
+		logger.With(zap.Error(err)).Error("failed to create location")
+		return status.Error(codes.Internal, "failed to create location")
 	}
 
 	lastInsertedID, err := result.LastInsertId()
 	if err != nil {
-		logger.Error(ErrGetLastInsertID, zap.Error(err))
-		return err
+		logger.With(zap.Error(err)).Error("failed to get last inserted ID")
+		return status.Error(codes.Internal, "failed to get last inserted ID")
 	}
 
-	logger.Info("Location created", zap.Uint64(colNameLocationID, uint64(lastInsertedID)))
+	logger.With(zap.Uint64(colNameLocationID, uint64(lastInsertedID))).Info("location created")
 	return nil
 }
 
@@ -100,11 +99,11 @@ func (o *locationAccessor) Update(ctx context.Context, location *Location) error
 		Executor().
 		ExecContext(ctx)
 	if err != nil {
-		logger.Error(ErrUpdateLocation, zap.Error(err))
-		return err
+		logger.With(zap.Error(err)).Error("failed to update location")
+		return status.Error(codes.Internal, "failed to update location")
 	}
 
-	logger.Info("Location updated", zap.Uint64(colNameLocationID, location.ID))
+	logger.With(zap.Uint64(colNameLocationID, location.ID)).Info("location updated")
 	return nil
 }
 
@@ -112,11 +111,11 @@ func (o *locationAccessor) Delete(ctx context.Context, id uint64) error {
 	logger := utils.LoggerWithContext(ctx, o.logger).Named("LocationAccessor_Delete")
 	_, err := o.db.Delete(tableNameLocation).Where(goqu.Ex{colNameLocationID: id}).Executor().ExecContext(ctx)
 	if err != nil {
-		logger.Error(ErrDeleteLocation, zap.Error(err))
-		return err
+		logger.With(zap.Error(err)).Error("failed to delete location")
+		return status.Error(codes.Internal, "failed to delete location")
 	}
 
-	logger.Info("Location deleted", zap.Uint64(colNameLocationID, id))
+	logger.With(zap.Uint64(colNameLocationID, id)).Info("location deleted")
 	return nil
 }
 
@@ -130,24 +129,24 @@ func (o *locationAccessor) GetByCountryStateCity(ctx context.Context,
 		Where(goqu.Ex{colCountry: country, colState: state, colCity: city}).
 		ScanStructContext(ctx, &location)
 	if err != nil {
-		logger.Error(ErrGetLocationByCountryStateCity, zap.Error(err))
-		return nil, err
+		logger.With(zap.Error(err)).Error("failed to get location by country, state, city")
+		return nil, status.Error(codes.Internal, "failed to get location by country, state, city")
 	}
 	if !found {
 		logger.Info(
-			ErrLocationNotFound,
-			zap.String("country", country),
-			zap.String("state", state),
-			zap.String("city", city),
+			"location not found",
+			zap.String(colCountry, country),
+			zap.String(colState, state),
+			zap.String(colCity, city),
 		)
-		return nil, errors.New(ErrLocationNotFound)
+		return nil, status.Error(codes.NotFound, "location not found")
 	}
 
 	logger.Info(
-		"Location found",
-		zap.String("country", country),
-		zap.String("state", state),
-		zap.String("city", city),
+		"location found",
+		zap.String(colCountry, country),
+		zap.String(colState, state),
+		zap.String(colCity, city),
 	)
 	return &location, nil
 }
