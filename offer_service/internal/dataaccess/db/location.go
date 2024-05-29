@@ -16,13 +16,6 @@ const (
 	colState          = "state"
 	colCity           = "city"
 	tableNameLocation = "location_tab"
-
-	ErrGetLastInsertID               = "failed to get last inserted ID"
-	ErrCreateLocation                = "failed to create location"
-	ErrExcecuteSQL                   = "failed to execute insert SQL"
-	ErrUpdateLocation                = "failed to update location"
-	ErrDeleteLocation                = "failed to delete location"
-	ErrGetLocationByCountryStateCity = "failed to get location by country, state, city"
 )
 
 type Location struct {
@@ -35,8 +28,8 @@ type Location struct {
 //go:generate mockgen -source=./location.go -destination=../../../test/mocks/dataaccess/db/location_mock.go -package=mockdatabase
 type LocationAccessor interface {
 	GetByID(ctx context.Context, id uint64) (*Location, error)
-	Create(ctx context.Context, offer *Location) error
-	Update(ctx context.Context, offer *Location) error
+	Create(ctx context.Context, location *Location) error
+	Update(ctx context.Context, location *Location) error
 	Delete(ctx context.Context, id uint64) error
 	GetByCountryStateCity(ctx context.Context, country, state, city string) (*Location, error)
 }

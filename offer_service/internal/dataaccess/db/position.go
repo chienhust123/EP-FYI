@@ -15,13 +15,6 @@ const (
 	tableNamePosition = "position_tab"
 	colTitle          = "title"
 	colLevel          = "level"
-
-	ErrPositionNotFound   = "position not found"
-	ErrGetPositionByID    = "failed to get position by ID"
-	ErrCreatePosition     = "failed to create position"
-	ErrUpdatePosition     = "failed to update position"
-	ErrDeletePosition     = "failed to delete position"
-	ErrGetGetByTitleLevel = "failed to get position by title, level"
 )
 
 type PositionLevel int32
@@ -44,8 +37,8 @@ type Position struct {
 //go:generate mockgen -source=./position.go -destination=../../../test/mocks/dataaccess/db/position_mock.go -package=mockdatabase
 type PositionAccessor interface {
 	GetByID(ctx context.Context, id uint64) (*Position, error)
-	Create(ctx context.Context, offer *Position) error
-	Update(ctx context.Context, offer *Position) error
+	Create(ctx context.Context, position *Position) error
+	Update(ctx context.Context, position *Position) error
 	Delete(ctx context.Context, id uint64) error
 	GetByTitleLevel(ctx context.Context, title string, level PositionLevel) (*Position, error)
 }
