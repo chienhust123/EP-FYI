@@ -141,7 +141,7 @@
         }
       }
     },
-    "account_coreModifyAccountResponse": {
+    "account_coreUpdateAccountResponse": {
       "type": "object",
       "properties": {
         "account": {

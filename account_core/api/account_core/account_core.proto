@@ -21,12 +21,12 @@ message CreateAccountRequest { Account account = 1; }
 
 message CreateAccountResponse { Account account = 1; }
 
-message ModifyAccountRequest {
+message UpdateAccountRequest {
     Account account = 1; // must pass id, can only modify name, picture, role
                          // TO DO: support modify email
 }
 
-message ModifyAccountResponse { Account account = 1; }
+message UpdateAccountResponse { Account account = 1; }
 
 message GetAccountRequest { uint64 account_id = 1; }
 
@@ -56,7 +56,7 @@ message GetSessionResponse {
 service AccountService {
     rpc CreateAccount(CreateAccountRequest) returns (CreateAccountResponse) {}
 
-    rpc UpdateAccount(ModifyAccountRequest) returns (ModifyAccountResponse) {}
+    rpc UpdateAccount(UpdateAccountRequest) returns (UpdateAccountResponse) {}
 
     rpc GetAccount(GetAccountRequest) returns (GetAccountResponse) {}
 

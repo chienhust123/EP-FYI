@@ -9,4 +9,5 @@ var WireSet = wire.NewSet(
 	wire.FieldsOf(new(Config), "Log"),
 	wire.FieldsOf(new(Config), "Cache"),
 	wire.FieldsOf(new(Config), "GRPC"),
+	wire.FieldsOf(new(Config), "Token"),
 )

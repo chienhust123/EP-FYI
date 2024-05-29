@@ -1,9 +1,10 @@
 package grpc
 
 import (
+	"context"
+
 	pb "auth_service/internal/generated/grpc/account_core"
 	"auth_service/internal/logic"
-	"context"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
@@ -13,8 +14,12 @@ const (
 	AuthTokenMetadataName = "AUTH_TOKEN"
 )
 
-func NewHandler() pb.AccountServiceServer {
-	return &Handler{}
+func NewHandler(
+	accountLogic logic.AccountLogic,
+) (pb.AccountServiceServer, error) {
+	return &Handler{
+		accountLogic: accountLogic,
+	}, nil
 }
 
 type Handler struct {
@@ -83,4 +88,69 @@ func (h *Handler) getAuthTokenFromMetadata(ctx context.Context) string {
 	}
 
 	return authTokenValues[0]
+}
+
+func (a Handler) GetAccount(ctx context.Context, request *pb.GetAccountRequest) (*pb.GetAccountResponse, error) {
+	output, err := a.accountLogic.GetAccount(ctx, logic.GetAccountInput{
+		AccountId: request.AccountId,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.GetAccountResponse{
+		Account: &pb.Account{
+			Id:        output.Account.Id,
+			Name:      output.Account.Name,
+			Email:     output.Account.Email,
+			Picture:   output.Account.Picture,
+			CreatedAt: output.Account.CreatedAt.String(),
+			UpdatedAt: output.Account.UpdatedAt.String(),
+		},
+	}, nil
+}
+
+func (a Handler) CreateAccount(ctx context.Context, request *pb.CreateAccountRequest) (*pb.CreateAccountResponse, error) {
+	output, err := a.accountLogic.CreateAccount(ctx, logic.CreateAccountInput{
+		Name:    request.Account.Name,
+		Email:   request.Account.Email,
+		Picture: request.Account.Picture,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.CreateAccountResponse{
+		Account: &pb.Account{
+			Id:        output.Account.Id,
+			Email:     output.Account.Email,
+			Name:      output.Account.Name,
+			Picture:   output.Account.Picture,
+			CreatedAt: output.Account.CreatedAt.String(),
+			UpdatedAt: output.Account.UpdatedAt.String(),
+		},
+	}, nil
+}
+
+func (a Handler) UpdateAccount(ctx context.Context, request *pb.UpdateAccountRequest) (*pb.UpdateAccountResponse, error) {
+	output, err := a.accountLogic.UpdateAccount(ctx, logic.UpdateAccountInput{
+		AccountId: request.Account.Id,
+		Name:      request.Account.Name,
+		Email:     request.Account.Email,
+		Picture:   request.Account.Picture,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.UpdateAccountResponse{
+		Account: &pb.Account{
+			Id:        output.Account.Id,
+			Name:      output.Account.Name,
+			Email:     output.Account.Email,
+			Picture:   output.Account.Picture,
+			CreatedAt: output.Account.CreatedAt.String(),
+			UpdatedAt: output.Account.UpdatedAt.String(),
+		},
+	}, nil
 }
