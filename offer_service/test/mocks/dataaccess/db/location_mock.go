@@ -41,17 +41,17 @@ func (m *MockLocationAccessor) EXPECT() *MockLocationAccessorMockRecorder {
 }
 
 // Create mocks base method.
-func (m *MockLocationAccessor) Create(ctx context.Context, offer *database.Location) error {
+func (m *MockLocationAccessor) Create(ctx context.Context, location *database.Location) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Create", ctx, offer)
+	ret := m.ctrl.Call(m, "Create", ctx, location)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // Create indicates an expected call of Create.
-func (mr *MockLocationAccessorMockRecorder) Create(ctx, offer any) *gomock.Call {
+func (mr *MockLocationAccessorMockRecorder) Create(ctx, location any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockLocationAccessor)(nil).Create), ctx, offer)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockLocationAccessor)(nil).Create), ctx, location)
 }
 
 // Delete mocks base method.
@@ -99,15 +99,15 @@ func (mr *MockLocationAccessorMockRecorder) GetByID(ctx, id any) *gomock.Call {
 }
 
 // Update mocks base method.
-func (m *MockLocationAccessor) Update(ctx context.Context, offer *database.Location) error {
+func (m *MockLocationAccessor) Update(ctx context.Context, location *database.Location) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Update", ctx, offer)
+	ret := m.ctrl.Call(m, "Update", ctx, location)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // Update indicates an expected call of Update.
-func (mr *MockLocationAccessorMockRecorder) Update(ctx, offer any) *gomock.Call {
+func (mr *MockLocationAccessorMockRecorder) Update(ctx, location any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockLocationAccessor)(nil).Update), ctx, offer)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockLocationAccessor)(nil).Update), ctx, location)
 }

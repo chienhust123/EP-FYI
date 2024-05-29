@@ -10,6 +10,10 @@
 package mockdatabase
 
 import (
+	context "context"
+	database "offer_service/internal/dataaccess/db"
+	reflect "reflect"
+
 	gomock "go.uber.org/mock/gomock"
 )
 
@@ -34,4 +38,18 @@ func NewMockOfferAccessor(ctrl *gomock.Controller) *MockOfferAccessor {
 // EXPECT returns an object that allows the caller to indicate expected use.
 func (m *MockOfferAccessor) EXPECT() *MockOfferAccessorMockRecorder {
 	return m.recorder
+}
+
+// Create mocks base method.
+func (m *MockOfferAccessor) Create(ctx context.Context, offer *database.Offer) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Create", ctx, offer)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Create indicates an expected call of Create.
+func (mr *MockOfferAccessorMockRecorder) Create(ctx, offer any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockOfferAccessor)(nil).Create), ctx, offer)
 }
