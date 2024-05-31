@@ -18,8 +18,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Go to web folder
-        run: cd web
 
       - name: Checkout 🛎️
         uses: actions/checkout@v4
@@ -31,15 +29,15 @@ jobs:
 
 
       - name: Build with Next.js 🏗️
-        run: npx next build
+        run: cd web && npx next build
 
       - name: debug
-        run: ls -la
+        run: cd web && ls -la
 
       - name: Upload artifact 📡
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./out
+          path: ./web/out
 
   deploy:
     environment:
