@@ -34,11 +34,15 @@ export const SearchPage: React.FC = () => {
             visible={isLoading}
             zIndex={1000}
             overlayProps={{ radius: 'sm', blur: 2 }}
+            loaderProps={{ color: '#046af1', type: 'bars' }}
           />
           {!hasSearchSomething ? (
             <OfferList offerList={offerListData?.offer_list ?? []} />
           ) : (
-            <OfferTable offerList={offerListData?.offer_list ?? []} />
+            <OfferTable
+              total={offerListData?.total_offer_count ?? 0}
+              offerList={offerListData?.offer_list ?? []}
+            />
           )}
         </Center>
       </Box>

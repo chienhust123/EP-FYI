@@ -76,7 +76,12 @@ export const UploadPage = () => {
 
   return (
     <Box>
-      <LoadingOverlay visible={isPending} />
+      <LoadingOverlay
+        visible={isPending}
+        zIndex={1000}
+        overlayProps={{ radius: 'sm', blur: 2 }}
+        loaderProps={{ color: '#046af1', type: 'bars' }}
+      />
       <Center>
         <form
           onSubmit={form.onSubmit((values) => {

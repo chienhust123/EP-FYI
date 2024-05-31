@@ -3,14 +3,25 @@ import { Table, ActionIcon, Box, Pagination, Flex, Center, Stack } from '@mantin
 import Link from 'next/link';
 import { IconEye } from '@tabler/icons-react';
 import dayjs from 'dayjs';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Offer } from '@/services/offer';
 import { formatCurrency } from '@/share/helpers/currency';
 
 type Props = {
   offerList: Offer[];
+  total: number;
+  renderActions?: (offer: Offer) => React.ReactNode;
 };
 
-const OfferTable: React.FC<Props> = ({ offerList }) => {
+const PAGE_SIZE = 10;
+
+const OfferTable: React.FC<Props> = ({ offerList, total, renderActions }) => {
+  const params = useSearchParams();
+  const router = useRouter();
+
+  const offset = params.get('offset');
+  const totalPage = total / PAGE_SIZE;
+
   const rows = offerList.map((offer) => (
     <Table.Tr key={offer.id}>
       <Table.Td>{offer.company.name}</Table.Td>
@@ -21,11 +32,13 @@ const OfferTable: React.FC<Props> = ({ offerList }) => {
         {offer.created_time ? dayjs(offer.created_time * 1000).format('YYYY-MM-DD') : 'NA'}
       </Table.Td>
       <Table.Td>
-        <Link href={`/offer/detail?id=${offer.id}`}>
-          <ActionIcon variant="outline">
-            <IconEye />
-          </ActionIcon>
-        </Link>
+        {renderActions?.(offer) || (
+          <Link href={`/offer/detail?id=${offer.id}`}>
+            <ActionIcon variant="outline">
+              <IconEye />
+            </ActionIcon>
+          </Link>
+        )}
       </Table.Td>
     </Table.Tr>
   ));
@@ -53,9 +66,21 @@ const OfferTable: React.FC<Props> = ({ offerList }) => {
           )}
         </Table.Tbody>
       </Table>
-      <Flex mt="lg" justify="end">
-        <Pagination total={10} />
-      </Flex>
+
+      {!!totalPage && (
+        <Flex mt="lg" justify="end">
+          <Pagination
+            total={Math.round(total / PAGE_SIZE)}
+            value={(Number(offset) ?? 0) + 1}
+            onChange={(value) => {
+              const url = new URL(window.location.href);
+              url.searchParams.set('offset', (PAGE_SIZE * (value - 1)).toString());
+              url.searchParams.set('limit', '20');
+              router.push(url.toString());
+            }}
+          />
+        </Flex>
+      )}
     </Box>
   );
 };
