@@ -5,6 +5,7 @@ import {
   GetAggregatedCompanyStatsListResponse,
   OFFER_API_PATH,
   SearchAggregatedCompanyStatsListResponse,
+  UpdateOfferResponse,
 } from '../offer';
 
 mockAxios.onPost(ACCOUNT_API_PATH.GET_ACCOUNT_SESSION).reply(200, {
@@ -280,3 +281,5 @@ mockAxios.onPost(OFFER_API_PATH.GET_OFFER).reply(200, {
     created_time: 1628236800,
   },
 });
+
+mockAxios.onPost(OFFER_API_PATH.UPDATE_OFFER).reply(200, {} as UpdateOfferResponse);

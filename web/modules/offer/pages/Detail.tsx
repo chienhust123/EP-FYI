@@ -19,7 +19,12 @@ export const DetailPage = () => {
 
   return (
     <>
-      <LoadingOverlay visible={isLoading} />
+      <LoadingOverlay
+        visible={isLoading}
+        zIndex={1000}
+        overlayProps={{ radius: 'sm', blur: 2 }}
+        loaderProps={{ color: '#046af1', type: 'bars' }}
+      />
       <Center>
         <Group>
           <Box>
