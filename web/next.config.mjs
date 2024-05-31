@@ -13,5 +13,5 @@ export default withBundleAnalyzer({
   eslint: {
     ignoreDuringBuilds: true,
   },
-  basePath: '/offer'
+  basePath: '/EP-FYI'
 });
