@@ -10,6 +10,8 @@ import (
 	"auth_service/internal/app"
 	"auth_service/internal/configs"
 	"auth_service/internal/dataaccess"
+	"auth_service/internal/dataaccess/cache"
+	"auth_service/internal/dataaccess/database"
 	"auth_service/internal/handler"
 	"auth_service/internal/handler/grpc"
 	"auth_service/internal/logic"
@@ -25,19 +27,66 @@ func InitializeStandaloneServer(configFilePath configs.ConfigFilePath) (app.Stan
 		return app.StandaloneServer{}, nil, err
 	}
 	configsGRPC := config.GRPC
-	accountServiceServer := grpc.NewHandler()
-	server := grpc.NewServer(configsGRPC, accountServiceServer)
-	log := config.Log
-	logger, cleanup, err := utils.NewLogger(log)
+	configsDatabase := config.Database
+	databaseDatabase, cleanup, err := database.NewDatabase(configsDatabase)
 	if err != nil {
 		return app.StandaloneServer{}, nil, err
 	}
-	standaloneServer, err := app.NewStandaloneServer(server, logger)
+	log := config.Log
+	logger, cleanup2, err := utils.NewLogger(log)
 	if err != nil {
 		cleanup()
 		return app.StandaloneServer{}, nil, err
 	}
+	publicKeyDataAccessor, err := database.NewPublicKeyDataAccessor(databaseDatabase, logger)
+	if err != nil {
+		cleanup2()
+		cleanup()
+		return app.StandaloneServer{}, nil, err
+	}
+	configsCache := config.Cache
+	client, err := cache.NewClient(configsCache, logger)
+	if err != nil {
+		cleanup2()
+		cleanup()
+		return app.StandaloneServer{}, nil, err
+	}
+	publicKeyCache, err := cache.NewPublicKeyCache(client)
+	if err != nil {
+		cleanup2()
+		cleanup()
+		return app.StandaloneServer{}, nil, err
+	}
+	token := config.Token
+	tokenLogic, err := logic.NewTokenLogic(logger, publicKeyDataAccessor, publicKeyCache, token)
+	if err != nil {
+		cleanup2()
+		cleanup()
+		return app.StandaloneServer{}, nil, err
+	}
+	takenEmailCache, err := cache.NewTakenEmailCache(client)
+	if err != nil {
+		cleanup2()
+		cleanup()
+		return app.StandaloneServer{}, nil, err
+	}
+	accountDataAccessor := database.NewAccountDataAccessor(databaseDatabase, logger)
+	accountLogic := logic.NewAccountLogic(databaseDatabase, tokenLogic, takenEmailCache, logger, accountDataAccessor)
+	accountServiceServer, err := grpc.NewHandler(accountLogic)
+	if err != nil {
+		cleanup2()
+		cleanup()
+		return app.StandaloneServer{}, nil, err
+	}
+	server := grpc.NewServer(configsGRPC, accountServiceServer)
+	standaloneServer, err := app.NewStandaloneServer(server, logger)
+	if err != nil {
+		cleanup2()
+		cleanup()
+		return app.StandaloneServer{}, nil, err
+	}
 	return standaloneServer, func() {
+		cleanup2()
 		cleanup()
 	}, nil
 }

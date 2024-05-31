@@ -29,7 +29,7 @@ docker-compose-dev-down:
 
 .PHONY: run
 run:
-	go run cmd/$(PROJECT_NAME)/*.go
+	go run cmd/$(PROJECT_NAME)/*.go standalone-server
 
 .PHONY: lint
 lint:

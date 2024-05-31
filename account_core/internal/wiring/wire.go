@@ -11,6 +11,7 @@ import (
 	"auth_service/internal/handler"
 	"auth_service/internal/logic"
 	"auth_service/internal/utils"
+
 	"github.com/google/wire"
 )
 

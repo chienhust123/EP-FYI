@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"auth_service/configs"
+
 	"gopkg.in/yaml.v2"
 )
 
@@ -12,6 +13,7 @@ type ConfigFilePath string
 
 type Config struct {
 	Auth     Auth     `yaml:"auth"`
+	Token    Token    `yaml:"auth.token"`
 	Database Database `yaml:"database"`
 	Log      Log      `yaml:"log"`
 	Cache    Cache    `yaml:"cache"`
