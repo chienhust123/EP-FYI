@@ -34,7 +34,7 @@ type Position struct {
 	Level PositionLevel `db:"level"`
 }
 
-//go:generate mockgen -source=./position.go -destination=../../../test/mocks/dataaccess/db/position_mock.go -package=mockdatabase
+//go:generate mockgen -source=./position.go -destination=./position_mock.go -package=database
 type PositionAccessor interface {
 	GetByID(ctx context.Context, id uint64) (*Position, error)
 	Create(ctx context.Context, position *Position) error

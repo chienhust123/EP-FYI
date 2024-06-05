@@ -25,7 +25,7 @@ type Location struct {
 	City    string `db:"city"`
 }
 
-//go:generate mockgen -source=./location.go -destination=../../../test/mocks/dataaccess/db/location_mock.go -package=mockdatabase
+//go:generate mockgen -source=./location.go -destination=./location_mock.go -package=database
 type LocationAccessor interface {
 	GetByID(ctx context.Context, id uint64) (*Location, error)
 	Create(ctx context.Context, location *Location) error

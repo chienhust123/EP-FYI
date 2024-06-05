@@ -32,7 +32,7 @@ type Offer struct {
 	CreatedTime          uint64 `db:"created_time"`
 }
 
-//go:generate mockgen -source=./offer_core.go -destination=../../../test/mocks/dataaccess/db/offer_core_mock.go -package=mockdatabase
+//go:generate mockgen -source=./offer_core.go -destination=./offer_mock.go -package=database
 type OfferAccessor interface {
 	Create(ctx context.Context, offer *Offer) error
 }
